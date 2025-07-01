@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Ética en la IA - Desarrollo Responsable</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            width: 100%;
+            max-width: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#006494] uppercase tracking-wide">Ética en la IA</h1>
+            <p class="text-xl md:text-2xl mt-4 font-light text-[#0582CA]">Preguntas Clave para el Desarrollo Responsable</p>
+        </header>
+        <main>
+            <section id="introduction" class="mb-16">
+                <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-[#006494] mb-4">La Inteligencia Artificial en la Encrucijada</h2>
+                    <p class="text-lg mb-4">
+                        A medida que la Inteligencia Artificial se integra cada vez más en nuestra sociedad, surgen preguntas fundamentales sobre cómo debemos desarrollarla y utilizarla de manera responsable. La ética en la IA no es un tema técnico, sino una reflexión profunda sobre los valores humanos que deben guiar su evolución. Esta infografía explora los desafíos clave que enfrentamos.
+                    </p>
+                    <p class="text-lg">
+                        Comprender y abordar estos dilemas éticos es crucial para asegurar que la IA beneficie a toda la humanidad, minimizando riesgos y promoviendo un futuro justo y equitativo.
+                    </p>
+                </div>
+            </section>
+            <section id="core-challenges" class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Desafíos Éticos Fundamentales</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">1. Privacidad de los Datos</h3>
+                        <p class="mb-4 flex-grow">La IA se alimenta de datos. Esto plantea la pregunta de cómo se recolectan, almacenan y utilizan nuestros datos personales. ¿Quién tiene acceso a ellos y cómo se garantiza su protección contra el uso indebido o las brechas de seguridad?</p>
+                        <p class="text-sm text-gray-600 mt-auto">Consideraciones: Consentimiento, anonimización, propósito de los datos.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">2. Sesgos Algorítmicos</h3>
+                        <p class="mb-4 flex-grow">Los algoritmos de IA pueden reflejar y amplificar los sesgos presentes en los datos con los que fueron entrenados. Esto puede llevar a decisiones discriminatorias en áreas como contrataciones, préstamos o incluso la justicia. ¿Cómo garantizamos la equidad?</p>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-auto rounded-md" role="alert">
+                            <p class="font-bold">¡Alerta!</p>
+                            <p>El sesgo en los datos de entrenamiento puede llevar a decisiones injustas.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">3. Impacto en el Empleo</h3>
+                        <p class="mb-4 flex-grow">La automatización impulsada por la IA transformará el mercado laboral. Si bien puede crear nuevos roles, también podría desplazar a trabajadores en ciertas industrias. ¿Cómo nos preparamos para esta transición y garantizamos una adaptación justa?</p>
+                        <p class="text-sm text-gray-600 mt-auto">Pregunta: ¿Reemplazo o redefinición de roles?</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">4. Toma de Decisiones Autónoma</h3>
+                        <p class="mb-4 flex-grow">A medida que la IA toma decisiones más complejas de forma autónoma (ej. vehículos autónomos, sistemas de armas), surge la pregunta de la responsabilidad. ¿Quién es responsable cuando un sistema de IA comete un error o causa daño?</p>
+                        <p class="text-sm text-gray-600 mt-auto">Concepto: La "caja negra" de la IA y su explicabilidad.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="ethical-concerns-radar" class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Percepción de Preocupaciones Éticas en la IA</h2>
+                <p class="text-center max-w-3xl mx-auto mb-12 text-lg">Este gráfico de radar muestra la importancia relativa que se le atribuye a diversas preocupaciones éticas en el desarrollo y uso de la IA, según una encuesta hipotética. Cuanto más grande el valor, mayor la preocupación percibida.</p>
+                <div class="chart-container">
+                    <canvas id="ethicalConcernsRadarChart"></canvas>
+                </div>
+            </section>
+            <section id="debate-points" class="my-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Puntos Clave del Debate: Pros y Contras</h2>
+                <p class="text-center max-w-3xl mx-auto mb-12 text-lg">Exploramos las dos caras de la moneda en el desarrollo ético de la IA, presentando consideraciones que impulsan su avance y los desafíos que deben ser mitigados.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-[#006494] mb-4">Consideraciones Positivas</h3>
+                        <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                            <li>Mejora la eficiencia y precisión en diversas tareas.</li>
+                            <li>Personalización de servicios y experiencias del usuario.</li>
+                            <li>Acceso a información y conocimiento a gran escala.</li>
+                            <li>Optimización de recursos y reducción de costos.</li>
+                            <li>Automatización de tareas repetitivas, liberando creatividad humana.</li>
+                            <li>Avances en medicina y descubrimiento científico.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-[#F991CC] mb-4">Desafíos Críticos</h3>
+                        <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                            <li>Riesgo de violación de privacidad y uso indebido de datos.</li>
+                            <li>Potencial de amplificación de sesgos y discriminación.</li>
+                            <li>Impacto en el empleo y necesidad de reentrenamiento laboral.</li>
+                            <li>Cuestiones de responsabilidad y explicabilidad en decisiones autónomas.</li>
+                            <li>Riesgos de seguridad y mal uso de tecnologías avanzadas.</li>
+                            <li>Desafíos en la gobernanza y regulación de la IA.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section id="conclusion" class="text-center my-16">
+                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-[#006494] mb-4">Hacia una IA Responsable</h2>
+                    <p class="text-lg mb-6">El desarrollo de la IA no es solo una cuestión de innovación tecnológica, sino de **responsabilidad social**. Debemos fomentar un diálogo continuo entre expertos, legisladores y la sociedad para establecer marcos éticos sólidos que guíen su evolución.</p>
+                    <p class="text-xl font-light text-[#0582CA]">¡El futuro de la IA está en nuestras manos!</p>
+                 </div>
+            </section>
+        </main>
+        <footer class="text-center py-6 border-t mt-8">
+            <p class="text-gray-500">Infografía creada para el blog de IA. © 2024</p>
+        </footer>
+    </div>
+    <script>
+        const FgBlue = '#00A6FB';
+        const FgDarkBlue = '#0582CA';
+        const FgPink = '#F991CC';
+        const FgDarkestBlue = '#006494';
+        const TextColor = '#4b5563';
+        const mandatoryTooltipPlugin = {
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleFont: {
+                    size: 16,
+                },
+                bodyFont: {
+                    size: 14,
+                },
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        }
+                        return label;
+                    }
+                }
+            }
+        };
+        function wrapLabel(label, maxWidth = 16) {
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = currentLine ? currentLine + ' ' + word : word;
+                }
+            });
+            lines.push(currentLine);
+            return lines;
+        }
+        const ethicalConcernsRadarCtx = document.getElementById('ethicalConcernsRadarChart').getContext('2d');
+        const radarLabels = [
+            'Privacidad de Datos',
+            'Sesgo Algorítmico',
+            'Transparencia',
+            'Responsabilidad',
+            'Impacto en Empleo',
+            'Seguridad'
+        ];
+        const wrappedRadarLabels = radarLabels.map(label => wrapLabel(label));
+        new Chart(ethicalConcernsRadarCtx, {
+            type: 'radar',
+            data: {
+                labels: wrappedRadarLabels,
+                datasets: [{
+                    label: 'Nivel de Preocupación Percibida (1-100)',
+                    data: [85, 90, 75, 80, 70, 65],
+                    backgroundColor: 'rgba(5, 130, 202, 0.4)',
+                    borderColor: FgDarkBlue,
+                    pointBackgroundColor: FgDarkBlue,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: FgDarkBlue,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(100, 100, 100, 0.3)'
+                        },
+                        grid: {
+                            color: 'rgba(100, 100, 100, 0.3)'
+                        },
+                        pointLabels: {
+                            color: TextColor,
+                            font: {
+                                size: 14
+                            }
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100,
+                            stepSize: 20,
+                            color: TextColor,
+                            backdropColor: 'transparent'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: TextColor,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    ...mandatoryTooltipPlugin
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

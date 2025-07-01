@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: El Arte de Crear un Buen Prompt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            width: 100%;
+            max-width: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-width: 500px;
+            }
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-height: 80px;
+        }
+        .flow-arrow {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0582CA;
+            transform: rotate(90deg);
+        }
+        @media (min-width: 768px) {
+            .flow-arrow {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#006494] uppercase tracking-wide">El Arte de Preguntar</h1>
+            <p class="text-xl md:text-2xl mt-4 font-light text-[#0582CA]">Domina los Prompts de IA para Resultados Increíbles</p>
+        </header>
+        <main>
+            <section id="what-is-a-prompt" class="mb-16">
+                <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold text-[#006494] mb-4">¿Qué es un Prompt?</h2>
+                            <p class="text-lg mb-4">
+                                Un prompt es simplemente la instrucción, pregunta o tarea que le das a una Inteligencia Artificial. Piensa en él como el mapa que guía a la IA hacia la respuesta que necesitas. La calidad de tu prompt determina directamente la calidad del resultado.
+                            </p>
+                            <p class="text-lg">
+                                Un prompt bien construido equilibra varios elementos clave para ser efectivo, como se muestra en el gráfico. La claridad y el contexto son fundamentales para guiar a la IA correctamente.
+                            </p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="promptCompositionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="core-tips" class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Los 6 Pilares de un Prompt Perfecto</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">1. Sé Claro y Específico</h3>
+                        <p class="mb-4 flex-grow">La ambigüedad es el enemigo. Evita generalidades y sé tan preciso como puedas sobre lo que quieres.</p>
+                        <div class="mt-auto">
+                           <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Háblame de perros."</span></p>
+                           <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Dame 5 datos curiosos sobre la raza Golden Retriever."</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">2. Define un Rol para la IA</h3>
+                        <p class="mb-4 flex-grow">Indícale a la IA qué "papel" debe adoptar. Esto enfoca el tono y la profundidad del contenido de manera sorprendente.</p>
+                         <div class="mt-auto">
+                           <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Escribe sobre el cambio climático."</span></p>
+                           <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Actúa como un científico y explica los efectos del cambio climático en los océanos para principiantes."</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">3. Establece el Formato</h3>
+                        <p class="mb-4 flex-grow">¿Necesitas una lista, una tabla, un poema, un email? Pídelo explícitamente para no tener que reformatear después.</p>
+                         <div class="mt-auto">
+                           <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Quiero recetas de postres."</span></p>
+                           <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Genera una lista de 3 postres con chocolate, con ingredientes y pasos."</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col md:col-span-2 lg:col-span-1">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">4. Incluye Restricciones</h3>
+                        <p class="mb-4 flex-grow">Si hay algo que NO quieres, o límites que debe respetar (extensión, temas), menciónalo. Es tan importante como decir lo que sí quieres.</p>
+                         <div class="mt-auto">
+                           <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Dame ideas para un viaje."</span></p>
+                           <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Sugiere 5 destinos en Colombia sin playa y con actividades al aire libre."</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col md:col-span-2">
+                         <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">5. Proporciona Contexto</h3>
+                         <p class="mb-4">Un poco de trasfondo ayuda a la IA a entender tu solicitud. Observa cómo el contexto transforma un prompt vago en uno útil, mejorando drásticamente la calidad de la respuesta.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                            <div>
+                               <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Escribe un correo."</span></p>
+                               <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Escribe un email formal a mi jefe, Juan Pérez, para pedir trabajar desde casa el próximo viernes."</span></p>
+                            </div>
+                            <div class="chart-container h-48 md:h-64">
+                                <canvas id="contextEffectivenessChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col lg:col-span-3">
+                        <h3 class="text-2xl font-bold text-[#00A6FB] mb-3">6. Utiliza Palabras Clave</h3>
+                        <p class="mb-4 flex-grow">Sé conciso y usa términos precisos. Las palabras clave son las señales que la IA sigue para encontrar la mejor información.</p>
+                         <div class="mt-auto">
+                           <p class="text-red-500 font-bold">❌ Mal: <span class="font-normal">"Hazme algo para la cena."</span></p>
+                           <p class="text-green-500 font-bold">✔️ Bien: <span class="font-normal">"Dame una receta de pasta cremosa con pollo para 4 personas, lista en 30 mins."</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="flowchart" class="my-20">
+                 <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Anatomía de un Prompt Maestro</h2>
+                 <p class="text-center max-w-3xl mx-auto mb-12 text-lg">Sigue este flujo para construir tus prompts paso a paso. Cada elemento añade una capa de precisión que guía a la IA hacia el resultado perfecto.</p>
+                 <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                     <div class="flow-step bg-[#F991CC] text-white font-bold w-full md:w-48 shadow-md">Define tu OBJETIVO</div>
+                     <div class="flow-arrow">→</div>
+                     <div class="flow-step bg-white border-2 border-[#0582CA] text-[#0582CA] w-full md:w-48 shadow-md">Añade CONTEXTO</div>
+                     <div class="flow-arrow">→</div>
+                     <div class="flow-step bg-white border-2 border-[#0582CA] text-[#0582CA] w-full md:w-48 shadow-md">Asigna un ROL</div>
+                      <div class="flow-arrow">→</div>
+                     <div class="flow-step bg-white border-2 border-[#0582CA] text-[#0582CA] w-full md:w-48 shadow-md">Especifica FORMATO y LÍMITES</div>
+                      <div class="flow-arrow">→</div>
+                     <div class="flow-step bg-[#00A6FB] text-white font-bold w-full md:w-48 shadow-md">🚀 ¡Lanza el Prompt!</div>
+                 </div>
+            </section>
+            <section id="examples" class="my-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-[#006494] mb-10">Prompts en Acción: Ejemplos Prácticos</h2>
+                <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+                    <div class="divide-y divide-gray-200">
+                        <div class="grid grid-cols-3 p-4 bg-[#006494] text-white font-bold">
+                            <div class="col-span-1">Objetivo</div>
+                            <div class="col-span-2">Prompt Efectivo</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 items-center hover:bg-gray-50">
+                            <div class="font-bold text-[#0582CA]">Resumen</div>
+                            <div class="col-span-2">"Resume este artículo sobre IA en 150 palabras, enfocándote en los hitos clave."</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 items-center hover:bg-gray-50">
+                            <div class="font-bold text-[#0582CA]">Ideas Creativas</div>
+                            <div class="col-span-2">"Genera 10 ideas de regalo para un amante de la jardinería, evitando herramientas comunes."</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 items-center hover:bg-gray-50">
+                            <div class="font-bold text-[#0582CA]">Escritura</div>
+                            <div class="col-span-2">"Escribe un microcuento de terror de 100 palabras sobre un reflejo inquietante."</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 items-center hover:bg-gray-50">
+                            <div class="font-bold text-[#0582CA]">Programación</div>
+                            <div class="col-span-2">"Escribe un script en Python que calcule el factorial de un número y maneje errores de entrada."</div>
+                        </div>
+                         <div class="grid grid-cols-3 p-4 items-center hover:bg-gray-50">
+                            <div class="font-bold text-[#0582CA]">Explicación</div>
+                            <div class="col-span-2">"Explica qué es un agujero negro a un niño de 8 años, usando analogías simples."</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="conclusion" class="text-center my-16">
+                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-[#006494] mb-4">¡Ahora es tu Turno!</h2>
+                    <p class="text-lg mb-6">Crear prompts es un proceso de experimentación. No tengas miedo de probar y ajustar. Antes de enviar, pregúntate siempre:</p>
+                    <ul class="text-left list-disc list-inside space-y-2 text-lg mb-6 mx-auto max-w-md">
+                        <li>¿Es mi instrucción lo suficientemente clara?</li>
+                        <li>¿He especificado todo lo que necesito?</li>
+                        <li>¿Hay algo que deba evitar?</li>
+                    </ul>
+                    <p class="text-xl font-light text-[#0582CA]">¡Estás listo para tener conversaciones más productivas y creativas con la IA!</p>
+                 </div>
+            </section>
+        </main>
+        <footer class="text-center py-6 border-t mt-8">
+            <p class="text-gray-500">Infografía generada para ilustrar la creación de prompts efectivos.</p>
+        </footer>
+    </div>
+    <script>
+        const FgBlue = '#00A6FB';
+        const FgDarkBlue = '#0582CA';
+        const FgPink = '#F991CC';
+        const TextColor = '#4b5563';
+        const mandatoryTooltipPlugin = {
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleFont: {
+                    size: 16,
+                },
+                bodyFont: {
+                    size: 14,
+                },
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        }
+                        return label;
+                    }
+                }
+            }
+        };
+        function wrapLabel(label, maxWidth = 16) {
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = currentLine ? currentLine + ' ' + word : word;
+                }
+            });
+            lines.push(currentLine);
+            return lines;
+        }
+        const promptCompositionCtx = document.getElementById('promptCompositionChart').getContext('2d');
+        new Chart(promptCompositionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Claridad y Especificidad', 'Contexto Relevante', 'Formato y Rol', 'Restricciones'],
+                datasets: [{
+                    label: 'Composición de un Prompt Efectivo',
+                    data: [40, 30, 20, 10],
+                    backgroundColor: [FgBlue, FgDarkBlue, '#006494', FgPink],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: TextColor,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    ...mandatoryTooltipPlugin
+                },
+                cutout: '60%'
+            }
+        });
+        const contextEffectivenessCtx = document.getElementById('contextEffectivenessChart').getContext('2d');
+        const labels = ['Prompt Sin Contexto', 'Prompt Con Contexto'];
+        const wrappedLabels = labels.map(label => wrapLabel(label));
+        new Chart(contextEffectivenessCtx, {
+            type: 'bar',
+            data: {
+                labels: wrappedLabels,
+                datasets: [{
+                    label: 'Calidad de la Respuesta',
+                    data: [25, 95],
+                    backgroundColor: [FgPink, FgBlue],
+                    borderRadius: 5,
+                    barThickness: 30,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                           display: false
+                        },
+                        ticks: {
+                           color: TextColor
+                        }
+                    },
+                    y: {
+                       grid: {
+                          display: false
+                       },
+                       ticks: {
+                           color: TextColor,
+                           font: {
+                            size: 14
+                           }
+                       }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                     ...mandatoryTooltipPlugin
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

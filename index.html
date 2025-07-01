@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impulso IA: Análisis Interactivo para Negocios en Colombia</title>
+    
+    <!-- External CDN Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+    
+    <div id="cursor-spotlight" class="fixed top-0 left-0 w-full h-full pointer-events-none z-30"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center">
+                        <svg class="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color: #3B82F6;" />
+                                    <stop offset="100%" style="stop-color: #14B8A6;" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient)" stroke-width="1.5"/>
+                            <path d="M12 10V8" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M12 14V16" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M10 12H8" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M14 12H16" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-500">Impulso IA</span>
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#universal-assistant" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Asistentes</a>
+                        <a href="#recommendation-engine" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Asesor</a>
+                        <a href="#tool-selector" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Herramientas</a>
+                        <a href="#deep-dive-comparison" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Comparativa</a>
+                        <a href="#blog" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Blog</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <div class="md:hidden ml-4">
+                        <button id="menu-toggle" class="p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
+                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#universal-assistant" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Asistentes</a>
+                    <a href="#recommendation-engine" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Asesor</a>
+                    <a href="#tool-selector" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Herramientas</a>
+                    <a href="#deep-dive-comparison" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Comparativa</a>
+                    <a href="#blog" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white">Blog</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+        <section class="text-center py-20 md:py-28 relative">
+             <div class="absolute inset-0 bg-white dark:bg-gray-900 opacity-50"></div>
+             <div class="container mx-auto px-4 relative z-10">
+                <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                    Potencie su Negocio con <span class="text-indigo-500" id="typed-text"></span><span class="typing-cursor text-indigo-500">|</span>
+                </h1>
+                <p class="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Asesor interactivo para descubrir e implementar la IA ideal para su empresa en Colombia.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <a href="#recommendation-engine" class="inline-block bg-indigo-600 text-white font-bold text-lg px-8 py-4 rounded-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                        Empezar Diagnóstico
+                    </a>
+                </div>
+                
+                <!-- Sección de Colaboradores -->
+                <div class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex items-start justify-center gap-8 sm:gap-12">
+                        <div class="flex flex-col items-center logo-container">
+                            <a href="https://uniempresarial.edu.co" target="_blank" rel="noopener noreferrer" class="block">
+                                <div class="bg-transparent p-4 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 logo-card logo-clickable">
+                                    <img src="img/Logo Completo Uniempresarial a color.png" 
+                                         alt="Logo Uniempresarial" 
+                                         class="h-14 sm:h-18 w-auto object-contain">
+                                </div>
+                            </a>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 text-center mt-3 opacity-80 hover:opacity-100 transition-opacity">Fundación Universitaria Empresarial</span>
+                        </div>
+                        <div class="w-px h-24 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent"></div>
+                        <div class="flex flex-col items-center logo-container">
+                            <a href="https://fabricasoluciones.uniempresarial.edu.co" target="_blank" rel="noopener noreferrer" class="block">
+                                <div id="fusoft-logo-container" class="bg-white dark:bg-transparent p-4 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 logo-card logo-clickable">
+                                    <img id="fusoft-logo-img" src="img/fUSoft complete 1.png" 
+                                         alt="Logo FUSoft" 
+                                         class="h-14 sm:h-18 w-auto object-contain">
+                                </div>
+                            </a>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 text-center mt-3 opacity-80 hover:opacity-100 transition-opacity">fUSoft</span>
+                        </div>
+                        <div class="w-px h-24 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent"></div>
+                        <div class="flex flex-col items-center logo-container">
+                            <a href="https://www.ccb.org.co/" target="_blank" rel="noopener noreferrer" class="block">
+                                <div class="bg-white dark:bg-transparent p-4 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 logo-card logo-clickable">
+                                    <img id="ccb-logo-img" src="img/CCB.png" 
+                                         alt="Logo CCB" 
+                                         class="h-14 sm:h-18 w-auto object-contain">
+                                </div>
+                            </a>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 text-center mt-3 opacity-80 hover:opacity-100 transition-opacity">Cámara de Comercio de Bogotá</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carrusel tipo slider de IAs universales -->
+        <section id="ia-universal-slider" class="my-12">
+          <h2 class="text-3xl font-bold text-center mb-2">Asistente de IA universal</h2>
+          <p class="text-center text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">Descubra y compare los asistentes de IA más avanzados para potenciar su productividad, creatividad y análisis. Deslice para explorar las opciones más populares.</p>
+          <div class="ia-slider-viewport overflow-x-hidden w-full relative">
+            <!-- Fade lateral izquierdo -->
+            <div class="ia-slider-fade ia-slider-fade-left pointer-events-none"></div>
+            <!-- Fade lateral derecho -->
+            <div class="ia-slider-fade ia-slider-fade-right pointer-events-none"></div>
+            <ul class="ia-slider-track flex items-center relative" style="will-change: transform;">
+              <li class="ia-slide border-2 border-green-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">ChatGPT</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">El más popular y versátil. Excelente para empezar, escribir, programar y resolver dudas de todo tipo.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-blue-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">Gemini</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">El asistente de Google, ideal para creatividad, búsqueda avanzada y generación de imágenes.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-yellow-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">Claude</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">Especialista en comprensión de textos largos, resúmenes y comunicación profesional.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-purple-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">DeepSeek</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">Potente alternativa, destacada para tareas de código, análisis y búsqueda técnica.</p>
+                </div>
+              </li>
+              <!-- Duplicar para efecto infinito -->
+              <li class="ia-slide border-2 border-green-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">ChatGPT</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">El más popular y versátil. Excelente para empezar, escribir, programar y resolver dudas de todo tipo.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-blue-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">Gemini</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">El asistente de Google, ideal para creatividad, búsqueda avanzada y generación de imágenes.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-yellow-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">Claude</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">Especialista en comprensión de textos largos, resúmenes y comunicación profesional.</p>
+                </div>
+              </li>
+              <li class="ia-slide border-2 border-purple-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-2xl shadow-lg mx-4 flex flex-col justify-between p-5 sm:p-8 min-w-[280px] max-w-[320px] sm:min-w-[320px] sm:max-w-[400px] w-[85vw] sm:w-[90vw] md:w-[350px]">
+                <div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2">DeepSeek</h3>
+                  <p class="text-sm sm:text-base font-light leading-relaxed">Potente alternativa, destacada para tareas de código, análisis y búsqueda técnica.</p>
+                </div>
+              </li>
+            </ul>
+            </div>
+        </section>
+
+        <section id="recommendation-engine" class="mb-12 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Asesor de Estrategia IA (Cuestionario de Diagnóstico)</h3>
+            <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Responda estas preguntas para recibir una recomendación personalizada y un plan de acción generado por IA.</p>
+            
+            <form id="strategy-form" class="max-w-4xl mx-auto space-y-6">
+                <div>
+                    <label for="company-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nombre de la Empresa</label>
+                    <input type="text" id="company-name" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej: Café El Mejor Sabor S.A.S.">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="companyType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">1. Tipo de Empresa</label>
+                        <select id="companyType" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="micro">Microempresa (1-10 empleados)</option>
+                            <option value="pequena">Pequeña empresa (11-50 empleados)</option>
+                            <option value="mediana">Mediana empresa (51-200 empleados)</option>
+                            <option value="informal">Empresa Informal / Vendedor</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sector" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">2. Sector Económico</label>
+                        <select id="sector" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="primario">Primario (Agricultura, minería)</option>
+                            <option value="secundario">Secundario (Industria, construcción)</option>
+                            <option value="terciario">Terciario (Comercio, servicios)</option>
+                            <option value="cuaternario">Cuaternario (Tecnología, consultoría)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="businessActivity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">3. Actividad Específica del Negocio</label>
+                    <select id="businessActivity" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="comercio">Comercio y ventas al detal</option>
+                        <option value="servicios-profesionales">Servicios personales y profesionales</option>
+                        <option value="gastronomia">Gastronomía y alimentos</option>
+                        <option value="educacion">Educación, formación y capacitación</option>
+                        <option value="salud">Salud, bienestar y cuidado</option>
+                        <option value="artesanias">Artesanías, moda y manufactura</option>
+                        <option value="agroindustria">Agroindustria y productos agrícolas</option>
+                        <option value="turismo">Turismo local y cultural</option>
+                        <option value="organizaciones-sociales">Organizaciones sociales y comunitarias</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                    <!-- Campo personalizado para "Otro" -->
+                    <div id="other-activity-container" class="hidden mt-3">
+                        <input type="text" id="other-activity" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Especifica tu actividad empresarial...">
+                    </div>
+                </div>
+                                  <div>
+                     <label for="business-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">4. En una frase, ¿a qué se dedica su negocio?</label>
+                     <input type="text" id="business-description" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej: Venta de café orgánico de origen a clientes finales.">
+                </div>
+                <div>
+                    <label for="improvement-goal" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">5. ¿Qué le gustaría mejorar o conseguir?</label>
+                    <textarea id="improvement-goal" rows="2" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej: Aumentar ventas, automatizar la creación de contenido para redes, ahorrar tiempo..."></textarea>
+                </div>
+                <div>
+                    <label for="current-problem" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">6. ¿Cuál es su problemática o desafío actual?</label>
+                    <textarea id="current-problem" rows="2" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej: Me demoro mucho creando videos, mi equipo no organiza bien los proyectos..."></textarea>
+                </div>
+                <div class="text-center pt-4">
+                    <button type="button" id="get-recommendation-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center mx-auto">
+                        🔍 Obtener mi herramienta recomendada
+                    </button>
+                </div>
+            </form>
+            <div id="recommendation-result" class="bg-gray-100 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[10rem] transition-all duration-300 hidden mt-8">
+            </div>
+        </section>
+
+        <section id="logo-scroller-section" class="py-12">
+            <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Un Ecosistema de Herramientas Potenciadas por IA</h3>
+            <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Estas son solo algunas de las herramientas que puedes conectar y potenciar con una estrategia de IA bien definida.</p>
+            <div class="logo-scroller overflow-hidden">
+                <div class="scroller-inner flex gap-4 w-max">
+                    <!-- Logos will be duplicated and inserted by JS -->
+                </div>
+            </div>
+            <div class="logo-scroller overflow-hidden mt-4">
+                <div class="scroller-inner flex gap-4 w-max" data-direction="right">
+                     <!-- Logos will be duplicated and inserted by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="tool-selector" class="mb-12">
+             <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold">Selector de Herramientas IA</h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 mt-2">Selecciona una herramienta para explorar sus características, casos de uso y potencial.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- Tool cards will be generated by JS -->
+            </div>
+        </section>
+
+        <div id="dynamic-content-area" class="opacity-0 transition-opacity duration-500">
+            <section id="overview" class="mb-12 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white" id="overview-title"></h3>
+                 <p id="overview-intro" class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8"></p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Propuesta de Valor Clave</h4>
+                        <ul id="overview-value-list" class="space-y-3 text-gray-600 dark:text-gray-400">
+                        </ul>
+                        <h4 class="text-xl font-semibold mt-6 mb-4 text-gray-700 dark:text-gray-300">Ideal para</h4>
+                        <p id="overview-ideal-for" class="text-gray-600 dark:text-gray-400"></p>
+                    </div>
+                     <div>
+                        <h4 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300 text-center">Análisis de Dimensiones</h4>
+                        <div class="chart-container">
+                            <canvas id="impactChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="use-cases" class="mb-12 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                 <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Casos de Uso Aplicados</h3>
+                 <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Descubre cómo esta herramienta se aplica en diferentes áreas de negocio. Selecciona una categoría para ver ejemplos prácticos.</p>
+                <div class="flex justify-center flex-wrap gap-2 md:gap-4 mb-8" id="use-case-tabs">
+                </div>
+                <div id="use-case-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </section>
+        </div>
+
+        <section id="deep-dive-comparison" class="mb-12 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Comparativa Profunda por Categorías</h3>
+            <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Selecciona una o más herramientas para compararlas. Luego, elige una categoría de abajo.</p>
+            
+            <div id="deep-dive-tool-selector" class="flex justify-center flex-wrap gap-3 mb-8">
+                <!-- Tool comparison selectors generated by JS -->
+            </div>
+
+            <div class="flex justify-center flex-wrap gap-2 md:gap-4 mb-8" id="deep-dive-tabs">
+                <!-- Deep dive category tabs generated by JS -->
+            </div>
+            <div id="deep-dive-content" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            </div>
+        </section>
+        
+        <section id="blog" class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Contenido Educativo del Blog</h3>
+            <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Explora nuestras guías y artículos para sacar el máximo provecho a la IA en tu negocio.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tarjeta del prompt -->
+                <div class="bg-blue-50 dark:bg-blue-900/40 p-6 rounded-lg border-2 border-blue-200 dark:border-blue-500 shadow-lg flex flex-col items-start justify-between hover:shadow-xl transition-shadow cursor-pointer" onclick="window.location.href='infografia-prompt.html'">
+                    <h4 class="font-bold text-lg mb-2 text-blue-700 dark:text-blue-300 flex items-center gap-2">📝 Cómo crear un prompt</h4>
+                    <p class="text-blue-800 dark:text-blue-200 mb-3">Infografía visual y consejos prácticos para dominar el arte de preguntar a la IA.</p>
+                    <span class="inline-block mt-auto text-blue-600 dark:text-blue-400 font-semibold hover:underline">Ver infografía &rarr;</span>
+                </div>
+                <!-- Tarjeta de ética en la IA -->
+                <div class="bg-pink-50 dark:bg-pink-900/40 p-6 rounded-lg border-2 border-pink-200 dark:border-pink-500 shadow-lg flex flex-col items-start justify-between hover:shadow-xl transition-shadow cursor-pointer" onclick="window.location.href='infografia-etica.html'">
+                    <h4 class="font-bold text-lg mb-2 text-pink-700 dark:text-pink-300 flex items-center gap-2">⚖️ Ética en la IA</h4>
+                    <p class="text-pink-800 dark:text-pink-200 mb-3">Preguntas clave y desafíos para el desarrollo responsable de la inteligencia artificial.</p>
+                    <span class="inline-block mt-auto text-pink-600 dark:text-pink-400 font-semibold hover:underline">Ver infografía &rarr;</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="info-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <header class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 id="info-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                <button id="close-info-modal-btn" class="text-gray-400 hover:text-gray-700 dark:hover:text-white text-3xl leading-none">&times;</button>
+            </header>
+            <div id="info-modal-content" class="p-8 overflow-y-auto text-gray-700 dark:text-gray-300">
+            </div>
+        </div>
+    </div>
+    
+    <div id="strategy-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
+            <header class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 relative">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">⚙️ Estrategia de Implementación Personalizada</h3>
+                <button id="copy-strategy-btn" class="absolute top-4 right-16 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600" title="Copiar estrategia">
+                     <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                </button>
+                <button id="close-modal-btn-strategy" class="text-gray-400 hover:text-gray-700 dark:hover:text-white text-3xl leading-none">&times;</button>
+            </header>
+            <div id="strategy-modal-content" class="p-8 overflow-y-auto text-gray-700 dark:text-gray-300">
+                <div class="flex flex-col items-center justify-center h-64">
+                    <div class="loader"></div>
+                    <p class="mt-4 text-gray-600 dark:text-gray-400">Generando estrategia con Gemini...</p>
+                </div>
+            </div>
+            <div id="strategy-modal-actions" class="absolute right-8 bottom-8 flex flex-col gap-3 z-30">
+              <button id="download-pdf-btn" class="bg-indigo-600 text-white font-bold py-2 px-4 w-48 rounded-full shadow-2xl hover:bg-indigo-700 transition-colors text-base flex items-center justify-center gap-2"
+                  style="box-shadow: 0 8px 32px rgba(59,130,246,0.25);">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  Descargar PDF
+              </button>
+              <button id="share-btn" class="bg-emerald-500 text-white font-bold py-2 px-4 w-48 rounded-full shadow-2xl hover:bg-emerald-600 transition-colors text-base flex items-center justify-center gap-2"
+                  style="box-shadow: 0 8px 32px rgba(16,185,129,0.25);">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 8a3 3 0 11-6 0 3 3 0 016 0zm6 8a3 3 0 11-6 0 3 3 0 016 0zm-6 4a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  Compartir
+              </button>
+            </div>
+            <div id="share-panel" class="absolute top-0 right-0 h-full w-96 max-w-full bg-white dark:bg-gray-800 shadow-2xl z-40 p-8 hidden flex-col justify-between">
+              <button id="close-share-panel" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-white text-2xl">&times;</button>
+              <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Compartir por Email</h3>
+              <form id="share-form" class="space-y-4">
+                <input type="email" id="share-email" class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Correo electrónico" required>
+                <button type="submit" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg hover:bg-emerald-600 transition-colors">Enviar</button>
+              </form>
+              <div id="share-message" class="mt-4 text-center text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="copy-toast" class="copy-toast fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0">
+        ¡Estrategia copiada!
+    </div>
+    
+    <footer class="text-center py-8 mt-8">
+        <p class="text-gray-500 dark:text-gray-400">Impulso IA - Potenciando a los emprendedores de Colombia.</p>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/data-complete.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

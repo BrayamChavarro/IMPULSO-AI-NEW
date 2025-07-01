@@ -808,19 +808,34 @@ async function generateStrategy(recommendedTools, improvementGoal, currentProble
     const businessDescription = businessDescriptionInput?.value || '';
     const toolNames = recommendedTools.map(t => aiData[t]?.name || t).join(' y ');
 
-    const prompt = `Actúa como un consultor experto en transformación digital para PYMES en Colombia. Crea un plan de implementación detallado para una empresa con el siguiente perfil:
-    - **Tipo de Empresa:** ${companyType}
-    - **Sector Económico:** ${sector}
-    - **Actividad Específica:** ${businessActivity}
-    - **Descripción del Negocio:** "${businessDescription}"
-    - **Objetivo Principal:** "${improvementGoal}"
-    - **Desafío Actual:** "${currentProblem}"
-    - **Herramientas Recomendadas:** ${toolNames}
+    const prompt = `Actúa como 'Impulso IA', un consultor élite en transformación digital, especializado en el ecosistema de PYMES y emprendimientos de Colombia. Tu tono debe ser experto, alentador y práctico. Tu misión es entregar un plan de acción estratégico que sea 100% aplicable en el contexto colombiano.
 
-    El plan debe ser claro, accionable y en español colombiano. Formatea la respuesta en HTML simple (usando <h3>, <ul>, <li>, <strong>, <p>) y debe incluir:
-    <h3>1. Fases Clave del Proyecto (Plan 30-60-90 días)</h3>
-    <h3>2. KPIs para Medir el Éxito</h3>
-    <h3>3. Posibles Desafíos y Cómo Superarlos</h3>`;
+Basado en el siguiente perfil de empresa:
+
+- **Tipo de Empresa:** ${companyType}
+- **Sector Económico:** ${sector}
+- **Actividad Específica:** ${businessActivity}
+- **Descripción del Negocio:** "${businessDescription}"
+- **Objetivo Principal:** "${improvementGoal}"
+- **Desafío Actual:** "${currentProblem}"
+- **Herramientas Seleccionadas:** ${toolNames}
+
+Genera un plan de implementación detallado. La respuesta DEBE ser en formato HTML simple (<h3>, <ul>, <li>, <strong>, <p>) y debe incluir OBLIGATORIAMENTE las siguientes secciones:
+
+<h3>1. Diagnóstico y Quick Wins (Victorias Tempranas)</h3>
+<p>Basado en el perfil, haz un breve diagnóstico del desafío principal. Luego, lista 2-3 acciones de bajo costo y alto impacto que la empresa puede implementar en los próximos 7 días usando las herramientas recomendadas.</p>
+
+<h3>2. Plan de Implementación 30-60-90 Días</h3>
+<p>Detalla un plan de acción por fases. Sé específico en las tareas para cada fase y cómo las herramientas seleccionadas se aplican en cada paso.</p>
+
+<h3>3. KPIs para Medir el Retorno de Inversión (ROI)</h3>
+<p>Define 3 a 5 indicadores clave de rendimiento (KPIs) para medir el éxito del plan. Incluye al menos un KPI financiero (ej: reducción de costos, aumento de ingresos) y uno operativo (ej: horas ahorradas, leads generados).</p>
+
+<h3>4. Radar de Oportunidades en Colombia</h3>
+<p>Menciona al menos una iniciativa, programa o beneficio específico del gobierno colombiano o de gremios que esta empresa podría explorar. Basa tus sugerencias en programas como los Centros de Transformación Digital, iNNpulsa, MinTIC o beneficios tributarios por inversión en CTeI. Adapta la sugerencia al sector y tamaño de la empresa.</p>
+
+<h3>5. Gestión de Riesgos y Desafíos Locales</h3>
+<p>Identifica 2 posibles desafíos en la implementación (ej: resistencia al cambio, conectividad, curva de aprendizaje) y ofrece una solución práctica y realista para cada uno, pensando en la realidad de una PYME colombiana.</p>`;
 
     const payload = { contents: [{ parts: [{ text: prompt }] }] };
     const apiUrl = `${GEMINI_CONFIG.baseUrl}?key=${GEMINI_CONFIG.apiKey}`;

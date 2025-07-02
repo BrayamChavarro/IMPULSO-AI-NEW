@@ -1,72 +1,125 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+// Configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
+    authDomain: "empresa-ai.firebaseapp.com",
+    projectId: "empresa-ai",
+    storageBucket: "empresa-ai.appspot.com",
+    messagingSenderId: "525047010078",
+    appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+    measurementId: "G-TKKJK5MBYL"
+};
 
-// Import Firebase configuration from config.js
-import { firebaseConfig } from './config.js';
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+document.addEventListener('DOMContentLoaded', function() {
+    // Tabs
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const errorDiv = document.getElementById('login-error');
 
-// Get form and input elements
-const loginForm = document.getElementById('loginForm');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const errorMessage = document.getElementById('errorMessage'); // Assuming you have an element with id 'errorMessage' in your HTML to display errors
-
-// Add event listener for form submission
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent default form submission
-
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log('User signed in:', user);
-            // Redirect or update UI as needed
-            // window.location.href = '/dashboard.html'; // Example redirect
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const message = error.message;
-            console.error('Login error:', errorCode, message);
-            // Display error message to the user
-            if (errorMessage) {
-                switch (errorCode) {
-                    case 'auth/invalid-email':
-                        errorMessage.textContent = 'El formato del correo electrónico no es válido.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage.textContent = 'Este usuario ha sido deshabilitado.';
-                        break;
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                        errorMessage.textContent = 'Correo electrónico o contraseña incorrectos.';
-                        break;
-                    case 'auth/invalid-credential':
-                         errorMessage.textContent = 'Credenciales inválidas. Verifica tu correo y contraseña.';
-                         break;
-                    default:
-                        errorMessage.textContent = 'Error al iniciar sesión. Por favor, inténtalo de nuevo.';
-                        break;
-                }
-                errorMessage.style.display = 'block'; // Show the error message element
-            }
-        });
-});
-
-// Optional: Hide error message when user starts typing
-emailInput.addEventListener('input', () => {
-    if (errorMessage) {
-        errorMessage.style.display = 'none';
+    // Animación de transición entre formularios
+    function animateFormSwitch(showForm, hideForm) {
+        hideForm.classList.add('opacity-0');
+        setTimeout(() => {
+            hideForm.classList.add('hidden');
+            showForm.classList.remove('hidden');
+            showForm.classList.add('opacity-0');
+            setTimeout(() => {
+                showForm.classList.remove('opacity-0');
+            }, 10);
+        }, 200);
     }
-});
 
-passwordInput.addEventListener('input', () => {
-    if (errorMessage) {
-        errorMessage.style.display = 'none';
+    function showLogin() {
+        tabLogin.classList.add('bg-indigo-600', 'text-white');
+        tabLogin.classList.remove('bg-gray-200', 'text-indigo-700');
+        tabRegister.classList.remove('bg-indigo-600', 'text-white');
+        tabRegister.classList.add('bg-gray-200', 'text-indigo-700');
+        animateFormSwitch(loginForm, registerForm);
+        errorDiv.textContent = '';
     }
+    function showRegister() {
+        tabRegister.classList.add('bg-indigo-600', 'text-white');
+        tabRegister.classList.remove('bg-gray-200', 'text-indigo-700');
+        tabLogin.classList.remove('bg-indigo-600', 'text-white');
+        tabLogin.classList.add('bg-gray-200', 'text-indigo-700');
+        animateFormSwitch(registerForm, loginForm);
+        errorDiv.textContent = '';
+    }
+
+    tabLogin.onclick = showLogin;
+    tabRegister.onclick = showRegister;
+
+    // Login
+    loginForm.onsubmit = async (e) => {
+        e.preventDefault();
+        errorDiv.textContent = '';
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+            window.location.replace('index.html');
+        } catch (err) {
+            errorDiv.textContent = err.message;
+        }
+    };
+
+    // Registro
+    registerForm.onsubmit = async (e) => {
+        e.preventDefault();
+        errorDiv.textContent = '';
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const password2 = document.getElementById('register-password2').value;
+        if (password !== password2) {
+            errorDiv.textContent = 'Las contraseñas no coinciden.';
+            return;
+        }
+        try {
+            await auth.createUserWithEmailAndPassword(email, password);
+            errorDiv.innerHTML = '<span class="text-green-600">✅ Registro exitoso, redirigiendo...</span>';
+            setTimeout(() => {
+                window.location.replace('index.html');
+            }, 1200);
+        } catch (err) {
+            errorDiv.textContent = err.message;
+        }
+    };
+
+    // Google
+    document.getElementById('google-btn').onclick = async () => {
+        errorDiv.textContent = '';
+        const provider = new firebase.auth.GoogleAuthProvider();
+        try {
+            await auth.signInWithPopup(provider);
+            window.location.replace('index.html');
+        } catch (err) {
+            errorDiv.textContent = err.message;
+        }
+    };
+
+    // Mostrar el formulario correcto según el hash
+    function updateFormByHash() {
+        if (window.location.hash === '#register') {
+            showRegister();
+        } else {
+            showLogin();
+        }
+    }
+    window.addEventListener('hashchange', updateFormByHash);
+    updateFormByHash();
+
+    // Enlaces para alternar entre login y registro
+    document.getElementById('link-to-register').onclick = (e) => {
+        e.preventDefault();
+        window.location.hash = '#register';
+    };
+    document.getElementById('link-to-login').onclick = (e) => {
+        e.preventDefault();
+        window.location.hash = '';
+    };
 });

@@ -50,16 +50,33 @@ const darkIcon = document.getElementById('theme-icon-dark');
 const menuToggle = document.getElementById('menu-toggle');
 const mobileMenu = document.getElementById('mobile-menu');
 
-// Función principal de inicialización
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Aplicación iniciada correctamente');
-    
+// Inicializar Firebase solo si no está inicializado
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
+    authDomain: "empresa-ai.firebaseapp.com",
+    projectId: "empresa-ai",
+    storageBucket: "empresa-ai.appspot.com",
+    messagingSenderId: "525047010078",
+    appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+    measurementId: "G-TKKJK5MBYL"
+  });
+}
+const auth = firebase.auth();
+
+// === PROTECCIÓN DE RUTA: SOLO USUARIOS AUTENTICADOS ===
+const loader = document.getElementById('global-loader');
+auth.onAuthStateChanged(function(user) {
+  if (!user) {
+    if (loader) loader.style.display = 'none';
+    window.location.replace('login.html');
+  } else {
+    if (loader) loader.style.display = 'none';
+    // --- INICIO DE INICIALIZACIÓN PRINCIPAL ---
     // Configuración inicial
     emailjs.init(EMAIL_CONFIG.publicKey);
-    
     // Inicializar tema PRIMERO para que los colores se apliquen correctamente
     initTheme();
-    
     // Inicializar componentes
     createToolCards();
     initChart();
@@ -69,29 +86,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeepDive();
     setupEventListeners();
     setupCursorEffect();
-    
     // Asegurar que el gráfico tenga los colores correctos desde el inicio
     setTimeout(() => {
-        updateChartTheme();
-        updateFUSoftLogo();
-        updateUniempresarialLogo();
-        updateCCBLogo();
+      updateChartTheme();
+      updateFUSoftLogo();
+      updateUniempresarialLogo();
+      updateCCBLogo();
     }, 100);
-    
     // Configurar rotación automática
     startAutoRotateTools();
-    
     // Mostrar área de contenido dinámico
     if (dynamicContentArea) {
-        dynamicContentArea.style.opacity = '1';
+      dynamicContentArea.style.opacity = '1';
     }
-    
     // Inicializar selección de asesor de IA
     setupAIAdvisorSelector();
     setupAdvisorAffinity();
     setupAffinityCards();
-    
+    setupProfileMenu();
     console.log('Aplicación configurada correctamente');
+    // --- FIN DE INICIALIZACIÓN PRINCIPAL ---
+  }
 });
 
 function createToolCards() {
@@ -1155,4 +1170,51 @@ async function generatePracticalExamples(primaryToolKey, businessProfile) {
             practicalContentContainer.innerHTML = `<p class='text-red-500'>No se pudieron generar los ejemplos prácticos. Intenta de nuevo.</p>`;
         }
     }
+}
+
+function setupProfileMenu() {
+    const profileMenuContainer = document.getElementById('profile-menu-container');
+    const profileMenuBtn = document.getElementById('profile-menu-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileUserName = document.getElementById('profile-user-name');
+    const profileDropdownName = document.getElementById('profile-dropdown-name');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (!profileMenuContainer || !profileMenuBtn || !profileDropdown || !profileUserName || !profileDropdownName || !logoutBtn) {
+        // Si falta algún elemento, no hacer nada
+        return;
+    }
+
+    // Mostrar el menú solo si hay usuario
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            let name = user.displayName || user.email || 'Usuario';
+            profileUserName.textContent = name.split(' ')[0];
+            profileDropdownName.textContent = name;
+            profileMenuContainer.classList.remove('hidden');
+        } else {
+            profileMenuContainer.classList.add('hidden');
+        }
+    });
+
+    // Mostrar/ocultar el dropdown
+    let dropdownOpen = false;
+    profileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownOpen = !dropdownOpen;
+        profileDropdown.classList.toggle('hidden', !dropdownOpen);
+    });
+    // Cerrar el dropdown al hacer click fuera
+    document.addEventListener('click', function(e) {
+        if (dropdownOpen && !profileMenuContainer.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+            dropdownOpen = false;
+        }
+    });
+    // Cerrar sesión
+    logoutBtn.addEventListener('click', function() {
+        auth.signOut().then(function() {
+            window.location.replace('login.html');
+        });
+    });
 } 

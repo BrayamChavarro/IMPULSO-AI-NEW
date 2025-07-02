@@ -1,0 +1,97 @@
+body {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f8f9; /* Light background color similar to the other CSS */
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box;
+}
+
+.login-container {
+    background-color: #fff; /* White background for the form container */
+    padding: 30px;
+    border-radius: 1rem; /* Rounded corners */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    width: 100%;
+    max-width: 400px; /* Max width for the form */
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #374151; /* Dark gray text color */
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #4b5563; /* Slightly lighter gray for labels */
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 0.5rem; /* Rounded corners for inputs */
+    box-sizing: border-box; /* Include padding in width */
+    font-size: 1rem;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4f46e5; /* Highlight color on focus */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); /* Subtle focus shadow */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4f46e5; /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 0.5rem; /* Rounded corners for button */
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Button shadow */
+}
+
+button:hover {
+    background-color: #4338ca; /* Darker shade on hover */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+button:active {
+    background-color: #3730a3; /* Even darker on active */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .login-container h2 {
+        font-size: 1.3rem;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}

@@ -542,6 +542,31 @@ function setupEventListeners() {
             generateStrategy(currentTools, improvementGoal, currentProblem);
         }
     });
+
+    // Generar ejemplos prácticos personalizados
+    const generateExamplesBtn = document.getElementById('generate-examples-btn');
+    if (generateExamplesBtn) {
+        generateExamplesBtn.addEventListener('click', () => {
+            // Reúne los datos del perfil del negocio
+            const businessProfile = {
+                companyType: companyTypeSelector?.value || '',
+                sector: sectorSelector?.value || '',
+                businessActivity: businessActivitySelector?.value || '',
+                businessDescription: businessDescriptionInput?.value || '',
+                improvementGoal: improvementGoalInput?.value || '',
+                currentProblem: currentProblemInput?.value || ''
+            };
+
+            // Obtiene la primera herramienta recomendada como ejemplo
+            const recommendedTools = Array.from(document.querySelectorAll('.recommended-tool-card'));
+            if (recommendedTools.length > 0) {
+                const primaryToolKey = recommendedTools[0].getAttribute('data-tool-key');
+                generatePracticalExamples(primaryToolKey, businessProfile);
+            } else {
+                alert('Primero debes generar una recomendación de herramienta.');
+            }
+        });
+    }
 }
 
 function setupEmailSharing() {
@@ -860,12 +885,36 @@ Genera un plan de implementación detallado. La respuesta DEBE ser en formato HT
             if (!/^<h1/i.test(strategyText.trim())) {
                 strategyText = `<h1 style="font-size:2.2rem;font-weight:800;margin-bottom:1.5rem;text-align:center;color:#374151;">Estrategia de implementación</h1>` + strategyText;
             }
+            // Agregar botón de primeros pasos
+            strategyText += `<div class="flex justify-center mt-8"><button id="first-steps-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-colors flex items-center gap-2"><span>🚀 ¡Ayúdame a empezar!</span></button></div><div id="first-steps-result" class="mt-8"></div>`;
             strategyModalContent.innerHTML = strategyText;
-            
-            // Asociar evento del botón PDF
+            // Evento botón PDF
             const downloadPdfBtn = document.getElementById('download-pdf-btn');
             if (downloadPdfBtn) {
                 downloadPdfBtn.addEventListener('click', downloadPDF);
+            }
+            // Evento botón primeros pasos
+            const firstStepsBtn = document.getElementById('first-steps-btn');
+            if (firstStepsBtn) {
+                firstStepsBtn.addEventListener('click', async () => {
+                    const firstStepsResult = document.getElementById('first-steps-result');
+                    if (firstStepsResult) {
+                        firstStepsResult.innerHTML = '<div class="flex flex-col items-center justify-center h-32"><div class="loader"></div><p class="mt-4 text-gray-600 dark:text-gray-400">Generando primeros pasos prácticos...</p></div>';
+                        // Prompt dinámico para primeros pasos
+                        const firstStepsPrompt = `Actúa como un experto en la herramienta ${toolNames} para PYMES colombianas. Basado en este perfil de empresa: Tipo de Empresa: ${companyType}, Sector: ${sector}, Actividad: ${businessActivity}, Descripción: ${businessDescription}, Objetivo: ${improvementGoal}, Desafío: ${currentProblem}. Genera 3 ejemplos prácticos y listos para usar que ayuden a la empresa a dar sus primeros pasos con la herramienta recomendada. Si es de marketing, crea borradores de publicaciones; si es de productividad, redacta un email de presentación; si es de ventas, crea una plantilla de WhatsApp Business. Responde en HTML simple (<ul>, <li>, <strong>, <p>).`;
+                        const payload = { contents: [{ parts: [{ text: firstStepsPrompt }] }] };
+                        try {
+                            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                            const result = await response.json();
+                            let stepsText = result.candidates && result.candidates[0]?.content.parts[0].text ? result.candidates[0].content.parts[0].text : '';
+                            stepsText = stepsText.replace(/^```html\s*|^```\s*/i, '');
+                            firstStepsResult.innerHTML = `<h3 style='font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:#059669;'>Primeros pasos prácticos</h3>` + stepsText;
+                        } catch (error) {
+                            firstStepsResult.innerHTML = `<p class='text-red-500'>No se pudieron generar los primeros pasos. Intenta de nuevo.</p>`;
+                        }
+                    }
+                });
             }
         } else {
             strategyModalContent.innerHTML = `<p class="text-red-500">No se pudo generar una estrategia. La respuesta de la IA no fue válida.</p>`;
@@ -1052,4 +1101,58 @@ function setupAffinityCards() {
     });
     // Por defecto: ninguno seleccionado
     affinitySelection = null;
+}
+
+// --- Generador de ejemplos prácticos personalizados ---
+/**
+ * Genera ejemplos prácticos y accionables basados en la principal herramienta recomendada.
+ * @param {string} primaryToolKey - La clave de la herramienta principal recomendada (ej: 'flikiAI').
+ * @param {object} businessProfile - Un objeto con la información del negocio del usuario.
+ */
+async function generatePracticalExamples(primaryToolKey, businessProfile) {
+    // Mostramos un estado de carga mientras se genera el contenido
+    const practicalContentContainer = document.getElementById('practical-examples-container');
+    if (practicalContentContainer) {
+        practicalContentContainer.innerHTML = `<div class="flex flex-col items-center justify-center h-48"><div class="loader"></div><p class="mt-4 text-gray-600 dark:text-gray-400">Generando ejemplos prácticos para ti...</p></div>`;
+    }
+
+    const toolData = aiData[primaryToolKey];
+    if (!toolData) {
+        if (practicalContentContainer) {
+            practicalContentContainer.innerHTML = `<p class="text-red-500">Error: No se encontraron datos para la herramienta seleccionada.</p>`;
+        }
+        return;
+    }
+
+    let prompt = '';
+    const { companyType, sector, businessActivity, businessDescription, improvementGoal, currentProblem } = businessProfile;
+    const toolCategory = toolData.description ? toolData.description.toLowerCase() : '';
+
+    if (toolCategory.includes('video') || toolCategory.includes('diseño') || toolCategory.includes('marketing')) {
+        prompt = `Actúa como un estratega de contenido y community manager experto en PYMES de Colombia. El negocio es: "${businessDescription}". Su objetivo es "${improvementGoal}". La herramienta a usar es ${toolData.name}. Crea 3 ideas de contenido listas para publicar en Instagram o Facebook. El tono debe ser cercano y usar modismos colombianos si es apropiado. Para cada idea, genera: 1.  **Texto del Post:** Un párrafo corto y atractivo. 2.  **Sugerencia Visual:** Describe la imagen o video a crear con ${toolData.name}. 3.  **Hashtags:** Incluye 5 hashtags relevantes para Colombia (ej: #HechoEnColombia, #EmprendimientoColombiano, etc.). Formatea la respuesta en HTML simple (<h3> para el título de la idea, <p> para el texto, <strong> para los subtítulos).`;
+    } else if (toolCategory.includes('ventas') || toolCategory.includes('crm')) {
+        prompt = `Actúa como un coach de ventas práctico para una empresa colombiana que se dedica a: "${businessDescription}". Su objetivo principal es "${improvementGoal}". Genera 2 plantillas de comunicación listas para usar que el equipo de ventas puede implementar hoy mismo. 1.  **Plantilla de Correo de Seguimiento:** Un email corto para un cliente potencial que mostró interés pero no ha respondido. Debe ser amable y no sonar desesperado. 2.  **Plantilla de WhatsApp Business:** Un mensaje para reactivar a un cliente que no compra hace tiempo, ofreciendo algo de valor (un dato útil, no necesariamente un descuento). El tono debe ser profesional pero cercano, adaptado a la forma de hacer negocios en Colombia. Formatea en HTML simple.`;
+    } else if (toolCategory.includes('productividad') || toolCategory.includes('gestión')) {
+        prompt = `Actúa como un consultor de operaciones y productividad para una PYME en Colombia. El negocio, que se dedica a "${businessDescription}", tiene este desafío: "${currentProblem}". Diseña la estructura de una plantilla simple en Notion para resolver ese desafío. Describe la plantilla usando listas. La respuesta debe incluir: 1.  **Nombre Sugerido para la Página de Notion.** 2.  **Estructura de la Base de Datos Principal:** Lista las 4-5 columnas (propiedades) más importantes y el tipo de cada una (ej: Tarea (Texto), Responsable (Persona), Fecha Límite (Fecha), Estado (Selección)). 3.  **Guía Rápida de Uso:** Un párrafo explicando en términos sencillos cómo el equipo debe usar esta plantilla en su día a día. Formatea la respuesta en HTML simple.`;
+    } else {
+        prompt = `Actúa como un asistente de IA práctico. El negocio es "${businessDescription}". Genera 2 ejemplos concretos de cómo la herramienta ${toolData.name} puede ayudar a este negocio a alcanzar su objetivo de "${improvementGoal}". Sé breve, claro y enfócate en acciones que se puedan realizar hoy mismo. Formatea en HTML simple.`;
+    }
+
+    // Llamada real a la API de Gemini
+    const apiUrl = `${GEMINI_CONFIG.baseUrl}?key=${GEMINI_CONFIG.apiKey}`;
+    const payload = { contents: [{ parts: [{ text: prompt }] }] };
+    try {
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+        const result = await response.json();
+        let generatedContent = result.candidates && result.candidates[0]?.content.parts[0].text ? result.candidates[0].content.parts[0].text : '';
+        generatedContent = generatedContent.replace(/^```html\s*|^```\s*/i, '');
+        if (practicalContentContainer) {
+            practicalContentContainer.innerHTML = generatedContent;
+        }
+    } catch (error) {
+        if (practicalContentContainer) {
+            practicalContentContainer.innerHTML = `<p class='text-red-500'>No se pudieron generar los ejemplos prácticos. Intenta de nuevo.</p>`;
+        }
+    }
 } 

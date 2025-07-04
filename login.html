@@ -99,6 +99,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
         // Tabs
         const tabLogin = document.getElementById('tab-login');
@@ -163,17 +164,29 @@
             const password2 = document.getElementById('register-password2').value;
             const nombre = document.getElementById('register-name').value;
             const empresa = document.getElementById('register-company').value;
+
             if (password !== password2) {
                 errorDiv.textContent = 'Las contraseñas no coinciden.';
                 return;
             }
+
             try {
-                await auth.createUserWithEmailAndPassword(email, password);
-                await auth.currentUser.updateProfile({ displayName: nombre });
+                const result = await auth.createUserWithEmailAndPassword(email, password);
+                const user = result.user;
+
+                // Guarda los datos en Firestore usando la instancia global y merge:true
+                await db.collection('users').doc(user.uid).set({
+                    name: nombre,
+                    company: empresa
+                }, { merge: true });
+
+                await user.updateProfile({ displayName: nombre });
+
                 errorDiv.innerHTML = '<span class="text-green-600">✅ Registro exitoso, redirigiendo...</span>';
                 setTimeout(() => {
                     window.location.replace('index.html');
                 }, 1200);
+
             } catch (err) {
                 errorDiv.textContent = err.message;
             }

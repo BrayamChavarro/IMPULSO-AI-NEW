@@ -85,21 +85,84 @@ document.addEventListener('DOMContentLoaded', function() {
         const password2 = document.getElementById('register-password2').value;
         const nombre = document.getElementById('register-name').value;
         const empresa = document.getElementById('register-company').value;
+        
         if (password !== password2) {
             errorDiv.textContent = 'Las contraseñas no coinciden.';
             return;
         }
+        
+        // Mostrar indicador de carga
+        errorDiv.innerHTML = '<span class="text-blue-600">⏳ Creando cuenta...</span>';
+        
         try {
+            // Crear el usuario primero
             const result = await auth.createUserWithEmailAndPassword(email, password);
             const user = result.user;
-            // Guardar nombre y empresa en Firestore
-            await db.collection('users').doc(user.uid).set({ name: nombre, company: empresa }, { merge: true });
-            errorDiv.innerHTML = '<span class="text-green-600">✅ Registro exitoso, redirigiendo...</span>';
-            setTimeout(() => {
-                window.location.replace('index.html');
-            }, 1200);
-        } catch (err) {
-            errorDiv.textContent = err.message;
+            
+            // Mostrar progreso
+            errorDiv.innerHTML = '<span class="text-blue-600">⏳ Guardando información del perfil...</span>';
+            
+            // Guardar datos en Firestore con manejo de errores mejorado
+            try {
+                const userData = {
+                    name: nombre,
+                    company: empresa,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('users').doc(user.uid).set(userData);
+                
+                // Éxito completo
+                errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1500);
+                
+            } catch (firestoreError) {
+                console.error('Error al guardar en Firestore:', firestoreError);
+                
+                // Intentar una segunda vez con un enfoque diferente
+                try {
+                    await db.collection('users').doc(user.uid).set({
+                        name: nombre,
+                        company: empresa,
+                        email: email
+                    });
+                    
+                    errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
+                    setTimeout(() => {
+                        window.location.replace('index.html');
+                    }, 1500);
+                    
+                } catch (retryError) {
+                    console.error('Error en segundo intento:', retryError);
+                    // Aún permitir el acceso aunque falle Firestore
+                    errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
+                    setTimeout(() => {
+                        window.location.replace('index.html');
+                    }, 1500);
+                }
+            }
+            
+        } catch (authError) {
+            console.error('Error en autenticación:', authError);
+            
+            // Manejar errores específicos de autenticación
+            let errorMessage = 'Error al crear la cuenta.';
+            
+            if (authError.code === 'auth/email-already-in-use') {
+                errorMessage = 'Este correo electrónico ya está registrado.';
+            } else if (authError.code === 'auth/weak-password') {
+                errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+            } else if (authError.code === 'auth/invalid-email') {
+                errorMessage = 'El correo electrónico no es válido.';
+            } else {
+                errorMessage = authError.message;
+            }
+            
+            errorDiv.textContent = errorMessage;
         }
     };
 
@@ -128,16 +191,70 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('google-extra-modal');
         modal.classList.remove('hidden');
         const form = document.getElementById('google-extra-form');
+        
+        // Mostrar indicador de carga en el modal
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
         form.onsubmit = async (e) => {
             e.preventDefault();
             const name = document.getElementById('google-extra-name').value;
             const company = document.getElementById('google-extra-company').value;
+            
+            // Mostrar carga
+            submitBtn.textContent = 'Guardando...';
+            submitBtn.disabled = true;
+            
             try {
-                await db.collection('users').doc(uid).set({ name, company }, { merge: true });
-                modal.classList.add('hidden');
-                window.location.replace('index.html');
+                const userData = {
+                    name, 
+                    company,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('users').doc(uid).set(userData, { merge: true });
+                
+                // Éxito
+                submitBtn.textContent = '¡Guardado!';
+                submitBtn.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    window.location.replace('index.html');
+                }, 1000);
+                
             } catch (err) {
-                alert('Error al guardar los datos: ' + err.message);
+                console.error('Error al guardar datos de Google:', err);
+                
+                // Intentar de nuevo sin timestamps
+                try {
+                    await db.collection('users').doc(uid).set({ 
+                        name, 
+                        company
+                    }, { merge: true });
+                    
+                    submitBtn.textContent = '¡Guardado!';
+                    submitBtn.classList.add('bg-green-500');
+                    
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        window.location.replace('index.html');
+                    }, 1000);
+                    
+                } catch (retryErr) {
+                    console.error('Error en segundo intento:', retryErr);
+                    alert('Error al guardar los datos. Se redirigirá de todas formas.');
+                    modal.classList.add('hidden');
+                    window.location.replace('index.html');
+                }
+            } finally {
+                // Restaurar botón
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('bg-green-500');
+                }, 2000);
             }
         };
     }

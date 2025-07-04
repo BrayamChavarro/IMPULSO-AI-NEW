@@ -63,6 +63,7 @@ if (!firebase.apps.length) {
   });
 }
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 // === PROTECCIÓN DE RUTA: SOLO USUARIOS AUTENTICADOS ===
 const loader = document.getElementById('global-loader');
@@ -104,6 +105,8 @@ auth.onAuthStateChanged(function(user) {
     setupAdvisorAffinity();
     setupAffinityCards();
     setupProfileMenu();
+    // Cargar datos del perfil del usuario
+    loadUserProfile();
     console.log('Aplicación configurada correctamente');
     // --- FIN DE INICIALIZACIÓN PRINCIPAL ---
   }

@@ -50,6 +50,15 @@ const darkIcon = document.getElementById('theme-icon-dark');
 const menuToggle = document.getElementById('menu-toggle');
 const mobileMenu = document.getElementById('mobile-menu');
 
+// === SIDEBAR DE PERFIL ===
+const profileMenuBtn = document.getElementById('profile-menu-btn');
+const profileSidebarOverlay = document.getElementById('profile-sidebar-overlay');
+const profileSidebar = document.getElementById('profile-sidebar');
+const closeSidebarBtn = document.getElementById('close-sidebar');
+const sidebarUsername = document.getElementById('sidebar-username');
+const sidebarUseremail = document.getElementById('sidebar-useremail');
+const logoutBtnSidebar = document.getElementById('logout-btn-sidebar');
+
 // Inicializar Firebase solo si no está inicializado
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -1217,6 +1226,51 @@ function setupProfileMenu() {
     // Cerrar sesión
     logoutBtn.addEventListener('click', function() {
         auth.signOut().then(function() {
+            window.location.replace('login.html');
+        });
+    });
+}
+
+if (profileMenuBtn && profileSidebarOverlay && profileSidebar) {
+    profileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (profileSidebarOverlay.classList.contains('hidden')) {
+            profileSidebarOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                profileSidebar.classList.remove('translate-x-full');
+                profileSidebar.classList.add('translate-x-0');
+            }, 10);
+        } else {
+            profileSidebar.classList.remove('translate-x-0');
+            profileSidebar.classList.add('translate-x-full');
+            setTimeout(() => {
+                profileSidebarOverlay.classList.add('hidden');
+            }, 300);
+        }
+    });
+}
+if (closeSidebarBtn && profileSidebarOverlay && profileSidebar) {
+    closeSidebarBtn.addEventListener('click', function() {
+        profileSidebar.classList.remove('translate-x-0');
+        profileSidebar.classList.add('translate-x-full');
+        setTimeout(() => {
+            profileSidebarOverlay.classList.add('hidden');
+        }, 300);
+    });
+}
+// Poblar datos del usuario en el sidebar
+if (auth && sidebarUsername && sidebarUseremail) {
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            sidebarUsername.textContent = user.displayName || 'Usuario';
+            sidebarUseremail.textContent = user.email || '';
+        }
+    });
+}
+// Logout desde el sidebar
+if (logoutBtnSidebar) {
+    logoutBtnSidebar.addEventListener('click', function() {
+        auth.signOut().then(() => {
             window.location.replace('login.html');
         });
     });

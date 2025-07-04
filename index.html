@@ -78,15 +78,33 @@
                         <button id="profile-menu-btn" class="flex items-center gap-2 px-3 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             <span id="profile-user-name">Perfil</span>
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </button>
-                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 hidden">
-                            <div class="px-4 py-2 text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">
-                                <div class="mb-1"><span class="font-semibold">Nombre:</span> <span id="dropdown-profile-name">Cargando...</span></div>
-                                <div class="mb-1"><span class="font-semibold">Correo:</span> <span id="dropdown-profile-email">Cargando...</span></div>
-                                <div><span class="font-semibold">Empresa:</span> <span id="dropdown-profile-company">Cargando...</span></div>
-                            </div>
-                            <button id="logout-btn" class="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar sesión</button>
+                        <!-- Overlay y Sidebar de perfil -->
+                        <div id="profile-sidebar-overlay" class="hidden fixed inset-0 z-50">
+                          <div class="absolute inset-0 bg-gray-900 bg-opacity-90"></div>
+                          <div id="profile-sidebar" class="absolute top-0 right-0 w-80 max-w-full h-full bg-gray-900 text-white shadow-2xl transition-transform duration-300 ease-in-out transform translate-x-full">
+                              <div class="flex flex-col h-full">
+                                  <div class="flex items-center justify-between p-4 border-b border-gray-700">
+                                      <div>
+                                          <div class="font-bold text-lg" id="sidebar-username">Usuario</div>
+                                          <div class="text-sm text-gray-400" id="sidebar-useremail">correo@ejemplo.com</div>
+                                      </div>
+                                      <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                                          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                          </svg>
+                                      </button>
+                                  </div>
+                                  <nav class="flex-1 p-4 space-y-2">
+                                      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-800"><span>👤</span> Mi perfil</a>
+                                      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-800"><span>⚙️</span> Configuración</a>
+                                      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-800"><span>⭐</span> Favoritos</a>
+                                  </nav>
+                                  <div class="p-4 border-t border-gray-700">
+                                      <button id="logout-btn-sidebar" class="w-full text-left text-red-400 hover:text-red-600">Cerrar sesión</button>
+                                  </div>
+                              </div>
+                          </div>
                         </div>
                     </div>
                     <div class="md:hidden ml-4">

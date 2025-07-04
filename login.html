@@ -24,7 +24,14 @@
             </div>
             <div>
                 <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <input type="password" id="login-password" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                <div class="relative">
+                    <input type="password" id="login-password" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <button type="button" id="toggle-login-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Iniciar sesión</button>
             <div class="text-center mt-2">
@@ -46,11 +53,25 @@
             </div>
             <div>
                 <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <input type="password" id="register-password" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                <div class="relative">
+                    <input type="password" id="register-password" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <button type="button" id="toggle-register-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div>
                 <label for="register-password2" class="block text-sm font-medium text-gray-700 mb-1">Repetir contraseña</label>
-                <input type="password" id="register-password2" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                <div class="relative">
+                    <input type="password" id="register-password2" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <button type="button" id="toggle-register-password2" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors">Crear cuenta</button>
             <div class="text-center mt-2">
@@ -70,164 +91,37 @@
     </div>
     <!-- Modal para datos adicionales tras Google -->
     <div id="google-extra-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
-      <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-sm">
-        <h2 class="text-xl font-bold mb-4 text-indigo-700">Completa tu registro</h2>
+      <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-sm relative">
+        <!-- Botón de cerrar -->
+        <button type="button" class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        
+        <h2 class="text-xl font-bold mb-4 text-indigo-700">Completa tu perfil</h2>
+        <p class="text-sm text-gray-600 mb-6">Necesitamos algunos datos adicionales para personalizar tu experiencia.</p>
+        
         <form id="google-extra-form" class="space-y-4">
           <div>
             <label for="google-extra-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
-            <input type="text" id="google-extra-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+            <input type="text" id="google-extra-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Tu nombre completo">
           </div>
           <div>
             <label for="google-extra-company" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
-            <input type="text" id="google-extra-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+            <input type="text" id="google-extra-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Nombre de tu empresa o organización">
           </div>
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Guardar</button>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Continuar</button>
         </form>
       </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Configuración de Firebase (reemplaza con tu config real)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
-            authDomain: "empresa-ai.firebaseapp.com",
-            projectId: "empresa-ai",
-            storageBucket: "empresa-ai.appspot.com",
-            messagingSenderId: "525047010078",
-            appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
-            measurementId: "G-TKKJK5MBYL"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // Tabs
-        const tabLogin = document.getElementById('tab-login');
-        const tabRegister = document.getElementById('tab-register');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const errorDiv = document.getElementById('login-error');
-
-        // Animación de transición entre formularios
-        function animateFormSwitch(showForm, hideForm) {
-            hideForm.classList.add('opacity-0');
-            setTimeout(() => {
-                hideForm.classList.add('hidden');
-                showForm.classList.remove('hidden');
-                showForm.classList.add('opacity-0');
-                setTimeout(() => {
-                    showForm.classList.remove('opacity-0');
-                }, 10);
-            }, 200);
-        }
-
-        function showLogin() {
-            tabLogin.classList.add('bg-indigo-600', 'text-white');
-            tabLogin.classList.remove('bg-gray-200', 'text-indigo-700');
-            tabRegister.classList.remove('bg-indigo-600', 'text-white');
-            tabRegister.classList.add('bg-gray-200', 'text-indigo-700');
-            animateFormSwitch(loginForm, registerForm);
-            errorDiv.textContent = '';
-        }
-        function showRegister() {
-            tabRegister.classList.add('bg-indigo-600', 'text-white');
-            tabRegister.classList.remove('bg-gray-200', 'text-indigo-700');
-            tabLogin.classList.remove('bg-indigo-600', 'text-white');
-            tabLogin.classList.add('bg-gray-200', 'text-indigo-700');
-            animateFormSwitch(registerForm, loginForm);
-            errorDiv.textContent = '';
-        }
-
-        tabLogin.onclick = showLogin;
-        tabRegister.onclick = showRegister;
-
-        // Login
-        loginForm.onsubmit = async (e) => {
-            e.preventDefault();
-            errorDiv.textContent = '';
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                window.location.replace('index.html');
-            } catch (err) {
-                errorDiv.textContent = err.message;
-            }
-        };
-
-        // Registro
-        registerForm.onsubmit = async (e) => {
-            e.preventDefault();
-            errorDiv.textContent = '';
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const password2 = document.getElementById('register-password2').value;
-            const nombre = document.getElementById('register-name').value;
-            const empresa = document.getElementById('register-company').value;
-
-            if (password !== password2) {
-                errorDiv.textContent = 'Las contraseñas no coinciden.';
-                return;
-            }
-
-            try {
-                const result = await auth.createUserWithEmailAndPassword(email, password);
-                const user = result.user;
-
-                // Guarda los datos en Firestore usando la instancia global y merge:true
-                await db.collection('users').doc(user.uid).set({
-                    name: nombre,
-                    company: empresa
-                }, { merge: true });
-
-                await user.updateProfile({ displayName: nombre });
-
-                errorDiv.innerHTML = '<span class="text-green-600">✅ Registro exitoso, redirigiendo...</span>';
-                setTimeout(() => {
-                    window.location.replace('index.html');
-                }, 1200);
-
-            } catch (err) {
-                errorDiv.textContent = err.message;
-            }
-        };
-
-        // Google
-        document.getElementById('google-btn').onclick = async () => {
-            errorDiv.textContent = '';
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                await auth.signInWithPopup(provider);
-                window.location.replace('index.html');
-            } catch (err) {
-                errorDiv.textContent = err.message;
-            }
-        };
-
-        // Mostrar el formulario correcto según el hash
-        function updateFormByHash() {
-            if (window.location.hash === '#register') {
-                showRegister();
-                registerForm.classList.remove('opacity-0');
-            } else {
-                showLogin();
-                loginForm.classList.remove('opacity-0');
-            }
-        }
-        window.addEventListener('hashchange', updateFormByHash);
-        updateFormByHash();
-
-        // Enlaces para alternar entre login y registro
-        document.getElementById('link-to-register').onclick = (e) => {
-            e.preventDefault();
-            window.location.hash = '#register';
-        };
-        document.getElementById('link-to-login').onclick = (e) => {
-            e.preventDefault();
-            window.location.hash = '';
-        };
-    });
-    </script>
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="js/login.js"></script>
     <style>
     #login-form, #register-form {
         transition: opacity 0.2s;

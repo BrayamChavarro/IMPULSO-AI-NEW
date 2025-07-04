@@ -173,24 +173,33 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const result = await auth.signInWithPopup(provider);
             const user = result.user;
-            // Verificar si el usuario ya tiene datos adicionales en Firestore
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            if (!userDoc.exists || !userDoc.data().name || !userDoc.data().company) {
-                // Mostrar modal para pedir datos adicionales
-                mostrarModalGoogleExtra(user.uid);
-            } else {
-                window.location.replace('index.html');
-            }
+            
+            // Siempre mostrar el modal para pedir/actualizar datos
+            // Esto asegura que todos los usuarios tengan nombre y empresa
+            mostrarModalGoogleExtra(user.uid, user.displayName, user.email);
+            
         } catch (err) {
+            console.error('Error en Google Sign-In:', err);
             errorDiv.textContent = err.message;
         }
     };
 
     // Función para mostrar el modal y guardar datos adicionales
-    function mostrarModalGoogleExtra(uid) {
+    function mostrarModalGoogleExtra(uid, googleName = '', googleEmail = '') {
         const modal = document.getElementById('google-extra-modal');
-        modal.classList.remove('hidden');
         const form = document.getElementById('google-extra-form');
+        const nameInput = document.getElementById('google-extra-name');
+        const companyInput = document.getElementById('google-extra-company');
+        
+        // Limpiar ambos campos para que el usuario los llene manualmente
+        nameInput.value = '';
+        companyInput.value = '';
+        
+        // Mostrar el modal
+        modal.classList.remove('hidden');
+        
+        // Enfocar el primer campo (nombre)
+        nameInput.focus();
         
         // Mostrar indicador de carga en el modal
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -198,8 +207,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         form.onsubmit = async (e) => {
             e.preventDefault();
-            const name = document.getElementById('google-extra-name').value;
-            const company = document.getElementById('google-extra-company').value;
+            const name = nameInput.value.trim();
+            const company = companyInput.value.trim();
+            
+            // Validar que ambos campos estén llenos
+            if (!name || !company) {
+                alert('Por favor, complete tanto el nombre como el nombre de la empresa.');
+                return;
+            }
             
             // Mostrar carga
             submitBtn.textContent = 'Guardando...';
@@ -209,8 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const userData = {
                     name, 
                     company,
+                    email: googleEmail || '',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    loginMethod: 'google'
                 };
                 
                 await db.collection('users').doc(uid).set(userData, { merge: true });
@@ -231,7 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     await db.collection('users').doc(uid).set({ 
                         name, 
-                        company
+                        company,
+                        email: googleEmail || '',
+                        loginMethod: 'google'
                     }, { merge: true });
                     
                     submitBtn.textContent = '¡Guardado!';
@@ -257,6 +276,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 2000);
             }
         };
+        
+        // Agregar botón para cerrar modal
+        const closeBtn = modal.querySelector('.close-modal-btn');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                modal.classList.add('hidden');
+                // Cerrar sesión si el usuario cancela
+                auth.signOut().then(() => {
+                    console.log('Usuario canceló el registro');
+                }).catch(err => {
+                    console.error('Error al cerrar sesión:', err);
+                });
+            };
+        }
     }
 
     // Mostrar el formulario correcto según el hash
@@ -279,4 +312,88 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         window.location.hash = '';
     };
+    
+    // Funcionalidad para mostrar/ocultar contraseñas
+    function setupPasswordToggles() {
+        // Toggle para contraseña de login
+        const toggleLoginPassword = document.getElementById('toggle-login-password');
+        const loginPasswordInput = document.getElementById('login-password');
+        
+        if (toggleLoginPassword && loginPasswordInput) {
+            toggleLoginPassword.addEventListener('click', () => {
+                const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                loginPasswordInput.setAttribute('type', type);
+                
+                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
+                const svg = toggleLoginPassword.querySelector('svg');
+                if (type === 'text') {
+                    // Contraseña visible - mostrar ojo abierto
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    `;
+                } else {
+                    // Contraseña oculta - mostrar ojo cerrado/tachado
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                    `;
+                }
+            });
+        }
+        
+        // Toggle para primera contraseña de registro
+        const toggleRegisterPassword = document.getElementById('toggle-register-password');
+        const registerPasswordInput = document.getElementById('register-password');
+        
+        if (toggleRegisterPassword && registerPasswordInput) {
+            toggleRegisterPassword.addEventListener('click', () => {
+                const type = registerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                registerPasswordInput.setAttribute('type', type);
+                
+                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
+                const svg = toggleRegisterPassword.querySelector('svg');
+                if (type === 'text') {
+                    // Contraseña visible - mostrar ojo abierto
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    `;
+                } else {
+                    // Contraseña oculta - mostrar ojo cerrado/tachado
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                    `;
+                }
+            });
+        }
+        
+        // Toggle para segunda contraseña de registro
+        const toggleRegisterPassword2 = document.getElementById('toggle-register-password2');
+        const registerPassword2Input = document.getElementById('register-password2');
+        
+        if (toggleRegisterPassword2 && registerPassword2Input) {
+            toggleRegisterPassword2.addEventListener('click', () => {
+                const type = registerPassword2Input.getAttribute('type') === 'password' ? 'text' : 'password';
+                registerPassword2Input.setAttribute('type', type);
+                
+                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
+                const svg = toggleRegisterPassword2.querySelector('svg');
+                if (type === 'text') {
+                    // Contraseña visible - mostrar ojo abierto
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    `;
+                } else {
+                    // Contraseña oculta - mostrar ojo cerrado/tachado
+                    svg.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                    `;
+                }
+            });
+        }
+    }
+    
+    // Inicializar los toggles de contraseña
+    setupPasswordToggles();
 });

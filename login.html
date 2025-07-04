@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-gradient-to-br from-indigo-100 via-white to-emerald-100 min-h-screen flex items-center justify-center">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
@@ -36,6 +37,10 @@
                 <input type="text" id="register-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
             </div>
             <div>
+                <label for="register-company" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
+                <input type="text" id="register-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+            <div>
                 <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
                 <input type="email" id="register-email" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
             </div>
@@ -62,6 +67,23 @@
             Continuar con Google
         </button>
         <div id="login-error" class="mt-4 text-center text-red-600 font-semibold"></div>
+    </div>
+    <!-- Modal para datos adicionales tras Google -->
+    <div id="google-extra-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+      <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-sm">
+        <h2 class="text-xl font-bold mb-4 text-indigo-700">Completa tu registro</h2>
+        <form id="google-extra-form" class="space-y-4">
+          <div>
+            <label for="google-extra-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+            <input type="text" id="google-extra-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <div>
+            <label for="google-extra-company" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
+            <input type="text" id="google-extra-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Guardar</button>
+        </form>
+      </div>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -140,6 +162,7 @@
             const password = document.getElementById('register-password').value;
             const password2 = document.getElementById('register-password2').value;
             const nombre = document.getElementById('register-name').value;
+            const empresa = document.getElementById('register-company').value;
             if (password !== password2) {
                 errorDiv.textContent = 'Las contraseñas no coinciden.';
                 return;

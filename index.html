@@ -23,6 +23,7 @@
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
     <div id="global-loader" class="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-[100]">
@@ -73,15 +74,17 @@
                         <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     </button>
                     <!-- Perfil de usuario -->
-                    <div id="profile-menu-container" class="relative ml-4 hidden">
+                    <div id="profile-menu-container" class="relative ml-4">
                         <button id="profile-menu-btn" class="flex items-center gap-2 px-3 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <span id="profile-user-name">Usuario</span>
+                            <span id="profile-user-name">Perfil</span>
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </button>
-                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 hidden">
+                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 hidden">
                             <div class="px-4 py-2 text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">
-                                <span id="profile-dropdown-name" class="font-semibold">Usuario</span>
+                                <div class="mb-1"><span class="font-semibold">Nombre:</span> <span id="dropdown-profile-name">Cargando...</span></div>
+                                <div class="mb-1"><span class="font-semibold">Correo:</span> <span id="dropdown-profile-email">Cargando...</span></div>
+                                <div><span class="font-semibold">Empresa:</span> <span id="dropdown-profile-company">Cargando...</span></div>
                             </div>
                             <button id="logout-btn" class="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar sesión</button>
                         </div>
@@ -465,5 +468,74 @@
         100% { transform: rotate(360deg); }
     }
     </style>
+
+    <!-- Firebase Configuration -->
+    <script>
+    // Configuración de Firebase (debe ser igual a la de tu proyecto)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
+      authDomain: "empresa-ai.firebaseapp.com",
+      projectId: "empresa-ai",
+      storageBucket: "empresa-ai.appspot.com",
+      messagingSenderId: "525047010078",
+      appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+      measurementId: "G-TKKJK5MBYL"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileMenuBtn = document.getElementById('profile-menu-btn');
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const nameSpan = document.getElementById('dropdown-profile-name');
+      const emailSpan = document.getElementById('dropdown-profile-email');
+      const companySpan = document.getElementById('dropdown-profile-company');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      profileMenuBtn.onclick = async (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        // Cargar datos del usuario
+        const user = firebase.auth().currentUser;
+        if (!user) {
+          nameSpan.textContent = '(No autenticado)';
+          emailSpan.textContent = '-';
+          companySpan.textContent = '-';
+          return;
+        }
+        emailSpan.textContent = user.email;
+        try {
+          const db = firebase.firestore();
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            nameSpan.textContent = data.name || '(Sin nombre)';
+            companySpan.textContent = data.company || '(Sin empresa)';
+          } else {
+            nameSpan.textContent = '(Sin nombre)';
+            companySpan.textContent = '(Sin empresa)';
+          }
+        } catch (err) {
+          nameSpan.textContent = 'Error';
+          companySpan.textContent = 'Error';
+        }
+      };
+      document.addEventListener('click', (e) => {
+        if (!profileDropdown.classList.contains('hidden')) {
+          profileDropdown.classList.add('hidden');
+        }
+      });
+
+      // Cerrar sesión
+      if (logoutBtn) {
+        logoutBtn.onclick = async (e) => {
+          e.preventDefault();
+          await firebase.auth().signOut();
+          window.location.href = 'login.html';
+        };
+      }
+    });
+    </script>
 </body>
 </html>

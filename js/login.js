@@ -12,6 +12,7 @@ const firebaseConfig = {
 // Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 document.addEventListener('DOMContentLoaded', function() {
     // Tabs
@@ -61,8 +62,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
         try {
-            await auth.signInWithEmailAndPassword(email, password);
-            window.location.replace('index.html');
+            const result = await auth.signInWithEmailAndPassword(email, password);
+            const user = result.user;
+            // Verificar si el usuario ya tiene datos adicionales en Firestore
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists || !userDoc.data().name || !userDoc.data().company) {
+                mostrarModalGoogleExtra(user.uid);
+            } else {
+                window.location.replace('index.html');
+            }
         } catch (err) {
             errorDiv.textContent = err.message;
         }
@@ -75,12 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
         const password2 = document.getElementById('register-password2').value;
+        const nombre = document.getElementById('register-name').value;
+        const empresa = document.getElementById('register-company').value;
         if (password !== password2) {
             errorDiv.textContent = 'Las contraseñas no coinciden.';
             return;
         }
         try {
-            await auth.createUserWithEmailAndPassword(email, password);
+            const result = await auth.createUserWithEmailAndPassword(email, password);
+            const user = result.user;
+            // Guardar nombre y empresa en Firestore
+            await db.collection('users').doc(user.uid).set({ name: nombre, company: empresa }, { merge: true });
             errorDiv.innerHTML = '<span class="text-green-600">✅ Registro exitoso, redirigiendo...</span>';
             setTimeout(() => {
                 window.location.replace('index.html');
@@ -95,12 +108,39 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.textContent = '';
         const provider = new firebase.auth.GoogleAuthProvider();
         try {
-            await auth.signInWithPopup(provider);
-            window.location.replace('index.html');
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            // Verificar si el usuario ya tiene datos adicionales en Firestore
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists || !userDoc.data().name || !userDoc.data().company) {
+                // Mostrar modal para pedir datos adicionales
+                mostrarModalGoogleExtra(user.uid);
+            } else {
+                window.location.replace('index.html');
+            }
         } catch (err) {
             errorDiv.textContent = err.message;
         }
     };
+
+    // Función para mostrar el modal y guardar datos adicionales
+    function mostrarModalGoogleExtra(uid) {
+        const modal = document.getElementById('google-extra-modal');
+        modal.classList.remove('hidden');
+        const form = document.getElementById('google-extra-form');
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('google-extra-name').value;
+            const company = document.getElementById('google-extra-company').value;
+            try {
+                await db.collection('users').doc(uid).set({ name, company }, { merge: true });
+                modal.classList.add('hidden');
+                window.location.replace('index.html');
+            } catch (err) {
+                alert('Error al guardar los datos: ' + err.message);
+            }
+        };
+    }
 
     // Mostrar el formulario correcto según el hash
     function updateFormByHash() {

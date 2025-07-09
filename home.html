@@ -229,128 +229,144 @@
     
     <!-- Sección Cómo Funciona -->
     <section id="como-funciona" class="page-section py-20 sm:py-32 bg-black">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto">
-                <h2 class="text-4xl md:text-5xl font-bold mb-3">
-                    Tu Hoja de Ruta hacia la <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500">IA</span>
-                </h2>
-                <p class="text-lg text-gray-400 mb-16 max-w-2xl mx-auto">
-                    En 3 simples pasos, obtén una recomendación personalizada para tu negocio.
-                </p>
-            </div>
-
-            <!-- Contenedor de los pasos con línea de tiempo -->
-            <div class="relative">
-                <!-- Línea de tiempo (se animará con JS) -->
-                <div class="timeline-line hidden md:block"></div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
-                    <!-- Paso 1 -->
-                    <div class="step-card" style="--glow-color-light: rgba(249, 115, 22, 0.4); --glow-color-dark: rgba(249, 115, 22, 0.2); transition-delay: 0.2s;">
-                        <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
-                            <div class="mb-6">
-                                <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-orange-500 text-orange-400 bg-gray-800">
-                                    1
-                                </span>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3 text-white">Completa el Diagnóstico</h3>
-                            <p class="text-gray-400">
-                                Responde unas pocas preguntas sobre tu empresa, tus objetivos y los desafíos que enfrentas.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Paso 2 -->
-                    <div class="step-card" style="--glow-color-light: rgba(236, 72, 153, 0.4); --glow-color-dark: rgba(236, 72, 153, 0.2); transition-delay: 0.4s;">
-                        <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
-                            <div class="mb-6">
-                                <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-pink-500 text-pink-400 bg-gray-800">
-                                    2
-                                </span>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3 text-white">Analizamos tu Perfil</h3>
-                            <p class="text-gray-400">
-                                Nuestro sistema inteligente procesa tu información para entender las necesidades únicas de tu PYME.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Paso 3 -->
-                    <div class="step-card" style="--glow-color-light: rgba(139, 92, 246, 0.4); --glow-color-dark: rgba(139, 92, 246, 0.2); transition-delay: 0.6s;">
-                        <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
-                            <div class="mb-6">
-                                <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-purple-500 text-purple-400 bg-gray-800">
-                                    3
-                                </span>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3 text-white">Recibe tu Recomendación</h3>
-                            <p class="text-gray-400">
-                                Obtén una selección de las mejores IAs para ti, con un plan de acción claro para empezar a implementarlas.
-                            </p>
-                        </div>
-                    </div>
-
+        <!-- Carrusel de Ecosistema de Herramientas Potenciadas por IA -->
+        <div class="pb-16">
+            <h3 class="text-3xl font-bold text-center mb-2 text-white">Un Ecosistema de Herramientas Potenciadas por IA</h3>
+            <p class="text-center text-white max-w-3xl mx-auto mb-8">Estas son solo algunas de las herramientas que puedes conectar y potenciar con una estrategia de IA bien definida.</p>
+            <div class="logo-scroller overflow-hidden">
+                <div class="scroller-inner flex gap-4 w-max">
+                    <!-- Logos will be duplicated and inserted by JS -->
                 </div>
             </div>
-
-            <style>
-                .step-card {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-                }
-                .step-card.is-visible {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-                .timeline-line {
-                    position: absolute;
-                    top: 40px;
-                    left: 15%;
-                    width: 0;
-                    height: 2px;
-                    background: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6);
-                    transition: width 1.5s ease-in-out;
-                    z-index: 0;
-                }
-                .timeline-line.is-visible {
-                    width: 70%;
-                }
-                .card-hover-effect {
-                    position: relative;
-                    overflow: hidden;
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                }
-                .card-hover-effect:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 0 25px var(--glow-color-light), 0 0 40px var(--glow-color-dark);
-                }
-            </style>
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const roadmapSection = document.getElementById('como-funciona');
-                    const stepCards = document.querySelectorAll('.step-card');
-                    const timelineLine = document.querySelector('.timeline-line');
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                stepCards.forEach(card => card.classList.add('is-visible'));
-                                if(timelineLine) {
-                                   timelineLine.classList.add('is-visible');
-                                }
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    }, {
-                        threshold: 0.3
-                    });
-                    if (roadmapSection) {
-                        observer.observe(roadmapSection);
-                    }
-                });
-            </script>
+            <div class="logo-scroller overflow-hidden mt-4">
+                <div class="scroller-inner flex gap-4 w-max" data-direction="right">
+                    <!-- Logos will be duplicated and inserted by JS -->
+                </div>
+            </div>
         </div>
-    </section>
+
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-3">
+                        Tu Hoja de Ruta hacia la <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500">IA</span>
+                    </h2>
+                    <p class="text-lg text-gray-400 mb-16 max-w-2xl mx-auto">
+                        En 3 simples pasos, obtén una recomendación personalizada para tu negocio.
+                    </p>
+                </div>
+
+                <!-- Contenedor de los pasos con línea de tiempo -->
+                <div class="relative">
+                    <!-- Línea de tiempo (se animará con JS) -->
+                    <div class="timeline-line hidden md:block"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
+                        <!-- Paso 1 -->
+                        <div class="step-card" style="--glow-color-light: rgba(249, 115, 22, 0.4); --glow-color-dark: rgba(249, 115, 22, 0.2); transition-delay: 0.2s;">
+                            <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
+                                <div class="mb-6">
+                                    <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-orange-500 text-orange-400 bg-gray-800">
+                                        1
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Completa el Diagnóstico</h3>
+                                <p class="text-gray-400">
+                                    Responde unas pocas preguntas sobre tu empresa, tus objetivos y los desafíos que enfrentas.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Paso 2 -->
+                        <div class="step-card" style="--glow-color-light: rgba(236, 72, 153, 0.4); --glow-color-dark: rgba(236, 72, 153, 0.2); transition-delay: 0.4s;">
+                            <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
+                                <div class="mb-6">
+                                    <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-pink-500 text-pink-400 bg-gray-800">
+                                        2
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Analizamos tu Perfil</h3>
+                                <p class="text-gray-400">
+                                    Nuestro sistema inteligente procesa tu información para entender las necesidades únicas de tu PYME.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Paso 3 -->
+                        <div class="step-card" style="--glow-color-light: rgba(139, 92, 246, 0.4); --glow-color-dark: rgba(139, 92, 246, 0.2); transition-delay: 0.6s;">
+                            <div class="card-hover-effect bg-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-full">
+                                <div class="mb-6">
+                                    <span class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl font-extrabold border-4 border-purple-500 text-purple-400 bg-gray-800">
+                                        3
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Recibe tu Recomendación</h3>
+                                <p class="text-gray-400">
+                                    Obtén una selección de las mejores IAs para ti, con un plan de acción claro para empezar a implementarlas.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <style>
+                    .step-card {
+                        opacity: 0;
+                        transform: translateY(20px);
+                        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+                    }
+                    .step-card.is-visible {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                    .timeline-line {
+                        position: absolute;
+                        top: 40px;
+                        left: 15%;
+                        width: 0;
+                        height: 2px;
+                        background: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6);
+                        transition: width 1.5s ease-in-out;
+                        z-index: 0;
+                    }
+                    .timeline-line.is-visible {
+                        width: 70%;
+                    }
+                    .card-hover-effect {
+                        position: relative;
+                        overflow: hidden;
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    .card-hover-effect:hover {
+                        transform: translateY(-8px);
+                        box-shadow: 0 0 25px var(--glow-color-light), 0 0 40px var(--glow-color-dark);
+                    }
+                </style>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const roadmapSection = document.getElementById('como-funciona');
+                        const stepCards = document.querySelectorAll('.step-card');
+                        const timelineLine = document.querySelector('.timeline-line');
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    stepCards.forEach(card => card.classList.add('is-visible'));
+                                    if(timelineLine) {
+                                       timelineLine.classList.add('is-visible');
+                                    }
+                                    observer.unobserve(entry.target);
+                                }
+                            });
+                        }, {
+                            threshold: 0.3
+                        });
+                        if (roadmapSection) {
+                            observer.observe(roadmapSection);
+                        }
+                    });
+                </script>
+            </div>
+        </section>
 
     <!-- Sección Sobre Nosotros -->
     <section id="nosotros" class="page-section py-20 sm:py-32 bg-gray-900/50">
@@ -659,22 +675,6 @@
             });
         })();
         </script>
-    </section>
-
-    <!-- Carrusel de Ecosistema de Herramientas Potenciadas por IA -->
-    <section id="logo-scroller-section" class="py-12">
-        <h3 class="text-3xl font-bold text-center mb-2 text-gray-900 dark:text-white">Un Ecosistema de Herramientas Potenciadas por IA</h3>
-        <p class="text-center text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">Estas son solo algunas de las herramientas que puedes conectar y potenciar con una estrategia de IA bien definida.</p>
-        <div class="logo-scroller overflow-hidden">
-            <div class="scroller-inner flex gap-4 w-max">
-                <!-- Logos will be duplicated and inserted by JS -->
-            </div>
-        </div>
-        <div class="logo-scroller overflow-hidden mt-4">
-            <div class="scroller-inner flex gap-4 w-max" data-direction="right">
-                <!-- Logos will be duplicated and inserted by JS -->
-            </div>
-        </div>
     </section>
 
     <!-- Footer Section -->

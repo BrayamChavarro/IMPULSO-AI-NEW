@@ -16,19 +16,10 @@
             color: #f9fafb; /* text-gray-50 */
         }
         /* Custom scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #111827; /* bg-gray-900 */
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #4b5563; /* bg-gray-600 */
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #6b7280; /* bg-gray-500 */
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #111827; /* bg-gray-900 */ }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; /* bg-gray-600 */ }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7280; /* bg-gray-500 */ }
         /* Title animation */
         .title-animate {
             background-size: 200% 200%;
@@ -40,26 +31,188 @@
             100% { background-position: 0% 50%; }
         }
         /* Sidebar transition */
-        #sidebar {
-            transition: width 0.3s ease-in-out;
-        }
-        #main-content {
-            transition: margin-left 0.3s ease-in-out;
-        }
+        #sidebar { transition: width 0.3s ease-in-out; }
+        #main-content { transition: margin-left 0.3s ease-in-out; }
         /* Hide text in collapsed sidebar */
-        #sidebar.collapsed .nav-text, #sidebar.collapsed .profile-text {
-            display: none;
-        }
-         /* Center icons in collapsed sidebar */
-        #sidebar.collapsed .nav-link {
-            justify-content: center;
-        }
-        #sidebar.collapsed .profile-header {
-             justify-content: center;
-             /* Fix for profile picture squishing */
-             padding-left: 1rem;
-             padding-right: 1rem;
-        }
+        #sidebar.collapsed .nav-text, #sidebar.collapsed .profile-text { display: none; }
+        /* Center icons in collapsed sidebar */
+        #sidebar.collapsed .nav-link, #sidebar.collapsed .profile-header { justify-content: center; }
+         #sidebar.collapsed .profile-header { padding-left: 1rem; padding-right: 1rem; }
+
+/* --- Estilo barra de chat moderna --- */
+.ai-chatbar-container {
+  background: #23272f;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1.5px solid #333;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  position: relative;
+  min-height: 56px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.ai-chatbar-btn {
+  background: #23272f;
+  border: none;
+  outline: none;
+  border-radius: 0.7rem;
+  padding: 0.5rem 0.9rem;
+  color: #b3b8c5;
+  font-weight: 500;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.ai-chatbar-btn:hover {
+  background: #31343c;
+  color: #fff;
+}
+.ai-chatbar-input {
+  flex: 2 1 0%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.7rem 0.5rem;
+  resize: none;
+  min-height: 36px;
+  max-height: 120px;
+  line-height: 1.4;
+  border-radius: 0.7rem;
+  font-family: inherit;
+}
+.ai-chatbar-input::placeholder {
+  color: #b3b8c5;
+  opacity: 0.8;
+}
+.ai-chatbar-send {
+  background: #31343c;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.ai-chatbar-send:hover {
+  background: #ea2323;
+  color: #fff;
+}
+.ai-chatbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Toggle de tono */
+.ai-tone-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.7rem;
+}
+.ai-tone-btn {
+  background: #23272f;
+  border: 1.5px solid #333;
+  color: #b3b8c5;
+  font-size: 0.98rem;
+  font-weight: 500;
+  border-radius: 0.7rem;
+  padding: 0.45rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.ai-tone-btn.selected, .ai-tone-btn:focus {
+  background: #ea2323;
+  color: #fff;
+  border-color: #ea2323;
+  outline: none;
+}
+
+.ai-message-bubble {
+  background: rgba(35, 43, 56, 0.45);
+  color: #fff;
+  border-radius: 1.1rem;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 90vw;
+  width: 100%;
+  min-width: 0;
+  word-break: break-word;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255,255,255,0.08);
+}
+@media (min-width: 640px) {
+  .ai-message-bubble {
+    max-width: 700px;
+  }
+}
+@media (min-width: 1024px) {
+  .ai-message-bubble {
+    max-width: 950px;
+  }
+}
+/* Elimina el fondo de #message-area, solo deja el blur en .ai-message-bubble */
+#message-area {
+  background: none;
+}
+
+/* Sidebar de chats */
+#chat-list {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.chat-list-item {
+  background: #181c22;
+  color: #fff;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: background 0.18s, border 0.18s;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chat-list-item.selected, .chat-list-item:hover {
+  background: #23272f;
+  border-color: #ea2323;
+}
+#new-chat-btn {
+  background: #ea2323;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+#new-chat-btn:hover {
+  background: #ff8a00;
+}
     </style>
 </head>
 <body class="h-screen antialiased overflow-hidden">
@@ -85,6 +238,8 @@
                 <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                 <span class="nav-text">Tareas</span>
             </a>
+            <button id="new-chat-btn">+ Nuevo chat</button>
+            <div id="chat-list"></div>
         </nav>
         <!-- Pie del Menú -->
         <div class="p-4 mt-auto border-t border-gray-800">
@@ -102,12 +257,11 @@
     <main id="main-content" class="relative flex-1 flex flex-col h-full bg-black">
         <canvas id="particle-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
         
-        <!-- Botón de Home -->
         <a href="index.html" id="home-button" class="absolute top-4 right-4 z-10 p-2 rounded-full text-white bg-gray-900/50 hover:bg-red-600/70 transition-colors" title="Volver al inicio">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
         </a>
 
-        <!-- Pantalla de Bienvenida (Estilo Grok) -->
+        <!-- Pantalla de Bienvenida -->
         <div id="welcome-screen" class="relative z-10 flex flex-col items-center justify-center h-full p-4">
             <div class="text-center">
                 <h1 class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-red-500 title-animate pb-4">
@@ -117,7 +271,7 @@
             </div>
             <form id="welcome-form" class="w-full max-w-2xl">
                 <div class="relative">
-                    <input id="welcome-input" type="text" placeholder="Pregúntale lo que sea a IMPULSO..." class="w-full bg-gray-900/70 border border-gray-700 rounded-full py-4 pl-6 pr-16 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+                    <input id="welcome-input" type="text" autocomplete="off" placeholder="Pregúntale lo que sea a IMPULSO..." class="w-full bg-gray-900/70 border border-gray-700 rounded-full py-4 pl-6 pr-16 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-red-500">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                     </button>
@@ -148,10 +302,14 @@
 
             <!-- Área de Entrada de Mensaje -->
             <footer class="p-4 border-t border-gray-800 flex-shrink-0 bg-black/30 backdrop-blur-sm">
-                <form id="chat-form" class="flex items-center bg-gray-900 rounded-lg max-w-4xl mx-auto">
-                    <input id="chat-input" type="text" placeholder="Escribe tu mensaje aquí..." class="flex-1 bg-transparent p-4 text-white placeholder-gray-400 focus:outline-none">
-                    <button type="submit" class="p-4 text-white bg-red-600 rounded-r-lg hover:bg-red-700 transition-colors">
-                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                <form id="chat-form" class="ai-chatbar-container">
+                    <textarea id="chat-input" autocomplete="off" placeholder="¿Qué quieres saber?" class="ai-chatbar-input" rows="1"></textarea>
+                    <div class="ai-tone-toggle">
+                        <button type="button" id="tone-simple" class="ai-tone-btn selected">Sencillo</button>
+                        <button type="button" id="tone-tech" class="ai-tone-btn">Técnico</button>
+                    </div>
+                    <button type="submit" class="ai-chatbar-send" title="Enviar">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </form>
             </footer>
@@ -159,261 +317,501 @@
     </main>
 </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import functions from the Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+<!-- =========== SCRIPT UNIFICADO =========== -->
+<script src="js/config.js"></script>
+<script type="module">
+    // Import functions from the Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Your web app's Firebase configuration
-            const firebaseConfig = {
-                apiKey: "YOUR_API_KEY", // IMPORTANT: Replace with your actual API key
-                authDomain: "empresa-ai.firebaseapp.com",
-                projectId: "empresa-ai",
-                storageBucket: "empresa-ai.appspot.com",
-                messagingSenderId: "525047010078",
-                appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
-                measurementId: "G-TKKJK5MBYL"
-            };
+    // --- CONFIGURACIÓN ---
+    // ⚠️ IMPORTANTE: Reemplaza con tus claves de API reales.
+    const firebaseConfig = {
+        apiKey: "TU_API_KEY_FIREBASE", // <--- REEMPLAZA ESTO
+        authDomain: "empresa-ai.firebaseapp.com",
+        projectId: "empresa-ai",
+        storageBucket: "empresa-ai.appspot.com",
+        messagingSenderId: "525047010078",
+        appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+        measurementId: "G-TKKJK5MBYL"
+    };
+    
+    // ⚠️ ADVERTENCIA DE SEGURIDAD:
+    // Exponer tu clave de API de Gemini en el lado del cliente es INSEGURO y puede
+    // llevar a que sea robada y usada sin tu control, generando costos inesperados.
+    // La práctica recomendada es crear un backend (ej. una Cloud Function de Firebase)
+    // que reciba la pregunta del usuario y haga la llamada a la API de Gemini desde el servidor.
+    const GEMINI_API_KEY = "TU_API_KEY_GEMINI"; // <--- REEMPLAZA ESTO
 
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
+    // --- INICIALIZACIÓN DE FIREBASE ---
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-            // --- DOM ELEMENTS ---
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const toggleIcon = document.getElementById('toggle-icon');
-            const mainContent = document.getElementById('main-content');
-            const userNameEl = document.getElementById('user-name');
-            const companyNameEl = document.getElementById('company-name');
-            const profilePicEl = document.getElementById('profile-pic');
-            const logoutBtn = document.getElementById('logout-btn-sidebar');
-            
-            // Chat elements
-            const welcomeScreen = document.getElementById('welcome-screen');
-            const chatContainer = document.getElementById('chat-container');
-            const welcomeForm = document.getElementById('welcome-form');
-            const welcomeInput = document.getElementById('welcome-input');
-            const chatForm = document.getElementById('chat-form');
-            const chatInput = document.getElementById('chat-input');
-            const messageArea = document.getElementById('message-area');
-            let userProfile = {
-                photoURL: 'https://placehold.co/40x40/1f2937/ef4444?text=U',
-                initial: 'U'
-            };
+    // --- ELEMENTOS DEL DOM ---
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const toggleIcon = document.getElementById('toggle-icon');
+    const userNameEl = document.getElementById('user-name');
+    const companyNameEl = document.getElementById('company-name');
+    const profilePicEl = document.getElementById('profile-pic');
+    const logoutBtn = document.getElementById('logout-btn-sidebar');
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const chatContainer = document.getElementById('chat-container');
+    const welcomeForm = document.getElementById('welcome-form');
+    const welcomeInput = document.getElementById('welcome-input');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const messageArea = document.getElementById('message-area');
+    
+    let userProfile = {
+        photoURL: 'https://placehold.co/40x40/1f2937/ef4444?text=U',
+        initial: 'U'
+    };
 
-            // --- SIDEBAR TOGGLE LOGIC ---
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                if (sidebar.classList.contains('collapsed')) {
-                    sidebar.style.width = '5rem'; // 80px
-                    toggleIcon.style.transform = 'rotate(180deg)';
-                } else {
-                    sidebar.style.width = '18rem'; // 288px
-                    toggleIcon.style.transform = 'rotate(0deg)';
-                }
-            });
+    // --- LÓGICA DEL SIDEBAR ---
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        if (sidebar.classList.contains('collapsed')) {
+            sidebar.style.width = '5rem'; // 80px
+            toggleIcon.style.transform = 'rotate(180deg)';
+        } else {
+            sidebar.style.width = '18rem'; // 288px
+            toggleIcon.style.transform = 'rotate(0deg)';
+        }
+    });
 
-            // --- AUTH & DATA LOGIC ---
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    try {
-                        const userDocRef = doc(db, 'users', user.uid);
-                        const userDocSnap = await getDoc(userDocRef);
+    // --- LÓGICA DE AUTENTICACIÓN Y DATOS DE USUARIO ---
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            try {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
 
-                        if (userDocSnap.exists()) {
-                            const userData = userDocSnap.data();
-                            const userName = userData.name || 'Usuario';
-                            const initial = (userName).charAt(0).toUpperCase();
-                            
-                            userNameEl.textContent = userName;
-                            companyNameEl.textContent = userData.company || 'Sin empresa';
-                            userProfile.initial = initial;
+                if (userDocSnap.exists()) {
+                    const userData = userDocSnap.data();
+                    const userName = userData.name || 'Usuario';
+                    const initial = (userName).charAt(0).toUpperCase();
+                    
+                    userNameEl.textContent = userName;
+                    companyNameEl.textContent = userData.company || 'Sin empresa';
+                    userProfile.initial = initial;
 
-                            if (userData.photoURL) {
-                                profilePicEl.src = userData.photoURL;
-                                userProfile.photoURL = userData.photoURL;
-                            } else {
-                                const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
-                                profilePicEl.src = placeholderUrl;
-                                userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
-                            }
-                        } else {
-                            const displayName = user.displayName || 'Usuario';
-                            const initial = displayName.charAt(0).toUpperCase();
-                            userNameEl.textContent = displayName;
-                            companyNameEl.textContent = 'Completa tu perfil';
-                            userProfile.initial = initial;
-                            const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
-                            profilePicEl.src = placeholderUrl;
-                            userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
-                        }
-                    } catch (error) {
-                        console.error("Error fetching user data:", error);
-                        userNameEl.textContent = 'Error al cargar';
-                        companyNameEl.textContent = 'Intenta de nuevo';
+                    if (userData.photoURL) {
+                        profilePicEl.src = userData.photoURL;
+                        userProfile.photoURL = userData.photoURL;
+                    } else {
+                        const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
+                        profilePicEl.src = placeholderUrl;
+                        userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
                     }
                 } else {
-                    console.log("User is not signed in.");
+                    const displayName = user.displayName || 'Usuario';
+                    const initial = displayName.charAt(0).toUpperCase();
+                    userNameEl.textContent = displayName;
+                    companyNameEl.textContent = 'Completa tu perfil';
+                    userProfile.initial = initial;
+                    const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
+                    profilePicEl.src = placeholderUrl;
+                    userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
                 }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                userNameEl.textContent = 'Error al cargar';
+                companyNameEl.textContent = 'Intenta de nuevo';
+            }
+        } else {
+            console.log("User is not signed in. Redirecting to login page.");
+            // Opcional: Redirigir al usuario si no está logueado
+            // window.location.href = '/login.html'; 
+        }
+    });
+
+    // --- LÓGICA DE CERRAR SESIÓN ---
+    logoutBtn.addEventListener('click', () => {
+        signOut(auth).catch((error) => console.error('Error signing out:', error));
+    });
+
+    // --- LÓGICA DEL CHAT ---
+    const addMessage = (text, type, elementId = null) => {
+        const timestamp = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        let messageHTML = '';
+        const messageId = elementId || `msg-${Date.now()}`;
+
+        if (type === 'sent') {
+            messageHTML = `
+                <div class="flex items-start gap-4 justify-end">
+                    <div class="flex flex-col items-end">
+                        <div class="bg-red-600 text-white p-3 md:p-4 rounded-xl rounded-tr-none max-w-md lg:max-w-lg">
+                            <p>${text}</p>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
+                    </div>
+                    <img src="${userProfile.photoURL}" alt="Tu Avatar" class="w-10 h-10 rounded-full flex-shrink-0">
+                </div>
+            `;
+        } else { // received or thinking
+            messageHTML = `
+                <div id="${messageId}" class="flex items-start gap-4">
+                    <img src="https://placehold.co/40x40/1f2937/ef4444?text=I" alt="Avatar de IMPULSO" class="w-10 h-10 rounded-full flex-shrink-0">
+                    <div class="flex flex-col items-start">
+                        <div class="ai-message-bubble">
+                           <p>${text}</p>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
+                    </div>
+                </div>
+            `;
+        }
+        messageArea.insertAdjacentHTML('beforeend', messageHTML);
+        messageArea.scrollTop = messageArea.scrollHeight;
+        return messageId;
+    };
+    
+    const updateMessage = (elementId, newText) => {
+        const messageElement = document.getElementById(elementId);
+        if (messageElement) {
+            const textParagraph = messageElement.querySelector('p');
+            if(textParagraph) {
+                // Basic markdown to HTML conversion
+                let html = newText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Italic
+                    .replace(/`([^`]+)`/g, '<code class="bg-gray-700 text-red-300 rounded px-1 py-0.5">$1</code>') // Inline code
+                    .replace(/\n/g, '<br>'); // Newlines
+                textParagraph.innerHTML = html;
+            }
+        }
+        messageArea.scrollTop = messageArea.scrollHeight;
+    };
+
+    const getGeminiResponse = async (prompt) => {
+        const thinkingMessageId = addMessage('Pensando...', 'received');
+
+        // Usar la configuración global de GEMINI_CONFIG
+        const apiKey = window.GEMINI_CONFIG?.apiKey;
+        const baseUrl = window.GEMINI_CONFIG?.baseUrl;
+        if (!apiKey || !baseUrl) {
+            updateMessage(thinkingMessageId, 'No se encontró la configuración de Gemini.');
+            return;
+        }
+        const apiUrl = `${baseUrl}?key=${apiKey}`;
+        const payload = {
+            contents: [{
+                parts: [{ text: prompt }]
+            }]
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
 
-            // --- LOGOUT LOGIC ---
-            logoutBtn.addEventListener('click', () => {
-                signOut(auth).then(() => {
-                    console.log('Sign-out successful.');
-                }).catch((error) => {
-                    console.error('Error signing out:', error);
-                });
-            });
-
-            // --- CHAT LOGIC ---
-            const addMessage = (text, type) => {
-                const timestamp = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-                let messageHTML = '';
-
-                if (type === 'sent') {
-                    messageHTML = `
-                        <div class="flex items-start gap-4 justify-end">
-                            <div class="flex flex-col items-end">
-                                <div class="bg-red-600 text-white p-3 md:p-4 rounded-xl rounded-tr-none max-w-md lg:max-w-lg">
-                                    <p>${text}</p>
-                                </div>
-                                <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
-                            </div>
-                            <img src="${userProfile.photoURL}" alt="Tu Avatar" class="w-10 h-10 rounded-full flex-shrink-0">
-                        </div>
-                    `;
-                } else { // received
-                    messageHTML = `
-                        <div class="flex items-start gap-4">
-                            <img src="https://placehold.co/40x40/1f2937/ef4444?text=I" alt="Avatar de IMPULSO" class="w-10 h-10 rounded-full flex-shrink-0">
-                            <div class="flex flex-col items-start">
-                                <div class="bg-gray-900 p-3 md:p-4 rounded-xl rounded-tl-none max-w-md lg:max-w-lg">
-                                    <p class="text-white">${text}</p>
-                                </div>
-                                <span class="text-xs text-gray-400 mt-1">${timestamp}</span>
-                            </div>
-                        </div>
-                    `;
-                }
-                messageArea.insertAdjacentHTML('beforeend', messageHTML);
-                messageArea.scrollTop = messageArea.scrollHeight;
-            };
-
-            const handleMessageSubmit = (event) => {
-                event.preventDefault();
-                const input = event.target.closest('form') === welcomeForm ? welcomeInput : chatInput;
-                const messageText = input.value.trim();
-
-                if (!messageText) return;
-
-                if (welcomeScreen.classList.contains('flex')) {
-                    welcomeScreen.classList.remove('flex');
-                    welcomeScreen.classList.add('hidden');
-                    chatContainer.classList.remove('hidden');
-                    chatContainer.classList.add('flex');
-                }
-
-                addMessage(messageText, 'sent');
-                input.value = '';
-
-                setTimeout(() => {
-                    addMessage('Estoy analizando tu pregunta. Un momento por favor...', 'received');
-                }, 1000);
-            };
-
-            welcomeForm.addEventListener('submit', handleMessageSubmit);
-            chatForm.addEventListener('submit', handleMessageSubmit);
-
-            // --- PARTICLE BACKGROUND ANIMATION ---
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-
-            const setupCanvas = () => {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-            };
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.vx = Math.random() * 0.4 - 0.2; // Slower speed
-                    this.vy = Math.random() * 0.4 - 0.2; // Slower speed
-                    this.radius = Math.random() * 1.5 + 0.5; // Smaller particles
-                }
-
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                    ctx.fill();
-                }
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("API Error Response:", errorData);
+                throw new Error(`API Error: ${response.statusText}`);
             }
 
-            const initParticles = () => {
-                particles = [];
-                const numberOfParticles = Math.floor(canvas.width / 25); // Adjust density based on width
-                for (let i = 0; i < numberOfParticles; i++) {
-                    particles.push(new Particle());
+            const result = await response.json();
+            const botResponse = result.candidates?.[0]?.content.parts[0].text || 'Lo siento, no pude procesar tu solicitud.';
+            updateMessage(thinkingMessageId, botResponse);
+
+        } catch (error) {
+            console.error("Error calling Gemini API:", error);
+            updateMessage(thinkingMessageId, 'Ocurrió un error al contactar a la IA. Por favor, inténtalo de nuevo.');
+        }
+    };
+
+    // Toggle de tono
+    let currentTone = 'simple';
+    const btnSimple = document.getElementById('tone-simple');
+    const btnTech = document.getElementById('tone-tech');
+    if (btnSimple && btnTech) {
+      btnSimple.addEventListener('click', () => {
+        currentTone = 'simple';
+        btnSimple.classList.add('selected');
+        btnTech.classList.remove('selected');
+      });
+      btnTech.addEventListener('click', () => {
+        currentTone = 'tech';
+        btnTech.classList.add('selected');
+        btnSimple.classList.remove('selected');
+      });
+    }
+    // Modifica el prompt según el tono
+    const getPromptWithTone = (prompt) => {
+      if (currentTone === 'tech') {
+        return prompt + '\n\nResponde con lenguaje técnico y profesional.';
+      } else {
+        return prompt + '\n\nResponde de forma clara y sencilla, sin tecnicismos.';
+      }
+    };
+
+    const handleMessageSubmit = (event) => {
+        event.preventDefault();
+        const isWelcomeForm = event.target.closest('form') === welcomeForm;
+        const input = isWelcomeForm ? welcomeInput : chatInput;
+        const messageText = input.value.trim();
+
+        if (!messageText) return;
+
+        if (isWelcomeForm) {
+            welcomeScreen.classList.remove('flex');
+            welcomeScreen.classList.add('hidden');
+            chatContainer.classList.remove('hidden');
+            chatContainer.classList.add('flex');
+        }
+
+        addMessage(messageText, 'sent');
+        input.value = '';
+
+        getGeminiResponse(getPromptWithTone(messageText));
+    };
+
+    welcomeForm.addEventListener('submit', handleMessageSubmit);
+    chatForm.addEventListener('submit', handleMessageSubmit);
+
+    // --- ANIMACIÓN DE FONDO CON PARTÍCULAS ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const setupCanvas = () => {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    };
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = Math.random() * 0.4 - 0.2;
+            this.vy = Math.random() * 0.4 - 0.2;
+            this.radius = Math.random() * 1.5 + 0.5;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fill();
+        }
+    }
+    const initParticles = () => {
+        particles = [];
+        const numberOfParticles = Math.floor(canvas.width / 25);
+        for (let i = 0; i < numberOfParticles; i++) {
+            particles.push(new Particle());
+        }
+    };
+    const connectParticles = () => {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i; j < particles.length; j++) {
+                const distance = Math.sqrt(Math.pow(particles[i].x - particles[j].x, 2) + Math.pow(particles[i].y - particles[j].y, 2));
+                if (distance < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 120})`;
+                    ctx.lineWidth = 0.3;
+                    ctx.stroke();
                 }
-            };
-
-            const connectParticles = () => {
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i; j < particles.length; j++) {
-                        const distance = Math.sqrt(
-                            Math.pow(particles[i].x - particles[j].x, 2) +
-                            Math.pow(particles[i].y - particles[j].y, 2)
-                        );
-
-                        if (distance < 120) { // Connection distance
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 120})`;
-                            ctx.lineWidth = 0.3;
-                            ctx.stroke();
-                        }
-                    }
-                }
-            };
-
-            const animate = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
-                connectParticles();
-                requestAnimationFrame(animate);
-            };
-
-            // Setup and run animation
-            setupCanvas();
-            initParticles();
-            animate();
-
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                setupCanvas();
-                initParticles();
-            });
+            }
+        }
+    };
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
         });
-    </script>
+        connectParticles();
+        requestAnimationFrame(animate);
+    };
+    setupCanvas();
+    initParticles();
+    animate();
+    window.addEventListener('resize', () => {
+        setupCanvas();
+        initParticles();
+    });
+
+    let currentChatId = null;
+    let chats = [];
+    let userId = null;
+
+    // --- Cargar chats del usuario ---
+    async function loadChats() {
+      if (!userId) return;
+      const chatListDiv = document.getElementById('chat-list');
+      chatListDiv.innerHTML = '';
+      const chatsRef = collection(db, 'users', userId, 'chats');
+      const q = query(chatsRef, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      chats = [];
+      snapshot.forEach(docSnap => {
+        const chat = { id: docSnap.id, ...docSnap.data() };
+        chats.push(chat);
+        const item = document.createElement('div');
+        item.className = 'chat-list-item' + (currentChatId === chat.id ? ' selected' : '');
+        item.textContent = chat.title || 'Chat sin título';
+        item.onclick = () => selectChat(chat.id);
+        chatListDiv.appendChild(item);
+      });
+      console.log('Chats cargados:', chats.length);
+    }
+
+    // --- Crear nuevo chat ---
+    async function createNewChat() {
+      console.log('Creando nuevo chat...');
+      if (!userId) {
+        console.log('No hay usuario autenticado');
+        return;
+      }
+      
+      // Si hay un chat actual, guarda su título basado en el primer mensaje
+      if (currentChatId) {
+        await updateChatTitle(currentChatId);
+      }
+      
+      const chatsRef = collection(db, 'users', userId, 'chats');
+      const newChat = {
+        title: 'Nuevo chat',
+        createdAt: serverTimestamp()
+      };
+      try {
+        const docRef = await addDoc(chatsRef, newChat);
+        console.log('Chat creado con ID:', docRef.id);
+        
+        // Limpia el área de mensajes inmediatamente
+        const messageArea = document.getElementById('message-area');
+        messageArea.innerHTML = '';
+        
+        // Actualiza la lista de chats y selecciona el nuevo
+        await loadChats();
+        selectChat(docRef.id);
+      } catch (error) {
+        console.error('Error al crear chat:', error);
+      }
+    }
+    
+    // --- Actualizar título del chat basado en el primer mensaje ---
+    async function updateChatTitle(chatId) {
+      if (!userId || !chatId) return;
+      
+      try {
+        const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
+        const q = query(messagesRef, orderBy('timestamp', 'asc'));
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
+          const firstMessage = snapshot.docs[0].data();
+          const title = firstMessage.text.length > 30 ? 
+            firstMessage.text.substring(0, 30) + '...' : 
+            firstMessage.text;
+          
+          const chatRef = doc(db, 'users', userId, 'chats', chatId);
+          await setDoc(chatRef, { title }, { merge: true });
+        }
+      } catch (error) {
+        console.error('Error al actualizar título:', error);
+      }
+    }
+
+    // Conectar el botón después de que el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+      const newChatBtn = document.getElementById('new-chat-btn');
+      if (newChatBtn) {
+        newChatBtn.onclick = createNewChat;
+        console.log('Botón nuevo chat conectado');
+      } else {
+        console.error('No se encontró el botón nuevo chat');
+      }
+    });
+
+    // --- Seleccionar chat y cargar mensajes ---
+    async function selectChat(chatId) {
+      console.log('Seleccionando chat:', chatId);
+      currentChatId = chatId;
+      
+      // Limpia el área de mensajes
+      const messageArea = document.getElementById('message-area');
+      messageArea.innerHTML = '';
+      
+      // Actualiza selección visual
+      document.querySelectorAll('.chat-list-item').forEach(el => el.classList.remove('selected'));
+      const selected = Array.from(document.querySelectorAll('.chat-list-item')).find(el => {
+        const chat = chats.find(c => c.id === chatId);
+        return el.textContent === (chat?.title || 'Chat sin título');
+      });
+      if (selected) selected.classList.add('selected');
+      
+      // Carga mensajes
+      await loadMessages(chatId);
+    }
+
+    // --- Cargar mensajes de un chat ---
+    async function loadMessages(chatId) {
+      const messageArea = document.getElementById('message-area');
+      messageArea.innerHTML = '';
+      if (!userId || !chatId) return;
+      const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
+      const q = query(messagesRef, orderBy('timestamp', 'asc'));
+      const snapshot = await getDocs(q);
+      snapshot.forEach(docSnap => {
+        const msg = docSnap.data();
+        addMessage(msg.text, msg.sender === 'user' ? 'sent' : 'received');
+      });
+    }
+
+    // --- Guardar mensaje en el chat actual ---
+    async function saveMessageToChat(text, sender) {
+      if (!userId || !currentChatId) return;
+      const messagesRef = collection(db, 'users', userId, 'chats', currentChatId, 'messages');
+      await addDoc(messagesRef, {
+        text,
+        sender,
+        timestamp: serverTimestamp()
+      });
+      
+      // Si es el primer mensaje del usuario, actualiza el título del chat
+      if (sender === 'user') {
+        const messagesSnapshot = await getDocs(query(messagesRef, orderBy('timestamp', 'asc')));
+        if (messagesSnapshot.docs.length === 1) {
+          const title = text.length > 30 ? text.substring(0, 30) + '...' : text;
+          const chatRef = doc(db, 'users', userId, 'chats', currentChatId);
+          await setDoc(chatRef, { title }, { merge: true });
+          // Actualiza la lista de chats para mostrar el nuevo título
+          await loadChats();
+        }
+      }
+    }
+
+    // --- Modifica addMessage para guardar mensajes ---
+    const originalAddMessage = window.addMessage;
+    window.addMessage = function(text, type, elementId = null) {
+      originalAddMessage(text, type, elementId);
+      if (type === 'sent') saveMessageToChat(text, 'user');
+      if (type === 'received') saveMessageToChat(text, 'bot');
+    };
+
+    // --- Al iniciar sesión, carga los chats ---
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        userId = user.uid;
+        await loadChats();
+        // Si hay chats, selecciona el primero
+        if (chats.length > 0) selectChat(chats[0].id);
+      }
+    });
+</script>
+
 </body>
 </html>

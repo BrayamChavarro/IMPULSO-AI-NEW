@@ -485,6 +485,79 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+    .logo-scroller {
+      -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+      mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+      overflow: hidden;
+      width: 100%;
+    }
+    .scroller-inner {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: scroll 60s linear infinite;
+    }
+    .scroller-inner[data-direction="right"] {
+      animation-direction: reverse;
+    }
+    @keyframes scroll {
+      to {
+        transform: translate(calc(-50% - 0.5rem));
+      }
+    }
+    .carousel-logo-card {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 60px;
+      min-height: 60px;
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, border-color 0.22s;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+      border: none;
+      overflow: visible;
+      margin: 0.25rem;
+    }
+    .carousel-logo-card img {
+      pointer-events: none;
+      user-select: none;
+      width: 40px;
+      height: 40px;
+    }
+    .carousel-logo-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1rem;
+      padding: 2px;
+      background: conic-gradient(from 0deg, #ff8a00, #e83e8c, #ff8a00 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      opacity: 0;
+      transition: opacity 0.22s, filter 0.22s;
+      filter: blur(0.5px);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .carousel-logo-card:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 0 4px rgba(255,138,0,0.13), 0 8px 24px rgba(232,62,140,0.10);
+    }
+    .carousel-logo-card:hover::before {
+      opacity: 1;
+      animation: border-spin 1.2s linear infinite;
+    }
+    @keyframes border-spin {
+      0% { filter: hue-rotate(0deg); background: conic-gradient(from 0deg, #ff8a00, #e83e8c, #ff8a00 100%); }
+      100% { filter: hue-rotate(360deg); background: conic-gradient(from 360deg, #ff8a00, #e83e8c, #ff8a00 100%); }
+    }
     </style>
 
     <!-- Firebase Configuration -->

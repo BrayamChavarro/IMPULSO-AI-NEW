@@ -384,11 +384,10 @@ function initLogoScroller() {
         
         scroller.innerHTML = '';
         logosToRender.forEach(tool => {
-            const logoEl = document.createElement('img');
-            logoEl.src = tool.logo;
-            logoEl.alt = `Logo de ${tool.name}`;
-            logoEl.className = 'h-16 w-16 object-contain rounded-md bg-white p-2 shadow-md flex-shrink-0 carousel-logo-hover';
-            scroller.appendChild(logoEl);
+            const card = document.createElement('div');
+            card.className = 'carousel-logo-card';
+            card.innerHTML = `<img src="${tool.logo}" alt="Logo de ${tool.name}" class="h-16 w-16 object-contain" draggable="false">`;
+            scroller.appendChild(card);
         });
     });
 }

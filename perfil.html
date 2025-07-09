@@ -3,69 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Perfil y Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            color: #f9fafb; /* text-gray-50 */
+        }
+        /* Custom scrollbar for a better look in webkit browsers */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937; /* bg-gray-800 */
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563; /* bg-gray-600 */
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* bg-gray-500 */
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-100 via-white to-emerald-100 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-6">Perfil de Usuario</h1>
-        <div id="profile-info" class="space-y-4 text-lg">
-            <div><span class="font-bold">Nombre completo:</span> <span id="profile-name"></span></div>
-            <div><span class="font-bold">Correo electrónico:</span> <span id="profile-email"></span></div>
-            <div><span class="font-bold">Nombre de la empresa:</span> <span id="profile-company"></span></div>
+<body class="flex h-screen antialiased">
+
+    <!-- Contenedor del Menú de Perfil (Sidebar) -->
+    <div class="w-72 bg-gray-900 text-white flex flex-col h-full shadow-lg flex-shrink-0">
+        <!-- Cabecera del Perfil -->
+        <div class="p-5 border-b border-gray-700/50 flex items-center gap-4">
+            <img id="profile-pic" src="https://placehold.co/48x48/1f2937/7c3aed?text=A" alt="Foto de perfil" class="w-12 h-12 rounded-full border-2 border-violet-500">
+            <div class="flex-1 overflow-hidden">
+                <h3 id="user-name" class="font-bold text-lg truncate">Cargando...</h3>
+                <p id="company-name" class="text-sm text-gray-400 truncate">Cargando...</p>
+            </div>
         </div>
-        <div id="profile-error" class="mt-4 text-center text-red-600 font-semibold"></div>
-        <div class="mt-8 text-center">
-            <a href="index.html" class="text-indigo-600 hover:underline font-medium">Volver al inicio</a>
+        <!-- Navegación Principal -->
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 bg-gray-800 text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <span>Conversación</span>
+            </a>
+            <a href="perfil.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span>Mi perfil</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Configuración</span>
+            </a>
+        </nav>
+        <!-- Pie del Menú -->
+        <div class="p-4 border-t border-gray-700/50">
+            <button id="logout-btn-sidebar" class="w-full flex items-center gap-3 p-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span>Cerrar sesión</span>
+            </button>
         </div>
     </div>
-    <script>
-    // Configuración de Firebase (debe ser igual a la de tu proyecto)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
-      authDomain: "empresa-ai.firebaseapp.com",
-      projectId: "empresa-ai",
-      storageBucket: "empresa-ai.appspot.com",
-      messagingSenderId: "525047010078",
-      appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
-      measurementId: "G-TKKJK5MBYL"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
 
-    const nameSpan = document.getElementById('profile-name');
-    const emailSpan = document.getElementById('profile-email');
-    const companySpan = document.getElementById('profile-company');
-    const errorDiv = document.getElementById('profile-error');
+    <!-- Contenedor del Chat -->
+    <main class="flex-1 flex flex-col bg-gray-800 h-full">
+        <!-- Cabecera del Chat -->
+        <header class="flex items-center justify-between p-4 border-b border-gray-700/50">
+            <div class="flex items-center gap-3">
+                <img src="https://placehold.co/40x40/374151/a78bfa?text=AI" alt="Avatar del Asistente" class="w-10 h-10 rounded-full">
+                <div>
+                    <h2 class="text-lg font-semibold text-white">Asistente IA</h2>
+                    <p class="text-sm text-green-400 flex items-center gap-1.5">
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        En línea
+                    </p>
+                </div>
+            </div>
+        </header>
 
-    auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        errorDiv.textContent = 'No has iniciado sesión.';
-        nameSpan.textContent = '';
-        emailSpan.textContent = '';
-        companySpan.textContent = '';
-        return;
-      }
-      emailSpan.textContent = user.email;
-      try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        if (userDoc.exists) {
-          const data = userDoc.data();
-          nameSpan.textContent = data.name || '(Sin nombre)';
-          companySpan.textContent = data.company || '(Sin empresa)';
-        } else {
-          nameSpan.textContent = '(Sin nombre)';
-          companySpan.textContent = '(Sin empresa)';
-        }
-      } catch (err) {
-        errorDiv.textContent = 'Error al cargar los datos: ' + err.message;
-      }
-    });
+        <!-- Área de Mensajes -->
+        <div id="message-area" class="flex-1 p-6 overflow-y-auto custom-scrollbar space-y-6">
+            <!-- Mensaje Recibido (Ejemplo) -->
+            <div class="flex items-start gap-4">
+                <img src="https://placehold.co/40x40/374151/a78bfa?text=AI" alt="Avatar del Asistente" class="w-10 h-10 rounded-full flex-shrink-0">
+                <div class="flex flex-col items-start">
+                    <div class="bg-gray-700 p-4 rounded-lg rounded-tl-none max-w-lg">
+                        <p class="text-white">¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</p>
+                    </div>
+                    <span class="text-xs text-gray-400 mt-1">10:30 AM</span>
+                </div>
+            </div>
+
+            <!-- Mensaje Enviado (Ejemplo) -->
+            <div class="flex items-start gap-4 justify-end">
+                <div class="flex flex-col items-end">
+                    <div class="bg-violet-600 text-white p-4 rounded-lg rounded-tr-none max-w-lg">
+                        <p>Hola, necesito ayuda para analizar los datos de ventas del último trimestre.</p>
+                    </div>
+                    <span class="text-xs text-gray-400 mt-1">10:31 AM</span>
+                </div>
+                <img id="chat-profile-pic" src="https://placehold.co/40x40/1f2937/7c3aed?text=A" alt="Tu Avatar" class="w-10 h-10 rounded-full flex-shrink-0">
+            </div>
+
+             <!-- Mensaje Recibido con más texto (Ejemplo) -->
+             <div class="flex items-start gap-4">
+                <img src="https://placehold.co/40x40/374151/a78bfa?text=AI" alt="Avatar del Asistente" class="w-10 h-10 rounded-full flex-shrink-0">
+                <div class="flex flex-col items-start">
+                    <div class="bg-gray-700 p-4 rounded-lg rounded-tl-none max-w-lg">
+                        <p class="text-white">¡Por supuesto! Para empezar, por favor, súbeme el archivo CSV con los datos. Puedo generar un resumen, identificar tendencias clave y crear visualizaciones para tu informe.</p>
+                    </div>
+                    <span class="text-xs text-gray-400 mt-1">10:32 AM</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de Entrada de Mensaje -->
+        <footer class="p-4 border-t border-gray-700/50">
+            <div class="flex items-center bg-gray-700 rounded-lg">
+                <input type="text" placeholder="Escribe tu mensaje aquí..." class="flex-1 bg-transparent p-4 text-white placeholder-gray-400 focus:outline-none">
+                <button class="p-4 text-gray-400 hover:text-violet-400 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                </button>
+                <button class="p-4 text-gray-400 hover:text-violet-400 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </button>
+                <button class="p-4 text-white bg-violet-600 rounded-r-lg hover:bg-violet-700 transition-colors">
+                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import functions from the Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "YOUR_API_KEY", // IMPORTANT: Replace with your actual API key
+                authDomain: "empresa-ai.firebaseapp.com",
+                projectId: "empresa-ai",
+                storageBucket: "empresa-ai.appspot.com",
+                messagingSenderId: "525047010078",
+                appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+                measurementId: "G-TKKJK5MBYL"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            // --- DOM ELEMENTS ---
+            const userNameEl = document.getElementById('user-name');
+            const companyNameEl = document.getElementById('company-name');
+            const profilePicEl = document.getElementById('profile-pic');
+            const chatProfilePicEl = document.getElementById('chat-profile-pic'); // Avatar in chat
+            const logoutBtn = document.getElementById('logout-btn-sidebar');
+
+            // --- AUTH & DATA LOGIC ---
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // User is signed in
+                    try {
+                        const userDocRef = doc(db, 'users', user.uid);
+                        const userDocSnap = await getDoc(userDocRef);
+
+                        if (userDocSnap.exists()) {
+                            const userData = userDocSnap.data();
+                            const userName = userData.name || 'Usuario';
+                            const initial = (userName).charAt(0).toUpperCase();
+                            
+                            userNameEl.textContent = userName;
+                            companyNameEl.textContent = userData.company || 'Sin empresa';
+
+                            // Update profile pictures
+                            if (userData.photoURL) {
+                                profilePicEl.src = userData.photoURL;
+                                chatProfilePicEl.src = userData.photoURL;
+                            } else {
+                                const placeholderUrl = `https://placehold.co/48x48/1f2937/7c3aed?text=${initial}`;
+                                profilePicEl.src = placeholderUrl;
+                                chatProfilePicEl.src = placeholderUrl.replace('48x48', '40x40'); // Adjust size for chat
+                            }
+                        } else {
+                            // No additional data found in Firestore
+                            userNameEl.textContent = user.displayName || 'Usuario';
+                            companyNameEl.textContent = 'Completa tu perfil';
+                            const initial = (user.displayName || 'A').charAt(0).toUpperCase();
+                            const placeholderUrl = `https://placehold.co/48x48/1f2937/7c3aed?text=${initial}`;
+                            profilePicEl.src = placeholderUrl;
+                            chatProfilePicEl.src = placeholderUrl.replace('48x48', '40x40');
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user data:", error);
+                        userNameEl.textContent = 'Error al cargar';
+                        companyNameEl.textContent = 'Intenta de nuevo';
+                    }
+                } else {
+                    // User is not signed in, redirect to login page
+                    console.log("User is not signed in. Redirecting to login.html...");
+                    // window.location.href = 'login.html'; // Uncomment to enable redirection
+                }
+            });
+
+            // --- LOGOUT LOGIC ---
+            logoutBtn.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    console.log('Sign-out successful.');
+                    // window.location.href = 'login.html'; // Uncomment to enable redirection
+                }).catch((error) => {
+                    console.error('Error signing out:', error);
+                });
+            });
+        });
     </script>
 </body>
-</html> 
+</html>

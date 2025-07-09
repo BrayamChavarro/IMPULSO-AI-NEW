@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!userDoc.exists || !userDoc.data().name || !userDoc.data().company) {
                 mostrarModalGoogleExtra(user.uid);
             } else {
-                window.location.replace('index.html');
+                errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1200);
             }
         } catch (err) {
             errorDiv.textContent = err.message;
@@ -82,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.textContent = '';
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
-        const password2 = document.getElementById('register-password2').value;
+        const password2 = document.getElementById('register-confirm-password').value;
         const nombre = document.getElementById('register-name').value;
         const empresa = document.getElementById('register-company').value;
         
@@ -167,22 +170,44 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Google
-    document.getElementById('google-btn').onclick = async () => {
-        errorDiv.textContent = '';
-        const provider = new firebase.auth.GoogleAuthProvider();
-        try {
-            const result = await auth.signInWithPopup(provider);
-            const user = result.user;
-            
-            // Siempre mostrar el modal para pedir/actualizar datos
-            // Esto asegura que todos los usuarios tengan nombre y empresa
-            mostrarModalGoogleExtra(user.uid, user.displayName, user.email);
-            
-        } catch (err) {
-            console.error('Error en Google Sign-In:', err);
-            errorDiv.textContent = err.message;
-        }
-    };
+    const googleBtn = document.getElementById('google-btn');
+    if (googleBtn) {
+        console.log('Google login button found');
+        googleBtn.onclick = async () => {
+            errorDiv.textContent = '';
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                mostrarModalGoogleExtra(user.uid, user.displayName, user.email);
+            } catch (err) {
+                console.error('Error en Google Sign-In:', err);
+                errorDiv.textContent = err.message;
+            }
+        };
+    } else {
+        console.warn('Google login button NOT found');
+    }
+
+    // Google Register (si existe)
+    const googleRegisterBtn = document.getElementById('google-register-btn');
+    if (googleRegisterBtn) {
+        console.log('Google register button found');
+        googleRegisterBtn.onclick = async () => {
+            errorDiv.textContent = '';
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                mostrarModalGoogleExtra(user.uid, user.displayName, user.email);
+            } catch (err) {
+                console.error('Error en Google Register:', err);
+                errorDiv.textContent = err.message;
+            }
+        };
+    } else {
+        console.warn('Google register button NOT found');
+    }
 
     // Función para mostrar el modal y guardar datos adicionales
     function mostrarModalGoogleExtra(uid, googleName = '', googleEmail = '') {
@@ -238,7 +263,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 setTimeout(() => {
                     modal.classList.add('hidden');
-                    window.location.replace('index.html');
+                    errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
+                    setTimeout(() => {
+                        window.location.replace('index.html');
+                    }, 1200);
                 }, 1000);
                 
             } catch (err) {
@@ -258,7 +286,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     setTimeout(() => {
                         modal.classList.add('hidden');
-                        window.location.replace('index.html');
+                        errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
+                        setTimeout(() => {
+                            window.location.replace('index.html');
+                        }, 1200);
                     }, 1000);
                     
                 } catch (retryErr) {
@@ -313,87 +344,24 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.hash = '';
     };
     
-    // Funcionalidad para mostrar/ocultar contraseñas
-    function setupPasswordToggles() {
-        // Toggle para contraseña de login
-        const toggleLoginPassword = document.getElementById('toggle-login-password');
-        const loginPasswordInput = document.getElementById('login-password');
-        
-        if (toggleLoginPassword && loginPasswordInput) {
-            toggleLoginPassword.addEventListener('click', () => {
-                const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                loginPasswordInput.setAttribute('type', type);
-                
-                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
-                const svg = toggleLoginPassword.querySelector('svg');
-                if (type === 'text') {
-                    // Contraseña visible - mostrar ojo abierto
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    `;
-                } else {
-                    // Contraseña oculta - mostrar ojo cerrado/tachado
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                    `;
-                }
-            });
-        }
-        
-        // Toggle para primera contraseña de registro
-        const toggleRegisterPassword = document.getElementById('toggle-register-password');
-        const registerPasswordInput = document.getElementById('register-password');
-        
-        if (toggleRegisterPassword && registerPasswordInput) {
-            toggleRegisterPassword.addEventListener('click', () => {
-                const type = registerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                registerPasswordInput.setAttribute('type', type);
-                
-                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
-                const svg = toggleRegisterPassword.querySelector('svg');
-                if (type === 'text') {
-                    // Contraseña visible - mostrar ojo abierto
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    `;
-                } else {
-                    // Contraseña oculta - mostrar ojo cerrado/tachado
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                    `;
-                }
-            });
-        }
-        
-        // Toggle para segunda contraseña de registro
-        const toggleRegisterPassword2 = document.getElementById('toggle-register-password2');
-        const registerPassword2Input = document.getElementById('register-password2');
-        
-        if (toggleRegisterPassword2 && registerPassword2Input) {
-            toggleRegisterPassword2.addEventListener('click', () => {
-                const type = registerPassword2Input.getAttribute('type') === 'password' ? 'text' : 'password';
-                registerPassword2Input.setAttribute('type', type);
-                
-                // Cambiar el ícono - CORREGIDO: ojo abierto = texto visible, ojo cerrado = puntos
-                const svg = toggleRegisterPassword2.querySelector('svg');
-                if (type === 'text') {
-                    // Contraseña visible - mostrar ojo abierto
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    `;
-                } else {
-                    // Contraseña oculta - mostrar ojo cerrado/tachado
-                    svg.innerHTML = `
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                    `;
-                }
-            });
+    // === TOGGLE VER CONTRASEÑA LOGIN (final, robusto y fuera de wrappers) ===
+    var password = document.getElementById('login-password');
+    var viewPassword = document.getElementById('toggle-login-password');
+    if (viewPassword && password) {
+        let click = false;
+        viewPassword.onclick = function(e) {
+            e.preventDefault();
+            if (!click) {
+                password.type = 'text';
+                click = true;
+                // Ojo abierto
+                this.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            } else {
+                password.type = 'password';
+                click = false;
+                // Ojo cerrado
+                this.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>';
+            }
         }
     }
-    
-    // Inicializar los toggles de contraseña
-    setupPasswordToggles();
 });

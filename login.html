@@ -3,132 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso a Impulso IA</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Login - Impulso IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        .login-gradient-btn {
+            background: linear-gradient(90deg, #FF8A00 0%, #E52E71 100%);
+            color: #fff;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .login-gradient-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(229, 46, 113, 0.2);
+        }
+        .login-gradient-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .login-panel {
+            background: rgba(24, 24, 27, 0.95);
+        }
+        .login-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .login-input:focus {
+            border-color: #FF8A00;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 138, 0, 0.3);
+        }
+        
+        /* Estilos para una animación fluida */
+        #form-panel, #branding-panel {
+            transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.5s ease-in-out,
+                        padding 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-section {
+            position: absolute;
+            inset: 0;
+            padding: 2.5rem; /* Corresponde a p-10 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        /* Estado inicial de los formularios ocultos */
+        #register-section, #complete-profile-section {
+            opacity: 0;
+            transform: translateX(30px);
+            pointer-events: none;
+        }
+
+        /* Estado cuando se muestra el registro */
+        #auth-container.is-register-visible #form-panel {
+            width: 100%;
+        }
+        #auth-container.is-register-visible #branding-panel {
+            width: 0%;
+            opacity: 0;
+            padding: 0;
+        }
+        #auth-container.is-register-visible #login-section {
+            opacity: 0;
+            transform: translateX(-30px);
+            pointer-events: none;
+        }
+        #auth-container.is-register-visible #register-section {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        
+        /* Estado cuando se completa el perfil */
+        #auth-container.is-completing-profile #form-panel {
+            width: 100%;
+        }
+        #auth-container.is-completing-profile #branding-panel {
+            width: 0%;
+            opacity: 0;
+            padding: 0;
+        }
+        #auth-container.is-completing-profile #login-section,
+        #auth-container.is-completing-profile #register-section {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #auth-container.is-completing-profile #complete-profile-section {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+    </style>
+    <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
-<body class="bg-gradient-to-br from-indigo-100 via-white to-emerald-100 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-6">Impulso IA</h1>
-        <div class="flex mb-6">
-            <button id="tab-login" class="flex-1 py-2 font-bold rounded-l-lg bg-indigo-600 text-white">Iniciar sesión</button>
-            <button id="tab-register" class="flex-1 py-2 font-bold rounded-r-lg bg-gray-200 text-indigo-700">Registrarse</button>
-        </div>
-        <form id="login-form" class="space-y-5">
-            <div>
-                <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-                <input type="email" id="login-email" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-            </div>
-            <div>
-                <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <div class="relative">
-                    <input type="password" id="login-password" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-                    <button type="button" id="toggle-login-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Iniciar sesión</button>
-            <div class="text-center mt-2">
-                <a href="#" id="link-to-register" class="text-indigo-600 hover:underline text-sm font-medium">¿No tienes cuenta? Regístrate</a>
-            </div>
-        </form>
-        <form id="register-form" class="space-y-5 hidden">
-            <div>
-                <label for="register-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
-                <input type="text" id="register-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-            </div>
-            <div>
-                <label for="register-company" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
-                <input type="text" id="register-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-            </div>
-            <div>
-                <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-                <input type="email" id="register-email" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-            </div>
-            <div>
-                <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <div class="relative">
-                    <input type="password" id="register-password" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-                    <button type="button" id="toggle-register-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div>
-                <label for="register-password2" class="block text-sm font-medium text-gray-700 mb-1">Repetir contraseña</label>
-                <div class="relative">
-                    <input type="password" id="register-password2" class="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-                    <button type="button" id="toggle-register-password2" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors">Crear cuenta</button>
-            <div class="text-center mt-2">
-                <a href="#" id="link-to-login" class="text-indigo-600 hover:underline text-sm font-medium">¿Ya tienes cuenta? Inicia sesión</a>
-            </div>
-        </form>
-        <div class="my-6 flex items-center justify-center">
-            <span class="h-px flex-1 bg-gray-300"></span>
-            <span class="px-4 text-gray-400 text-sm">o</span>
-            <span class="h-px flex-1 bg-gray-300"></span>
-        </div>
-        <button id="google-btn" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg shadow-sm transition-colors">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6">
-            Continuar con Google
-        </button>
-        <div id="login-error" class="mt-4 text-center text-red-600 font-semibold"></div>
-    </div>
-    <!-- Modal para datos adicionales tras Google -->
-    <div id="google-extra-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
-      <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-sm relative">
-        <!-- Botón de cerrar -->
-        <button type="button" class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div id="auth-container" class="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl flex overflow-hidden">
         
-        <h2 class="text-xl font-bold mb-4 text-indigo-700">Completa tu perfil</h2>
-        <p class="text-sm text-gray-600 mb-6">Necesitamos algunos datos adicionales para personalizar tu experiencia.</p>
-        
-        <form id="google-extra-form" class="space-y-4">
-          <div>
-            <label for="google-extra-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
-            <input type="text" id="google-extra-name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Tu nombre completo">
-          </div>
-          <div>
-            <label for="google-extra-company" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
-            <input type="text" id="google-extra-company" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Nombre de tu empresa o organización">
-          </div>
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">Continuar</button>
-        </form>
-      </div>
+        <!-- Panel de Formularios (Contiene Login, Registro y Completar Perfil) -->
+        <div id="form-panel" class="w-full md:w-1/2 login-panel">
+            <div class="relative h-[680px]">
+                
+                <!-- Sección de Login -->
+                <div id="login-section" class="form-section">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <span class="text-xl font-semibold text-white">Impulso IA</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Bienvenido de nuevo</h2>
+                    <p class="text-gray-400 mb-8">Ingresa tus credenciales para acceder a tu cuenta</p>
+                    <div class="flex gap-3 mb-4">
+                        <button id="google-login-btn" class="flex-1 flex items-center justify-center gap-2 bg-[#18181b] hover:bg-[#232329] text-white font-semibold py-3 rounded-lg transition">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google"> Google
+                        </button>
+                    </div>
+                    <div class="flex items-center my-4">
+                        <span class="flex-1 h-px bg-gray-700"></span>
+                        <span class="px-3 text-gray-500 text-sm">o</span>
+                        <span class="flex-1 h-px bg-gray-700"></span>
+                    </div>
+                    <form id="login-form" class="space-y-4">
+                        <div>
+                            <label for="login-email" class="block text-gray-400 mb-1">Correo electrónico</label>
+                            <input type="email" id="login-email" class="w-full p-3 rounded-lg login-input" required>
+                        </div>
+                        <div>
+                            <label for="login-password" class="block text-gray-400 mb-1">Contraseña</label>
+                            <div class="relative">
+                                <input type="password" id="login-password" class="w-full p-3 pr-12 rounded-lg login-input" required>
+                                <button type="button" id="toggle-login-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full login-gradient-btn py-3 rounded-lg transition">Iniciar sesión</button>
+                        <div id="login-error" class="text-red-500 text-center font-semibold h-5"></div>
+                    </form>
+                    <div class="mt-6 text-center text-gray-400">
+                        ¿No tienes cuenta? <a href="#" id="show-register" class="text-orange-400 hover:underline">Regístrate gratis</a>
+                    </div>
+                </div>
+
+                <!-- Sección de Registro -->
+                <div id="register-section" class="form-section">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <span class="text-xl font-semibold text-white">Impulso IA</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Crear cuenta</h2>
+                    <p class="text-gray-400 mb-6">Completa tus datos para comenzar</p>
+                    <div class="flex gap-3 mb-4">
+                        <button id="google-register-btn" class="flex-1 flex items-center justify-center gap-2 bg-[#18181b] hover:bg-[#232329] text-white font-semibold py-3 rounded-lg transition">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google"> Google
+                        </button>
+                    </div>
+                    <div class="flex items-center my-4">
+                        <span class="flex-1 h-px bg-gray-700"></span>
+                        <span class="px-3 text-gray-500 text-sm">o</span>
+                        <span class="flex-1 h-px bg-gray-700"></span>
+                    </div>
+                    <form id="register-form" class="space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label for="register-name" class="block text-gray-400 mb-1">Nombre completo</label>
+                                <input type="text" id="register-name" class="w-full p-3 rounded-lg login-input" required>
+                            </div>
+                            <div>
+                                <label for="register-company" class="block text-gray-400 mb-1">Nombre de empresa</label>
+                                <input type="text" id="register-company" class="w-full p-3 rounded-lg login-input" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="register-email" class="block text-gray-400 mb-1">Correo electrónico</label>
+                            <input type="email" id="register-email" class="w-full p-3 rounded-lg login-input" required>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label for="register-password" class="block text-gray-400 mb-1">Contraseña</label>
+                                <div class="relative">
+                                    <input type="password" id="register-password" class="w-full p-3 pr-12 rounded-lg login-input" required>
+                                    <button type="button" id="toggle-register-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="register-confirm-password" class="block text-gray-400 mb-1">Confirmar contraseña</label>
+                                <div class="relative">
+                                    <input type="password" id="register-confirm-password" class="w-full p-3 pr-12 rounded-lg login-input" required>
+                                    <button type="button" id="toggle-register-confirm-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full login-gradient-btn py-3 rounded-lg transition">Crear cuenta</button>
+                        <div id="register-error" class="text-red-500 text-center font-semibold h-5"></div>
+                    </form>
+                    <div class="mt-4 text-center text-gray-400">
+                        ¿Ya tienes cuenta? <a href="#" id="show-login" class="text-orange-400 hover:underline">Iniciar sesión</a>
+                    </div>
+                </div>
+
+                <!-- Sección para Completar Perfil (tras registro con Google) -->
+                <div id="complete-profile-section" class="form-section">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <span class="text-xl font-semibold text-white">Impulso IA</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Un último paso...</h2>
+                    <p class="text-gray-400 mb-6">Completa tus datos para finalizar el registro.</p>
+                    <form id="complete-profile-form" class="space-y-4">
+                        <div>
+                            <label for="complete-name" class="block text-gray-400 mb-1">Nombre completo</label>
+                            <input type="text" id="complete-name" class="w-full p-3 rounded-lg login-input" required>
+                        </div>
+                        <div>
+                            <label for="complete-company" class="block text-gray-400 mb-1">Nombre de empresa</label>
+                            <input type="text" id="complete-company" class="w-full p-3 rounded-lg login-input" required>
+                        </div>
+                        <button type="submit" class="w-full login-gradient-btn py-3 rounded-lg transition">Finalizar registro</button>
+                        <div id="complete-profile-error" class="text-red-500 text-center font-semibold h-5"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Branding -->
+        <div id="branding-panel" class="w-1/2 p-10 md:flex flex-col items-center justify-center bg-black bg-opacity-90">
+            <div class="bg-[#18181b] rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold text-white mb-6">A</div>
+            <h2 class="text-3xl font-extrabold text-white mb-2">Impulso IA</h2>
+            <div class="text-gray-400 mb-4">Soluciones empresariales</div>
+            <p class="text-gray-400 text-center">Diagnóstico y asesoría en inteligencia artificial para empresas colombianas.</p>
+            <div class="mt-10 text-gray-600 text-xs">&copy; 2024 Impulso IA</div>
+        </div>
     </div>
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Custom Scripts -->
-    <script src="js/login.js"></script>
-    <style>
-    #login-form, #register-form {
-        transition: opacity 0.2s;
-    }
-    .opacity-0 {
-        opacity: 0 !important;
-    }
-    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuración de Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8", // ¡Usa tus propias claves de API!
+                authDomain: "empresa-ai.firebaseapp.com",
+                projectId: "empresa-ai",
+                storageBucket: "empresa-ai.appspot.com",
+                messagingSenderId: "525047010078",
+                appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+                measurementId: "G-TKKJK5MBYL"
+            };
+
+            // Inicializa Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            // --- ELEMENTOS DEL DOM ---
+            const authContainer = document.getElementById('auth-container');
+            const showRegisterBtn = document.getElementById('show-register');
+            const showLoginBtn = document.getElementById('show-login');
+            
+            // Formularios
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const completeProfileForm = document.getElementById('complete-profile-form');
+
+            // Botones de Google
+            const googleLoginBtn = document.getElementById('google-login-btn');
+            const googleRegisterBtn = document.getElementById('google-register-btn');
+
+            // Divs de error
+            const loginErrorDiv = document.getElementById('login-error');
+            const registerErrorDiv = document.getElementById('register-error');
+            const completeProfileErrorDiv = document.getElementById('complete-profile-error');
+
+            // --- LÓGICA DE TRANSICIÓN DE FORMULARIOS ---
+            showRegisterBtn?.addEventListener('click', (e) => {
+                e.preventDefault();
+                authContainer.classList.add('is-register-visible');
+            });
+            
+            showLoginBtn?.addEventListener('click', (e) => {
+                e.preventDefault();
+                authContainer.classList.remove('is-register-visible');
+            });
+
+            function showCompleteProfileForm(user) {
+                authContainer.classList.remove('is-register-visible');
+                authContainer.classList.add('is-completing-profile');
+                if (user.displayName) {
+                    document.getElementById('complete-name').value = user.displayName;
+                }
+            }
+
+            // --- LÓGICA DE AUTENTICACIÓN ---
+
+            // Iniciar sesión con Email y Contraseña
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                loginErrorDiv.textContent = '';
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                try {
+                    const result = await auth.signInWithEmailAndPassword(email, password);
+                    await handleUserRedirect(result.user);
+                } catch (err) {
+                    loginErrorDiv.textContent = 'Credenciales incorrectas. Inténtalo de nuevo.';
+                }
+            });
+
+            // Registro con Email y Contraseña
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                registerErrorDiv.textContent = '';
+                const name = document.getElementById('register-name').value;
+                const company = document.getElementById('register-company').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    registerErrorDiv.textContent = 'Las contraseñas no coinciden.';
+                    return;
+                }
+                if (password.length < 6) {
+                    registerErrorDiv.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+                    return;
+                }
+
+                try {
+                    const result = await auth.createUserWithEmailAndPassword(email, password);
+                    const user = result.user;
+                    // Guardar datos adicionales en Firestore
+                    await db.collection('users').doc(user.uid).set({
+                        name: name,
+                        company: company,
+                        email: user.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    window.location.href = 'index.html'; // O la página de dashboard
+                } catch (err) {
+                    if (err.code === 'auth/email-already-in-use') {
+                        registerErrorDiv.textContent = 'Este correo ya está registrado.';
+                    } else {
+                        registerErrorDiv.textContent = 'Error al crear la cuenta.';
+                    }
+                }
+            });
+
+            // Iniciar sesión/Registro con Google
+            const handleGoogleSignIn = async () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                try {
+                    const result = await auth.signInWithPopup(provider);
+                    await handleUserRedirect(result.user, true);
+                } catch (err) {
+                    loginErrorDiv.textContent = 'Error al iniciar sesión con Google.';
+                }
+            };
+
+            googleLoginBtn.addEventListener('click', handleGoogleSignIn);
+            googleRegisterBtn.addEventListener('click', handleGoogleSignIn);
+
+            // Completar Perfil
+            completeProfileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                completeProfileErrorDiv.textContent = '';
+                const user = auth.currentUser;
+                if (!user) {
+                    completeProfileErrorDiv.textContent = 'No se ha encontrado un usuario. Por favor, inicia sesión de nuevo.';
+                    return;
+                }
+                
+                const name = document.getElementById('complete-name').value;
+                const company = document.getElementById('complete-company').value;
+
+                if (!name || !company) {
+                    completeProfileErrorDiv.textContent = 'Por favor, completa todos los campos.';
+                    return;
+                }
+
+                try {
+                    await db.collection('users').doc(user.uid).set({
+                        name: name,
+                        company: company,
+                        email: user.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                    window.location.href = 'index.html'; // O la página de dashboard
+                } catch (err) {
+                    completeProfileErrorDiv.textContent = 'Error al guardar tu información.';
+                }
+            });
+
+            // Función para decidir si redirigir o pedir más datos
+            async function handleUserRedirect(user, isGoogleSignIn = false) {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (!userDoc.exists || !userDoc.data().company) {
+                    // Si el documento no existe o no tiene 'company', pedir datos
+                    showCompleteProfileForm(user);
+                } else {
+                    // Si todo está completo, redirigir
+                    window.location.href = 'index.html'; // O la página de dashboard
+                }
+            }
+
+            // --- LÓGICA PARA MOSTRAR/OCULTAR CONTRASEÑA ---
+            function setupPasswordToggle(toggleId, inputId) {
+                const toggleBtn = document.getElementById(toggleId);
+                const inputField = document.getElementById(inputId);
+                if (!toggleBtn || !inputField) return;
+
+                toggleBtn.addEventListener('click', () => {
+                    const type = inputField.type === 'password' ? 'text' : 'password';
+                    inputField.type = type;
+                    const svg = toggleBtn.querySelector('svg');
+                    if (type === 'text') {
+                        svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+                    } else {
+                        svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>';
+                    }
+                });
+            }
+
+            setupPasswordToggle('toggle-login-password', 'login-password');
+            setupPasswordToggle('toggle-register-password', 'register-password');
+            setupPasswordToggle('toggle-register-confirm-password', 'register-confirm-password');
+        });
+    </script>
 </body>
 </html>

@@ -34,10 +34,14 @@
         #sidebar { transition: width 0.3s ease-in-out; }
         #main-content { transition: margin-left 0.3s ease-in-out; }
         /* Hide text in collapsed sidebar */
-        #sidebar.collapsed .nav-text, #sidebar.collapsed .profile-text { display: none; }
-        /* Center icons in collapsed sidebar */
-        #sidebar.collapsed .nav-link, #sidebar.collapsed .profile-header { justify-content: center; }
-         #sidebar.collapsed .profile-header { padding-left: 1rem; padding-right: 1rem; }
+#sidebar.collapsed .nav-text, #sidebar.collapsed .profile-text { display: none; }
+/* Center icons in collapsed sidebar */
+#sidebar.collapsed .nav-link, #sidebar.collapsed .profile-header { justify-content: center; }
+#sidebar.collapsed .profile-header { padding-left: 1rem; padding-right: 1rem; }
+/* Ocultar lista de chats cuando está colapsado */
+#sidebar.collapsed #chat-list { display: none; }
+/* Centrar el botón nuevo chat cuando está colapsado */
+#sidebar.collapsed #new-chat-btn { justify-content: center; }
 
 /* --- Estilo barra de chat moderna --- */
 .ai-chatbar-container {
@@ -198,21 +202,7 @@
   background: #23272f;
   border-color: #ea2323;
 }
-#new-chat-btn {
-  background: #ea2323;
-  color: #fff;
-  border: none;
-  border-radius: 0.7rem;
-  padding: 0.7rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: background 0.18s;
-}
-#new-chat-btn:hover {
-  background: #ff8a00;
-}
+
     </style>
 </head>
 <body class="h-screen antialiased overflow-hidden">
@@ -238,12 +228,17 @@
                 <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                 <span class="nav-text">Tareas</span>
             </a>
-            <button id="new-chat-btn">+ Nuevo chat</button>
             <div id="chat-list"></div>
         </nav>
         <!-- Pie del Menú -->
         <div class="p-4 mt-auto border-t border-gray-800">
-            <button id="logout-btn-sidebar" class="w-full flex items-center gap-3 p-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors nav-link">
+            <button id="new-chat-btn" class="flex items-center gap-3 w-full p-3 rounded-lg text-gray-300 hover:bg-gray-900 hover:text-white transition-colors">
+                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                <span class="nav-text">Nuevo chat</span>
+            </button>
+            <button id="logout-btn-sidebar" class="w-full flex items-center gap-3 p-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors nav-link mt-2">
                 <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 <span class="nav-text">Cerrar sesión</span>
             </button>
@@ -328,7 +323,7 @@
     // --- CONFIGURACIÓN ---
     // ⚠️ IMPORTANTE: Reemplaza con tus claves de API reales.
     const firebaseConfig = {
-        apiKey: "TU_API_KEY_FIREBASE", // <--- REEMPLAZA ESTO
+        apiKey: "AIzaSyCJdg_PeUC1OwgY7fpDFXJ5AtjVn3ni4Dg", // <--- REEMPLAZA ESTO
         authDomain: "empresa-ai.firebaseapp.com",
         projectId: "empresa-ai",
         storageBucket: "empresa-ai.appspot.com",
@@ -345,9 +340,11 @@
     const GEMINI_API_KEY = "TU_API_KEY_GEMINI"; // <--- REEMPLAZA ESTO
 
     // --- INICIALIZACIÓN DE FIREBASE ---
+    console.log("Initializing Firebase...");
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    console.log("Firebase initialized successfully");
 
     // --- ELEMENTOS DEL DOM ---
     const sidebar = document.getElementById('sidebar');
@@ -384,15 +381,24 @@
 
     // --- LÓGICA DE AUTENTICACIÓN Y DATOS DE USUARIO ---
     onAuthStateChanged(auth, async (user) => {
+        console.log("Auth state changed:", user ? "User logged in" : "No user");
+        
         if (user) {
+            console.log("User UID:", user.uid);
+            console.log("User email:", user.email);
+            console.log("User displayName:", user.displayName);
+            
             try {
                 const userDocRef = doc(db, 'users', user.uid);
+                console.log("Fetching user document from Firestore...");
                 const userDocSnap = await getDoc(userDocRef);
 
                 if (userDocSnap.exists()) {
                     const userData = userDocSnap.data();
-                    const userName = userData.name || 'Usuario';
-                    const initial = (userName).charAt(0).toUpperCase();
+                    console.log("User data from Firestore:", userData);
+                    
+                    const userName = userData.name || user.displayName || user.email?.split('@')[0] || 'Usuario';
+                    const initial = userName.charAt(0).toUpperCase();
                     
                     userNameEl.textContent = userName;
                     companyNameEl.textContent = userData.company || 'Sin empresa';
@@ -406,23 +412,43 @@
                         profilePicEl.src = placeholderUrl;
                         userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
                     }
+                    
+                    console.log("Profile updated successfully");
                 } else {
-                    const displayName = user.displayName || 'Usuario';
+                    console.log("No user document found in Firestore, using Firebase Auth data");
+                    const displayName = user.displayName || user.email?.split('@')[0] || 'Usuario';
                     const initial = displayName.charAt(0).toUpperCase();
+                    
                     userNameEl.textContent = displayName;
                     companyNameEl.textContent = 'Completa tu perfil';
                     userProfile.initial = initial;
+                    
                     const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
                     profilePicEl.src = placeholderUrl;
                     userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
+                    
+                    console.log("Profile updated with Auth data");
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
-                userNameEl.textContent = 'Error al cargar';
-                companyNameEl.textContent = 'Intenta de nuevo';
+                console.log("Falling back to Firebase Auth data");
+                
+                // Fallback a datos de Firebase Auth
+                const displayName = user.displayName || user.email?.split('@')[0] || 'Usuario';
+                const initial = displayName.charAt(0).toUpperCase();
+                
+                userNameEl.textContent = displayName;
+                companyNameEl.textContent = 'Error al cargar empresa';
+                userProfile.initial = initial;
+                
+                const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
+                profilePicEl.src = placeholderUrl;
+                userProfile.photoURL = placeholderUrl.replace('48x48', '40x40');
             }
         } else {
-            console.log("User is not signed in. Redirecting to login page.");
+            console.log("User is not signed in");
+            userNameEl.textContent = 'No autenticado';
+            companyNameEl.textContent = 'Inicia sesión';
             // Opcional: Redirigir al usuario si no está logueado
             // window.location.href = '/login.html'; 
         }
@@ -665,7 +691,6 @@
         item.onclick = () => selectChat(chat.id);
         chatListDiv.appendChild(item);
       });
-      console.log('Chats cargados:', chats.length);
     }
 
     // --- Crear nuevo chat ---
@@ -675,12 +700,6 @@
         console.log('No hay usuario autenticado');
         return;
       }
-      
-      // Si hay un chat actual, guarda su título basado en el primer mensaje
-      if (currentChatId) {
-        await updateChatTitle(currentChatId);
-      }
-      
       const chatsRef = collection(db, 'users', userId, 'chats');
       const newChat = {
         title: 'Nuevo chat',
@@ -694,34 +713,10 @@
         const messageArea = document.getElementById('message-area');
         messageArea.innerHTML = '';
         
-        // Actualiza la lista de chats y selecciona el nuevo
         await loadChats();
         selectChat(docRef.id);
       } catch (error) {
         console.error('Error al crear chat:', error);
-      }
-    }
-    
-    // --- Actualizar título del chat basado en el primer mensaje ---
-    async function updateChatTitle(chatId) {
-      if (!userId || !chatId) return;
-      
-      try {
-        const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
-        const q = query(messagesRef, orderBy('timestamp', 'asc'));
-        const snapshot = await getDocs(q);
-        
-        if (!snapshot.empty) {
-          const firstMessage = snapshot.docs[0].data();
-          const title = firstMessage.text.length > 30 ? 
-            firstMessage.text.substring(0, 30) + '...' : 
-            firstMessage.text;
-          
-          const chatRef = doc(db, 'users', userId, 'chats', chatId);
-          await setDoc(chatRef, { title }, { merge: true });
-        }
-      } catch (error) {
-        console.error('Error al actualizar título:', error);
       }
     }
 
@@ -747,10 +742,7 @@
       
       // Actualiza selección visual
       document.querySelectorAll('.chat-list-item').forEach(el => el.classList.remove('selected'));
-      const selected = Array.from(document.querySelectorAll('.chat-list-item')).find(el => {
-        const chat = chats.find(c => c.id === chatId);
-        return el.textContent === (chat?.title || 'Chat sin título');
-      });
+      const selected = Array.from(document.querySelectorAll('.chat-list-item')).find(el => el.textContent === (chats.find(c => c.id === chatId)?.title || 'Chat sin título'));
       if (selected) selected.classList.add('selected');
       
       // Carga mensajes
@@ -780,18 +772,6 @@
         sender,
         timestamp: serverTimestamp()
       });
-      
-      // Si es el primer mensaje del usuario, actualiza el título del chat
-      if (sender === 'user') {
-        const messagesSnapshot = await getDocs(query(messagesRef, orderBy('timestamp', 'asc')));
-        if (messagesSnapshot.docs.length === 1) {
-          const title = text.length > 30 ? text.substring(0, 30) + '...' : text;
-          const chatRef = doc(db, 'users', userId, 'chats', currentChatId);
-          await setDoc(chatRef, { title }, { merge: true });
-          // Actualiza la lista de chats para mostrar el nuevo título
-          await loadChats();
-        }
-      }
     }
 
     // --- Modifica addMessage para guardar mensajes ---

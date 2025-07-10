@@ -84,12 +84,49 @@
             transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out, width 0.4s ease-in-out;
         }
         
-        @media (max-width: 768px) {
+                         @media (max-width: 768px) {
             #dynamic-word {
                 display: inline !important;
                 vertical-align: baseline !important;
             }
         }
+        
+        /* Estilos para el logo SVG */
+        .logo-svg {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(255, 138, 0, 0.2));
+        }
+        
+        .logo-svg:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 8px rgba(255, 138, 0, 0.4));
+        }
+        
+        /* Animación sutil para el gradiente del logo */
+        @keyframes logo-pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 2px 4px rgba(255, 138, 0, 0.2));
+            }
+            50% { 
+                filter: drop-shadow(0 2px 6px rgba(255, 138, 0, 0.4));
+            }
+        }
+        
+        .logo-svg {
+            animation: logo-pulse 3s ease-in-out infinite;
+        }
+         
+         /* Ajustes para desktop */
+         @media (min-width: 769px) {
+            #hero {
+                padding-top: 5rem;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+         }
         /* Shimmer text animation for 'Nuestro Origen' */
         .shimmer-text {
             display: inline-block;
@@ -130,6 +167,7 @@
             /* Mobile menu styles */
             #mobile-menu {
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                margin-top: 0;
             }
             
             #mobile-menu a {
@@ -137,17 +175,40 @@
                 padding: 0.75rem 0;
             }
             
-            /* Hero section móvil */
+            /* Logo responsive en móvil */
+            .logo-svg {
+                width: 1.75rem !important;
+                height: 1.75rem !important;
+            }
+            
+            /* Texto del logo más pequeño en móvil */
+            .flex.items-center a {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Ajustar hero para móvil */
+            #hero {
+                min-height: 100vh !important;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            /* Hero section móvil - overwrites previous */
             #hero {
                 padding: 1rem !important;
+                padding-top: 5rem !important; /* Espacio para el header */
+                padding-bottom: 2rem !important;
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                align-items: center;
             }
             
             #hero main {
-                padding-top: 2rem;
+                padding-top: 1rem !important; /* Reducir padding extra en móvil */
             }
             
             /* Título principal responsive */
@@ -378,7 +439,7 @@
 <body class="bg-black text-white overflow-x-hidden">
 
     <!-- Contenedor principal del Hero -->
-    <div id="hero" class="relative page-section p-4 overflow-hidden">
+    <div id="hero" class="relative page-section p-4 overflow-hidden pt-20">
 
         <!-- Elemento gráfico de fondo (el brillo) -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -387,11 +448,31 @@
         </div>
         
         <!-- Navegación Superior -->
-        <header class="absolute top-0 left-0 w-full p-6 z-10">
+        <header class="absolute top-0 left-0 w-full p-6 z-20">
             <nav class="flex justify-between items-center max-w-7xl mx-auto">
                 <!-- Logo -->
-                <div class="text-2xl font-bold">
-                    <a href="#">Impulso<span class="text-orange-400">.</span>IA</a>
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center text-2xl font-bold text-white hover:text-orange-400 transition-colors">
+                        <svg class="h-8 w-8 mr-2 logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color: #FF8A00;"></stop>
+                                    <stop offset="100%" style="stop-color: #E52E71;"></stop>
+                                </linearGradient>
+                            </defs>
+                            <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            
+                            <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient)" stroke-width="1.5"></rect>
+                            <path d="M12 10V8" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path d="M12 14V16" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path d="M10 12H8" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path d="M14 12H16" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                        Impulso<span class="text-orange-400">.</span>IA
+                    </a>
                 </div>
                 
                 <!-- Desktop Navigation -->
@@ -421,7 +502,7 @@
             </nav>
             
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-t border-gray-800 hidden">
+            <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-t border-gray-800 hidden z-30">
                 <div class="px-6 py-4 space-y-3">
                     <a href="#como-funciona" class="block py-2 text-white hover:text-orange-400 transition-colors border-b border-gray-800">Cómo Funciona</a>
                     <a href="#nosotros" class="block py-2 text-white hover:text-orange-400 transition-colors border-b border-gray-800">Nosotros</a>
@@ -432,7 +513,7 @@
         </header>
 
         <!-- Contenido principal del Hero -->
-        <main class="relative z-10 text-center flex flex-col items-center">
+        <main class="relative z-10 text-center flex flex-col items-center pt-20">
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-tight max-w-5xl">
                 Dale un <span class="text-gradient">IMPULSO</span> a tu <span id="dynamic-word">empresa</span> con IA
             </h1>

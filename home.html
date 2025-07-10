@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IMPULSO IA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,6 +23,10 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         /* Efecto de gradiente para el texto de IMPULSO */
         .text-gradient {
@@ -79,6 +83,13 @@
             vertical-align: bottom; /* Alinea la palabra con el resto del texto */
             transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out, width 0.4s ease-in-out;
         }
+        
+        @media (max-width: 768px) {
+            #dynamic-word {
+                display: inline !important;
+                vertical-align: baseline !important;
+            }
+        }
         /* Shimmer text animation for 'Nuestro Origen' */
         .shimmer-text {
             display: inline-block;
@@ -105,6 +116,188 @@
                 background-position: -200% center;
             }
         }
+        
+                 /* Mejoras responsive para móvil */
+        @media (max-width: 768px) {
+            /* Navegación móvil */
+            header {
+                padding: 1rem !important;
+                position: relative !important;
+                background: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(10px);
+            }
+            
+            /* Mobile menu styles */
+            #mobile-menu {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            #mobile-menu a {
+                font-size: 1rem;
+                padding: 0.75rem 0;
+            }
+            
+            /* Hero section móvil */
+            #hero {
+                padding: 1rem !important;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            #hero main {
+                padding-top: 2rem;
+            }
+            
+            /* Título principal responsive */
+            #hero h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.1 !important;
+                margin-bottom: 1.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            /* Párrafo descripción */
+            #hero p {
+                font-size: 1rem !important;
+                padding: 0 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            /* Botones móvil */
+            #hero .flex.flex-col.sm\\:flex-row {
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+            
+            #hero .flex.flex-col.sm\\:flex-row a {
+                padding: 0.875rem 1.5rem !important;
+                font-size: 1rem !important;
+                text-align: center;
+                width: 100%;
+            }
+            
+            /* Secciones responsive */
+            .page-section {
+                min-height: auto !important;
+                padding: 3rem 1rem !important;
+            }
+            
+            /* Títulos de sección */
+            .page-section h2 {
+                font-size: 2rem !important;
+            }
+            
+            .page-section h3 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1rem;
+            }
+            
+            /* Contenido de secciones */
+            .max-w-7xl,
+            .max-w-4xl,
+            .max-w-3xl {
+                padding: 0 1rem !important;
+            }
+            
+            /* Grid responsive */
+            .grid.md\\:grid-cols-3 {
+                gap: 2rem !important;
+            }
+            
+            .grid.md\\:grid-cols-2 {
+                gap: 2rem !important;
+            }
+            
+            /* Cards responsive */
+            .step-card .card-hover-effect {
+                padding: 1.5rem !important;
+            }
+            
+            .step-card h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            /* FAQ responsive */
+            .accordion-button span {
+                font-size: 1rem !important;
+            }
+            
+            /* Formulario de contacto responsive */
+            .main-container {
+                flex-direction: column !important;
+                gap: 2rem !important;
+            }
+            
+            .form-wrapper,
+            .info-wrapper {
+                min-width: auto !important;
+            }
+            
+            .form-header-subtitle {
+                padding-left: 0 !important;
+                text-align: center;
+            }
+            
+            /* Logos responsive */
+            .carousel-logo-card {
+                min-width: 50px !important;
+                min-height: 50px !important;
+            }
+            
+            .carousel-logo-card img {
+                width: 30px !important;
+                height: 30px !important;
+            }
+            
+            /* Eliminamos espaciado horizontal innecesario */
+            body {
+                overflow-x: hidden !important;
+            }
+            
+            
+            
+                         /* Ajuste para el hero background */
+             #hero .absolute.top-1\\/2 {
+                 width: 100vw !important;
+                 height: 100vw !important;
+             }
+             
+             /* Mejoras táctiles para botones */
+             button, 
+             a[href], 
+             input[type="submit"],
+             .accordion-button {
+                 min-height: 44px !important;
+                 min-width: 44px !important;
+                 touch-action: manipulation;
+                 -webkit-tap-highlight-color: rgba(255, 138, 0, 0.3);
+             }
+             
+             /* Feedback táctil para botones principales */
+             #btn-empezar,
+             #btn-descubrir-ia,
+             .submit-btn {
+                 transform: scale(1);
+                 transition: transform 0.2s ease;
+             }
+             
+             #btn-empezar:active,
+             #btn-descubrir-ia:active,
+             .submit-btn:active {
+                 transform: scale(0.95);
+             }
+             
+             /* Mejor contraste para texto en móvil */
+             .text-gray-400 {
+                 color: #d1d5db !important;
+             }
+             
+             .text-gray-300 {
+                 color: #f3f4f6 !important;
+             }
+         }
     </style>
     <style>
     .logo-scroller {
@@ -195,11 +388,14 @@
         
         <!-- Navegación Superior -->
         <header class="absolute top-0 left-0 w-full p-6 z-10">
-            <nav class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto">
-                <div class="text-2xl font-bold md:mr-8">
+            <nav class="flex justify-between items-center max-w-7xl mx-auto">
+                <!-- Logo -->
+                <div class="text-2xl font-bold">
                     <a href="#">Impulso<span class="text-orange-400">.</span>IA</a>
                 </div>
-                <div class="flex-1 flex justify-center md:justify-center items-center w-full md:w-auto mt-4 md:mt-0">
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex flex-1 justify-center items-center">
                     <div class="flex items-center space-x-8">
                         <a href="#como-funciona" class="hover:text-orange-400 transition-colors">Cómo Funciona</a>
                         <a href="#nosotros" class="hover:text-orange-400 transition-colors">Nosotros</a>
@@ -207,10 +403,32 @@
                         <a href="#contacto" class="hover:text-orange-400 transition-colors">Contacto</a>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                
+                <!-- Desktop Empezar Button -->
+                <div class="hidden md:flex items-center">
                     <a href="#" id="btn-empezar" class="bg-white text-black font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors">Empezar</a>
                 </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-3">
+                    <a href="#" id="btn-empezar-mobile" class="bg-white text-black font-semibold px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors text-sm">Empezar</a>
+                    <button id="mobile-menu-button" class="text-white hover:text-orange-400 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
             </nav>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-t border-gray-800 hidden">
+                <div class="px-6 py-4 space-y-3">
+                    <a href="#como-funciona" class="block py-2 text-white hover:text-orange-400 transition-colors border-b border-gray-800">Cómo Funciona</a>
+                    <a href="#nosotros" class="block py-2 text-white hover:text-orange-400 transition-colors border-b border-gray-800">Nosotros</a>
+                    <a href="#faq" class="block py-2 text-white hover:text-orange-400 transition-colors border-b border-gray-800">FAQs</a>
+                    <a href="#contacto" class="block py-2 text-white hover:text-orange-400 transition-colors">Contacto</a>
+                </div>
+            </div>
         </header>
 
         <!-- Contenido principal del Hero -->
@@ -922,9 +1140,69 @@
                 });
             }
             
-            // Aplicar la lógica a ambos botones
+            // Aplicar la lógica a ambos botones (desktop y mobile)
             document.getElementById('btn-descubrir-ia')?.addEventListener('click', handleAuthRedirect);
             document.getElementById('btn-empezar')?.addEventListener('click', handleAuthRedirect);
+            document.getElementById('btn-empezar-mobile')?.addEventListener('click', handleAuthRedirect);
+            
+            // === FUNCIONALIDAD DEL MENÚ HAMBURGUESA ===
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            
+            // Toggle del menú móvil
+            mobileMenuButton?.addEventListener('click', function() {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                
+                if (isHidden) {
+                    // Mostrar menú
+                    mobileMenu.classList.remove('hidden');
+                    // Cambiar ícono a X
+                    mobileMenuButton.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    `;
+                } else {
+                    // Ocultar menú
+                    mobileMenu.classList.add('hidden');
+                    // Cambiar ícono a hamburguesa
+                    mobileMenuButton.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    `;
+                }
+            });
+            
+            // Cerrar menú al hacer click en un enlace
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    // Restaurar ícono hamburguesa
+                    mobileMenuButton.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    `;
+                });
+            });
+            
+            // Cerrar menú al hacer click fuera de él
+            document.addEventListener('click', function(event) {
+                const isClickInsideMenu = mobileMenu.contains(event.target);
+                const isClickOnButton = mobileMenuButton.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    // Restaurar ícono hamburguesa
+                    mobileMenuButton.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    `;
+                }
+            });
         });
     </script>
     <script>

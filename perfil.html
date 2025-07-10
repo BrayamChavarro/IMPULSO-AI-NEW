@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IMPULSO Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -76,6 +76,49 @@
         #sidebar.collapsed .nav-text { 
             display: none; 
         }
+
+        /* Mobile sidebar overlay */
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                width: 280px;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+            }
+            
+            #sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            #sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+            
+            /* Mobile overlay backdrop */
+            .mobile-sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease-in-out;
+            }
+            
+            .mobile-sidebar-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
         
         /* Chat list item styles */
         .chat-list-item {
@@ -126,6 +169,50 @@
             white-space: nowrap;
             opacity: 0.7;
         }
+
+        /* Mobile chat list improvements */
+        @media (max-width: 768px) {
+            .chat-list-item {
+                padding: 0.75rem;
+                min-height: 60px;
+            }
+            
+            .chat-list-item .chat-actions {
+                gap: 0.5rem;
+            }
+            
+            .chat-actions button {
+                padding: 0.5rem;
+                min-width: 40px;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .chat-list-item .chat-title {
+                font-size: 0.95rem;
+                font-weight: 500;
+            }
+            
+            .chat-list-item .chat-preview {
+                font-size: 0.8rem;
+                margin-top: 4px;
+            }
+            
+            /* New chat button mobile */
+            #new-chat-btn {
+                padding: 0.875rem;
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Chat section title mobile */
+            .chat-section-title {
+                padding: 0 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+        }
         
         .chat-list-item .chat-actions {
             display: flex;
@@ -168,6 +255,25 @@
             margin: 0 auto 1rem auto;
             width: 100%;
         }
+
+        /* Mobile message styles */
+        @media (max-width: 768px) {
+            .message {
+                max-width: 95%;
+                gap: 0.5rem;
+                margin: 0 auto 0.75rem auto;
+            }
+            
+            .message.user {
+                margin-left: auto;
+                margin-right: 0.5rem;
+            }
+            
+            .message:not(.user) {
+                margin-left: 0.5rem;
+                margin-right: auto;
+            }
+        }
         
         .message.user {
             flex-direction: row-reverse;
@@ -207,6 +313,26 @@
             word-wrap: break-word;
             min-width: fit-content;
         }
+
+        /* Mobile content adjustments */
+        @media (max-width: 768px) {
+            .message-content {
+                padding: 0.75rem;
+                max-width: 85%;
+                font-size: 0.95rem;
+                line-height: 1.4;
+            }
+            
+            .message-avatar {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            
+            .message-avatar svg {
+                width: 0.875rem;
+                height: 0.875rem;
+            }
+        }
         
         .message-content.ai {
             background-color: rgb(55, 65, 81);
@@ -233,6 +359,91 @@
             font-size: 1rem;
         }
 
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            #main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            #chat-container {
+                padding: 0.75rem;
+            }
+            
+            #chat-input-container {
+                padding: 0.75rem;
+            }
+            
+            #chat-input-container .max-w-3xl {
+                max-width: 100%;
+                padding: 0 0.5rem;
+            }
+            
+            #chat-input {
+                min-height: 40px;
+                font-size: 0.95rem;
+            }
+            
+                         .tone-btn {
+                 padding: 0.5rem 0.75rem;
+                 font-size: 0.8rem;
+                 min-height: 36px;
+                 min-width: 60px;
+             }
+             
+             /* Submit button mobile */
+             button[type="submit"] {
+                 min-width: 44px;
+                 min-height: 44px;
+                 padding: 0.75rem;
+             }
+            
+            /* Welcome screen mobile */
+            #welcome-screen {
+                padding: 1rem;
+            }
+            
+            #welcome-screen h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            #welcome-screen p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .w-full.max-w-3xl {
+                padding: 0 1rem;
+            }
+            
+            /* Header mobile */
+            header {
+                padding: 0.75rem 1rem;
+            }
+            
+            #chat-title {
+                font-size: 1rem;
+                max-width: 200px;
+                                 overflow: hidden;
+                 text-overflow: ellipsis;
+                 white-space: nowrap;
+             }
+             
+             /* Prevent horizontal scroll on mobile */
+             body {
+                 overflow-x: hidden;
+             }
+             
+             /* Touch improvements */
+             .chat-list-item, 
+             #new-chat-btn,
+             .chat-actions button,
+             #sidebar-toggle {
+                 -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+                 touch-action: manipulation;
+             }
+         }
+
 
 
 
@@ -242,6 +453,9 @@
 <body class="h-screen antialiased overflow-hidden">
 
 <div class="flex h-screen bg-black text-gray-100 font-sans">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobile-overlay"></div>
+    
     <!-- Contenedor del Menú de Perfil (Sidebar) -->
     <aside id="sidebar" class="bg-black transition-all duration-300 ease-in-out w-64 overflow-hidden">
         <div class="p-4 flex flex-col h-full">
@@ -468,8 +682,34 @@
     };
 
     // --- LÓGICA DEL SIDEBAR ---
+    const isMobile = () => window.innerWidth <= 768;
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    
     sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
+        if (isMobile()) {
+            // Lógica para móvil
+            sidebar.classList.toggle('mobile-open');
+            mobileOverlay.classList.toggle('active');
+        } else {
+            // Lógica para desktop
+            sidebar.classList.toggle('collapsed');
+        }
+    });
+    
+    // Cerrar sidebar en móvil al hacer click en overlay
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-open');
+            mobileOverlay.classList.remove('active');
+        });
+    }
+    
+    // Ajustar sidebar al redimensionar ventana
+    window.addEventListener('resize', () => {
+        if (!isMobile()) {
+            sidebar.classList.remove('mobile-open');
+            mobileOverlay.classList.remove('active');
+        }
     });
 
     // --- LÓGICA DE AUTENTICACIÓN Y DATOS DE USUARIO ---
@@ -947,6 +1187,13 @@
         console.log('No hay usuario autenticado');
         return;
       }
+      
+      // Cerrar sidebar en móvil al crear nuevo chat
+      if (isMobile()) {
+        sidebar.classList.remove('mobile-open');
+        mobileOverlay.classList.remove('active');
+      }
+      
       const chatsRef = collection(db, 'users', userId, 'chats');
       const newChat = {
         title: 'Nuevo chat',
@@ -1106,6 +1353,12 @@
     async function selectChat(chatId) {
       console.log('Seleccionando chat:', chatId);
       currentChatId = chatId;
+      
+      // Cerrar sidebar en móvil al seleccionar chat
+      if (isMobile()) {
+        sidebar.classList.remove('mobile-open');
+        mobileOverlay.classList.remove('active');
+      }
       
       // Limpia el área de mensajes
       const messageArea = document.getElementById('message-area');

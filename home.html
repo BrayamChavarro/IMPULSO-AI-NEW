@@ -6,6 +6,11 @@
     <title>IMPULSO IA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -781,6 +786,23 @@
             // Estado inicial de las flechas
             updateArrowVisibility();
 
+            // Configuración e inicialización de Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8",
+                authDomain: "empresa-ai.firebaseapp.com",
+                projectId: "empresa-ai",
+                storageBucket: "empresa-ai.appspot.com",
+                messagingSenderId: "525047010078",
+                appId: "1:525047010078:web:f8f5414def9b0701e26f0f",
+                measurementId: "G-TKKJK5MBYL"
+            };
+            
+            // Inicializar Firebase
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                console.log('Firebase inicializado correctamente');
+            }
+
             // Script para texto dinámico con ancho automático
             const dynamicWordEl = document.getElementById('dynamic-word');
             const words = [
@@ -840,15 +862,69 @@
             // Iniciar el ciclo de animación
             setInterval(animateWordChange, 2500);
 
-            // Redirección de botones a login.html
-            document.getElementById('btn-descubrir-ia')?.addEventListener('click', function(e) {
+            // Variable para evitar múltiples verificaciones simultáneas
+            let isCheckingAuth = false;
+            
+            // Lógica de redirección condicional basada en autenticación
+            function handleAuthRedirect(e) {
                 e.preventDefault();
-                window.location.href = 'login.html';
-            });
-            document.getElementById('btn-empezar')?.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'login.html';
-            });
+                
+                // Evitar múltiples verificaciones simultáneas
+                if (isCheckingAuth) {
+                    return;
+                }
+                
+                // Verificar si Firebase está disponible
+                if (typeof firebase === 'undefined') {
+                    console.log('Firebase no disponible, redirigiendo a login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                isCheckingAuth = true;
+                
+                // Mostrar mensaje de carga
+                const target = e.target;
+                const originalText = target.textContent;
+                target.textContent = 'Verificando...';
+                target.disabled = true;
+                
+                // Función para restaurar el botón
+                function restoreButton() {
+                    target.textContent = originalText;
+                    target.disabled = false;
+                    isCheckingAuth = false;
+                }
+                
+                // Verificar estado de autenticación con timeout
+                const auth = firebase.auth();
+                const timeoutMs = 3000; // 3 segundos de timeout
+                
+                const authTimeout = setTimeout(() => {
+                    console.log('Timeout de autenticación, redirigiendo a login');
+                    window.location.href = 'login.html';
+                }, timeoutMs);
+                
+                // Crear listener una sola vez
+                const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                    clearTimeout(authTimeout);
+                    unsubscribe(); // Remover el listener inmediatamente
+                    
+                    if (user) {
+                        // Usuario autenticado, ir al chat
+                        console.log('Usuario autenticado:', user.email);
+                        window.location.href = 'perfil.html';
+                    } else {
+                        // Usuario no autenticado, ir al login
+                        console.log('Usuario no autenticado, redirigiendo a login');
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+            
+            // Aplicar la lógica a ambos botones
+            document.getElementById('btn-descubrir-ia')?.addEventListener('click', handleAuthRedirect);
+            document.getElementById('btn-empezar')?.addEventListener('click', handleAuthRedirect);
         });
     </script>
     <script>

@@ -105,11 +105,26 @@
             flex: 1;
         }
         
-        .chat-list-item .chat-title {
+        .chat-list-item .chat-title-container {
             margin-left: 0.75rem;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .chat-list-item .chat-title {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            line-height: 1.2;
+        }
+        
+        .chat-list-item .chat-preview {
+            margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            opacity: 0.7;
         }
         
         .chat-list-item .chat-actions {
@@ -148,21 +163,29 @@
         .message {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
-            max-width: 48rem;
-            margin: 0 auto 1.5rem auto;
+            gap: 0.75rem;
+            max-width: 85%;
+            margin: 0 auto 1rem auto;
             width: 100%;
         }
         
         .message.user {
             flex-direction: row-reverse;
             justify-content: flex-start;
+            margin-left: auto;
+            margin-right: 1rem;
+        }
+        
+        .message:not(.user) {
+            justify-content: flex-start;
+            margin-left: 1rem;
+            margin-right: auto;
         }
         
         .message-avatar {
             flex-shrink: 0;
-            width: 2rem;
-            height: 2rem;
+            width: 1.75rem;
+            height: 1.75rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -178,10 +201,11 @@
         }
         
         .message-content {
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 0.75rem;
-            max-width: 70%;
+            max-width: 75%;
             word-wrap: break-word;
+            min-width: fit-content;
         }
         
         .message-content.ai {
@@ -271,12 +295,6 @@
                     </svg>
                     <span class="nav-text">Cerrar Sesión</span>
                 </button>
-                <button id="go-to-login-btn" class="w-full flex items-center p-2 rounded-md text-sm text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-200 nav-link">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m0 0l4 4m-4-4v12"></path>
-                    </svg>
-                    <span class="nav-text">Ir a Login</span>
-                </button>
             </div>
         </div>
     </aside>
@@ -291,8 +309,8 @@
                     <line x1="9" y1="3" x2="9" y2="21"></line>
                 </svg>
             </button>
-            <h1 id="chat-title" class="text-lg font-semibold">Chat de IA</h1>
-            <a href="index.html" class="p-2 hover:bg-gray-800 rounded-md text-gray-400 hover:text-white transition-colors" title="Volver al inicio">
+            <h1 id="chat-title" class="text-lg font-semibold">Chat de Impulso</h1>
+            <a href="home.html" class="p-2 hover:bg-gray-800 rounded-md text-gray-400 hover:text-white transition-colors" title="Volver al inicio">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>
@@ -350,7 +368,7 @@
         </div>
 
         <!-- Contenedor de Mensajes -->
-        <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 hidden">
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 hidden">
             <div id="message-area">
                 <!-- Los mensajes se agregarán aquí dinámicamente -->
             </div>
@@ -387,7 +405,7 @@
     // Import functions from the Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, getDocs, query, orderBy, serverTimestamp, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     // --- CONFIGURACIÓN ---
     // ⚠️ IMPORTANTE: Reemplaza con tus claves de API reales.
@@ -543,14 +561,6 @@
         signOut(auth).catch((error) => console.error('Error signing out:', error));
     });
 
-    // --- BOTÓN PARA IR AL LOGIN ---
-    const goToLoginBtn = document.getElementById('go-to-login-btn');
-    if (goToLoginBtn) {
-        goToLoginBtn.addEventListener('click', () => {
-            window.location.href = 'login.html';
-        });
-    }
-
     // --- LÓGICA DEL CHAT ---
     const addMessage = (text, type, elementId = null) => {
         const messageId = elementId || `msg-${Date.now()}`;
@@ -562,10 +572,10 @@
             <div id="${messageId}" class="message ${isUser ? 'user' : ''}">
                 <div class="message-avatar ${isUser ? 'user' : 'ai'}">
                     ${isUser ? 
-                        `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>` : 
-                        `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>`
                     }
@@ -719,13 +729,20 @@
       }
     };
 
-    const handleMessageSubmit = (event) => {
+    const handleMessageSubmit = async (event) => {
         event.preventDefault();
         const isWelcomeForm = event.target.closest('form') === welcomeForm;
         const input = isWelcomeForm ? welcomeInput : chatInput;
         const messageText = input.value.trim();
 
         if (!messageText) return;
+
+        // Si no hay chat actual, crear uno nuevo
+        if (!currentChatId && userId) {
+            console.log('No hay chat actual, creando uno nuevo...');
+            await createNewChatWithFirstMessage(messageText);
+            return;
+        }
 
         if (isWelcomeForm) {
             // Ocultar pantalla de bienvenida y mostrar chat
@@ -851,49 +868,76 @@
     // --- Cargar chats del usuario ---
     async function loadChats() {
       if (!userId) return;
+      
       const chatListDiv = document.getElementById('chat-list');
-      chatListDiv.innerHTML = '';
-      const chatsRef = collection(db, 'users', userId, 'chats');
-      const q = query(chatsRef, orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
-      chats = [];
-      snapshot.forEach(docSnap => {
-        const chat = { id: docSnap.id, ...docSnap.data() };
-        chats.push(chat);
+      
+      // Mostrar indicador de carga
+      chatListDiv.innerHTML = '<li class="p-2 text-gray-400 text-sm">Cargando chats...</li>';
+      
+      try {
+        const chatsRef = collection(db, 'users', userId, 'chats');
+        const q = query(chatsRef, orderBy('lastMessageTime', 'desc'));
+        const snapshot = await getDocs(q);
         
-        const listItem = document.createElement('li');
-        const item = document.createElement('a');
-        item.href = '#';
-        item.className = 'chat-list-item' + (currentChatId === chat.id ? ' selected' : '');
-        item.onclick = (e) => {
-          e.preventDefault();
-          selectChat(chat.id);
-        };
+        chats = [];
+        chatListDiv.innerHTML = '';
         
-        item.innerHTML = `
-          <div class="chat-content">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-            </svg>
-            <span class="chat-title">${chat.title || 'Chat sin título'}</span>
-          </div>
-          <div class="chat-actions">
-            <button class="edit-btn" onclick="editChatTitle('${chat.id}')">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        if (snapshot.empty) {
+          chatListDiv.innerHTML = '<li class="p-2 text-gray-500 text-sm text-center">No hay chats aún<br/>¡Inicia una conversación!</li>';
+          return;
+        }
+        
+        snapshot.forEach(docSnap => {
+          const chat = { id: docSnap.id, ...docSnap.data() };
+          chats.push(chat);
+          
+          // Truncar último mensaje para preview
+          const lastMessagePreview = chat.lastMessage 
+            ? (chat.lastMessage.length > 40 ? chat.lastMessage.substring(0, 40) + '...' : chat.lastMessage)
+            : 'Sin mensajes';
+          
+          const listItem = document.createElement('li');
+          const item = document.createElement('a');
+          item.href = '#';
+          item.className = 'chat-list-item' + (currentChatId === chat.id ? ' selected' : '');
+          item.onclick = (e) => {
+            e.preventDefault();
+            selectChat(chat.id);
+          };
+          
+          item.innerHTML = `
+            <div class="chat-content">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
               </svg>
-            </button>
-            <button class="delete-btn" onclick="deleteChat('${chat.id}')">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-              </svg>
-            </button>
-          </div>
-        `;
+              <div class="chat-title-container">
+                <div class="chat-title font-medium">${chat.title || 'Chat sin título'}</div>
+                <div class="chat-preview text-xs text-gray-500 truncate">${lastMessagePreview}</div>
+              </div>
+            </div>
+            <div class="chat-actions">
+              <button class="edit-btn p-1 rounded hover:bg-gray-700" onclick="event.stopPropagation(); editChatTitle('${chat.id}')" title="Editar título">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+              <button class="delete-btn p-1 rounded hover:bg-gray-700 text-red-400" onclick="event.stopPropagation(); deleteChat('${chat.id}')" title="Eliminar chat">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </button>
+            </div>
+          `;
+          
+          listItem.appendChild(item);
+          chatListDiv.appendChild(listItem);
+        });
         
-        listItem.appendChild(item);
-        chatListDiv.appendChild(listItem);
-      });
+        console.log(`Chats cargados: ${chats.length}`);
+      } catch (error) {
+        console.error('Error al cargar chats:', error);
+        chatListDiv.innerHTML = '<li class="p-2 text-red-400 text-sm">Error al cargar chats</li>';
+      }
     }
 
     // --- Crear nuevo chat ---
@@ -906,7 +950,9 @@
       const chatsRef = collection(db, 'users', userId, 'chats');
       const newChat = {
         title: 'Nuevo chat',
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        lastMessage: '',
+        lastMessageTime: serverTimestamp()
       };
       try {
         const docRef = await addDoc(chatsRef, newChat);
@@ -916,6 +962,11 @@
         const messageArea = document.getElementById('message-area');
         messageArea.innerHTML = '';
         
+        // Mostrar interfaz de chat
+        welcomeScreen.classList.add('hidden');
+        chatContainer.classList.remove('hidden');
+        document.getElementById('chat-input-container').classList.remove('hidden');
+        
         await loadChats();
         selectChat(docRef.id);
       } catch (error) {
@@ -923,8 +974,118 @@
       }
     }
 
-    // Conectar el botón después de que el DOM esté listo
-    document.addEventListener('DOMContentLoaded', () => {
+    // --- Crear nuevo chat con primer mensaje ---
+    async function createNewChatWithFirstMessage(firstMessage) {
+      console.log('Creando nuevo chat con primer mensaje:', firstMessage);
+      if (!userId) {
+        console.log('No hay usuario autenticado');
+        return;
+      }
+      
+      // Crear título inteligente basado en el primer mensaje
+      const chatTitle = generateChatTitle(firstMessage);
+      console.log('Título generado para el chat:', chatTitle);
+      
+      const chatsRef = collection(db, 'users', userId, 'chats');
+      const newChat = {
+        title: chatTitle,
+        createdAt: serverTimestamp(),
+        lastMessage: firstMessage,
+        lastMessageTime: serverTimestamp()
+      };
+      
+      try {
+        const docRef = await addDoc(chatsRef, newChat);
+        console.log('Chat creado con ID:', docRef.id, 'y título:', chatTitle);
+        currentChatId = docRef.id;
+        
+        // Mostrar interfaz de chat
+        welcomeScreen.classList.add('hidden');
+        chatContainer.classList.remove('hidden');
+        document.getElementById('chat-input-container').classList.remove('hidden');
+        
+        // Actualizar título del chat en el header
+        const chatTitleElement = document.getElementById('chat-title');
+        if (chatTitleElement) {
+          chatTitleElement.textContent = chatTitle;
+        }
+        
+        // Agregar el primer mensaje
+        const userMessageId = addMessage(firstMessage, 'sent');
+        console.log('First message added with ID:', userMessageId);
+        
+        // Guardar el primer mensaje
+        await saveMessageToChat(firstMessage, 'user');
+        
+        // Actualizar lista de chats
+        await loadChats();
+        
+        // Asegurar que el chat recién creado esté seleccionado visualmente
+        setTimeout(() => {
+          const chatElements = document.querySelectorAll('.chat-list-item');
+          chatElements.forEach(el => el.classList.remove('selected'));
+          const newChatElement = Array.from(chatElements).find(el => 
+            el.onclick && el.onclick.toString().includes(docRef.id)
+          );
+          if (newChatElement) {
+            newChatElement.classList.add('selected');
+          }
+        }, 100);
+        
+        // Limpiar input
+        const input = document.getElementById('welcome-input') || document.getElementById('chat-input');
+        if (input) input.value = '';
+        
+        // Enviar a la IA
+        setTimeout(() => {
+            getGeminiResponse(getPromptWithTone(firstMessage));
+        }, 200);
+        
+      } catch (error) {
+        console.error('Error al crear chat con primer mensaje:', error);
+      }
+    }
+
+    // --- Generar título inteligente para el chat ---
+    function generateChatTitle(message) {
+      // Limpiar el mensaje
+      let cleanMessage = message.trim();
+      
+      // Remover caracteres especiales del inicio y fin
+      cleanMessage = cleanMessage.replace(/^[¿?¡!]+|[¿?¡!.]+$/g, '');
+      
+      // Si el mensaje es muy corto, usarlo completo
+      if (cleanMessage.length <= 25) {
+        return cleanMessage.charAt(0).toUpperCase() + cleanMessage.slice(1);
+      }
+      
+      // Para mensajes largos, tomar las primeras 3-5 palabras significativas
+      const words = cleanMessage.split(' ').filter(word => 
+        word.length > 2 && !['que', 'como', 'donde', 'cuando', 'porque', 'para', 'con', 'por', 'una', 'uno', 'del', 'las', 'los', 'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all'].includes(word.toLowerCase())
+      );
+      
+      // Tomar entre 3-5 palabras dependiendo de la longitud
+      const wordsToTake = words.length >= 4 ? 4 : Math.max(3, words.length);
+      let title = words.slice(0, wordsToTake).join(' ');
+      
+      // Si queda muy corto, usar las primeras 4 palabras originales
+      if (title.length < 10) {
+        title = cleanMessage.split(' ').slice(0, 4).join(' ');
+      }
+      
+      // Capitalizar primera letra
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      
+      // Limitar longitud total
+      if (title.length > 35) {
+        title = title.substring(0, 32) + '...';
+      }
+      
+      return title || 'Nuevo chat';
+    }
+
+    // Conectar el botón nuevo chat
+    const connectNewChatButton = () => {
       const newChatBtn = document.getElementById('new-chat-btn');
       if (newChatBtn) {
         newChatBtn.onclick = createNewChat;
@@ -932,7 +1093,14 @@
       } else {
         console.error('No se encontró el botón nuevo chat');
       }
-    });
+    };
+    
+    // Conectar inmediatamente si el DOM ya está listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', connectNewChatButton);
+    } else {
+      connectNewChatButton();
+    }
 
     // --- Seleccionar chat y cargar mensajes ---
     async function selectChat(chatId) {
@@ -991,12 +1159,32 @@
     // --- Guardar mensaje en el chat actual ---
     async function saveMessageToChat(text, sender) {
       if (!userId || !currentChatId) return;
-      const messagesRef = collection(db, 'users', userId, 'chats', currentChatId, 'messages');
-      await addDoc(messagesRef, {
-        text,
-        sender,
-        timestamp: serverTimestamp()
-      });
+      
+      try {
+        // Guardar el mensaje
+        const messagesRef = collection(db, 'users', userId, 'chats', currentChatId, 'messages');
+        await addDoc(messagesRef, {
+          text,
+          sender,
+          timestamp: serverTimestamp()
+        });
+        
+        // Actualizar último mensaje del chat
+        const chatRef = doc(db, 'users', userId, 'chats', currentChatId);
+        await updateDoc(chatRef, {
+          lastMessage: text,
+          lastMessageTime: serverTimestamp()
+        });
+        
+        // Recargar chats para actualizar el orden y preview
+        if (sender === 'bot') {
+          await loadChats();
+        }
+        
+        console.log('Mensaje guardado y chat actualizado');
+      } catch (error) {
+        console.error('Error al guardar mensaje:', error);
+      }
     }
 
     // --- Función para guardar mensajes sin interferir con addMessage ---
@@ -1006,31 +1194,117 @@
     };
 
     // --- Funciones adicionales para los botones de chat ---
-    window.editChatTitle = function(chatId) {
+    window.editChatTitle = async function(chatId) {
       const chat = chats.find(c => c.id === chatId);
       if (chat) {
         const newTitle = prompt('Nuevo título:', chat.title || 'Chat sin título');
-        if (newTitle && newTitle.trim()) {
-          // Aquí podrías actualizar el título en Firebase
-          console.log('Editando título del chat:', chatId, 'a:', newTitle);
+        if (newTitle && newTitle.trim() && newTitle !== chat.title) {
+          try {
+            const chatRef = doc(db, 'users', userId, 'chats', chatId);
+            await updateDoc(chatRef, {
+              title: newTitle.trim()
+            });
+            console.log('Título del chat actualizado');
+            
+            // Recargar chats para mostrar el cambio
+            await loadChats();
+            
+            // Si es el chat actual, actualizar el título en el header
+            if (currentChatId === chatId) {
+              const chatTitle = document.getElementById('chat-title');
+              if (chatTitle) {
+                chatTitle.textContent = newTitle.trim();
+              }
+            }
+          } catch (error) {
+            console.error('Error al actualizar título del chat:', error);
+            alert('Error al actualizar el título del chat');
+          }
         }
       }
     };
 
-    window.deleteChat = function(chatId) {
-      if (confirm('¿Estás seguro de que quieres eliminar este chat?')) {
-        // Aquí podrías eliminar el chat de Firebase
-        console.log('Eliminando chat:', chatId);
+    window.deleteChat = async function(chatId) {
+      if (confirm('¿Estás seguro de que quieres eliminar este chat? Esta acción no se puede deshacer.')) {
+        try {
+          // Eliminar todos los mensajes del chat primero
+          const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
+          const messagesSnapshot = await getDocs(messagesRef);
+          
+          // Eliminar mensajes en lotes
+          const deletePromises = messagesSnapshot.docs.map(messageDoc => 
+            deleteDoc(messageDoc.ref)
+          );
+          await Promise.all(deletePromises);
+          
+          // Eliminar el chat
+          const chatRef = doc(db, 'users', userId, 'chats', chatId);
+          await deleteDoc(chatRef);
+          
+          console.log('Chat eliminado exitosamente');
+          
+          // Si era el chat actual, limpiar la vista
+          if (currentChatId === chatId) {
+            currentChatId = null;
+            const messageArea = document.getElementById('message-area');
+            messageArea.innerHTML = '';
+            
+            // Mostrar pantalla de bienvenida si no hay otros chats
+            if (chats.length <= 1) {
+              document.getElementById('welcome-screen').classList.remove('hidden');
+              document.getElementById('chat-container').classList.add('hidden');
+              document.getElementById('chat-input-container').classList.add('hidden');
+            }
+          }
+          
+          // Recargar lista de chats
+          await loadChats();
+          
+          // Si hay otros chats, seleccionar el primero
+          if (chats.length > 0 && currentChatId === null) {
+            selectChat(chats[0].id);
+          }
+          
+        } catch (error) {
+          console.error('Error al eliminar chat:', error);
+          alert('Error al eliminar el chat');
+        }
       }
     };
 
-    // --- Al iniciar sesión, carga los chats ---
+    // --- Gestión mejorada del estado de autenticación para chats ---
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
+      if (user && user.uid !== userId) {
+        console.log('Usuario autenticado para chats:', user.uid);
         userId = user.uid;
-        await loadChats();
-        // Si hay chats, selecciona el primero
-        if (chats.length > 0) selectChat(chats[0].id);
+        
+        try {
+          await loadChats();
+          
+          // Si hay chats, seleccionar el primero, si no, mostrar pantalla de bienvenida
+          if (chats.length > 0) {
+            selectChat(chats[0].id);
+          } else {
+            // Asegurar que se muestre la pantalla de bienvenida
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('chat-container').classList.add('hidden');
+            document.getElementById('chat-input-container').classList.add('hidden');
+          }
+        } catch (error) {
+          console.error('Error al cargar chats:', error);
+        }
+      } else if (!user) {
+        // Usuario deslogueado, limpiar estado
+        userId = null;
+        currentChatId = null;
+        chats = [];
+        
+        // Limpiar UI
+        const chatListDiv = document.getElementById('chat-list');
+        if (chatListDiv) chatListDiv.innerHTML = '';
+        
+        const messageArea = document.getElementById('message-area');
+        if (messageArea) messageArea.innerHTML = '';
       }
     });
 </script>

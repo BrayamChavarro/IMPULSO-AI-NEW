@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
                 setTimeout(() => {
-                    window.location.replace('index.html');
+                    window.location.replace('perfil.html');
                 }, 1200);
             }
         } catch (err) {
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Éxito completo
                 errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
                 setTimeout(() => {
-                    window.location.replace('index.html');
+                    window.location.replace('perfil.html');
                 }, 1500);
                 
             } catch (firestoreError) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
                     setTimeout(() => {
-                        window.location.replace('index.html');
+                        window.location.replace('perfil.html');
                     }, 1500);
                     
                 } catch (retryError) {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Aún permitir el acceso aunque falle Firestore
                     errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Cuenta creada exitosamente! Redirigiendo...</span>';
                     setTimeout(() => {
-                        window.location.replace('index.html');
+                        window.location.replace('perfil.html');
                     }, 1500);
                 }
             }
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     modal.classList.add('hidden');
                     errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
                     setTimeout(() => {
-                        window.location.replace('index.html');
+                        window.location.replace('perfil.html');
                     }, 1200);
                 }, 1000);
                 
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         modal.classList.add('hidden');
                         errorDiv.innerHTML = '<span class="text-green-600">✅ ¡Inicio de sesión exitoso! Redirigiendo...</span>';
                         setTimeout(() => {
-                            window.location.replace('index.html');
+                            window.location.replace('perfil.html');
                         }, 1200);
                     }, 1000);
                     
@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('Error en segundo intento:', retryErr);
                     alert('Error al guardar los datos. Se redirigirá de todas formas.');
                     modal.classList.add('hidden');
-                    window.location.replace('index.html');
+                    window.location.replace('perfil.html');
                 }
             } finally {
                 // Restaurar botón

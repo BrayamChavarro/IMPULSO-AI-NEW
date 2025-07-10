@@ -43,33 +43,25 @@
             }
         }
         
-        /* Animación del gradiente para el texto */
-        @keyframes text-gradient-shine {
-            to {
-                background-position: 200% center;
+        /* Nueva animación de movimiento para cada letra */
+        @keyframes letter-rise {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
             }
         }
 
-        .animate-title {
-            /* Configuración del gradiente de fondo */
-            background-image: linear-gradient(
-                to right,
-                #ffffff 30%, 
-                #ffedd5 50%, 
-                #ffffff 70%
-            );
-            background-size: 200% auto;
-            
-            /* Recorta el fondo para que solo sea visible a través del texto */
-            color: #fff;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            
-            /* Aplicación de ambas animaciones */
-            animation: 
-                fade-in-down 0.8s ease-out forwards,
-                text-gradient-shine 3s linear infinite 1s; /* El brillo inicia 1s después */
+        .animate-letter-rise {
+            display: inline-block; /* Necesario para aplicar transform */
+            opacity: 0; /* Inicia oculto */
+            animation: letter-rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            color: #ffffff; /* Blanco sólido */
         }
 
         .animate-fade-in-up {
@@ -158,11 +150,13 @@
             align-items: flex-start;
             gap: 1rem;
             max-width: 48rem;
-            margin: 0 auto;
+            margin: 0 auto 1.5rem auto;
+            width: 100%;
         }
         
         .message.user {
             flex-direction: row-reverse;
+            justify-content: flex-start;
         }
         
         .message-avatar {
@@ -185,22 +179,34 @@
         
         .message-content {
             padding: 1rem;
-            border-radius: 0.5rem;
-            max-width: 75%;
+            border-radius: 0.75rem;
+            max-width: 70%;
+            word-wrap: break-word;
         }
         
         .message-content.ai {
             background-color: rgb(55, 65, 81);
-            text-align: left;
+            color: white;
+            border-bottom-left-radius: 0.25rem;
         }
         
         .message-content.user {
-            background-color: rgb(55, 65, 81);
-            text-align: left;
+            background-color: #dc2626;
+            color: white;
+            border-bottom-right-radius: 0.25rem;
         }
         
         .message-text {
             white-space: pre-wrap;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        /* Chat input centering */
+        #chat-input {
+            line-height: 1.5;
+            min-height: 44px;
+            font-size: 1rem;
         }
 
 
@@ -265,6 +271,12 @@
                     </svg>
                     <span class="nav-text">Cerrar Sesión</span>
                 </button>
+                <button id="go-to-login-btn" class="w-full flex items-center p-2 rounded-md text-sm text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-200 nav-link">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m0 0l4 4m-4-4v12"></path>
+                    </svg>
+                    <span class="nav-text">Ir a Login</span>
+                </button>
             </div>
         </div>
     </aside>
@@ -297,18 +309,18 @@
             
             <!-- Contenedor del contenido principal -->
             <div class="relative z-10 flex flex-col items-center justify-center text-center px-4 w-full">
-                <!-- Título Principal con animación -->
-                <h1 class="text-7xl md:text-9xl font-extrabold tracking-tighter pb-4 animate-title">
-                    IMPULSO
+                <!-- Título Principal con animación por letra -->
+                <h1 id="animated-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold tracking-tight pb-4 flex justify-center flex-wrap" aria-label="IMPULSO">
+                    <!-- Las letras se generarán con JavaScript -->
                 </h1>
                 
                 <!-- Subtítulo -->
-                <p class="mt-4 max-w-2xl text-lg md:text-xl text-gray-300 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <p class="mt-4 max-w-2xl text-lg md:text-xl text-gray-300 animate-fade-in-up" style="animation-delay: 1.2s;">
                     Potencia tu creatividad y productividad. La inteligencia artificial de vanguardia diseñada para llevar tus ideas al siguiente nivel.
                 </p>
 
                 <!-- Barra de Texto para Iniciar Conversación -->
-                <div class="w-full max-w-3xl mt-16 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="w-full max-w-3xl mt-16 animate-fade-in-up" style="animation-delay: 1.4s;">
                     <form id="welcome-form">
                         <div class="relative">
                             <input 
@@ -348,8 +360,8 @@
         <div id="chat-input-container" class="p-4 bg-black border-t border-gray-800 hidden">
             <div class="max-w-3xl mx-auto">
                 <form id="chat-form">
-                    <div class="flex items-end bg-gray-800 border border-gray-700 rounded-xl p-2">
-                        <textarea id="chat-input" autocomplete="off" placeholder="Escribe un mensaje..." rows="1" class="flex-1 bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none resize-none px-2 max-h-48"></textarea>
+                    <div class="flex items-center bg-gray-800 border border-gray-700 rounded-xl p-2">
+                        <textarea id="chat-input" autocomplete="off" placeholder="Escribe un mensaje..." rows="1" class="flex-1 bg-transparent text-gray-100 placeholder-gray-400 focus:outline-none resize-none px-3 max-h-48 py-3"></textarea>
                         <div class="flex items-center gap-2 ml-2">
                             <button type="button" id="tone-simple" class="px-3 py-1 text-xs bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors selected">Simple</button>
                             <button type="button" id="tone-tech" class="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 transition-colors">Técnico</button>
@@ -380,7 +392,7 @@
     // --- CONFIGURACIÓN ---
     // ⚠️ IMPORTANTE: Reemplaza con tus claves de API reales.
     const firebaseConfig = {
-        apiKey: "AIzaSyCJdg_PeUC1OwgY7fpDFXJ5AtjVn3ni4Dg", // <--- REEMPLAZA ESTO
+        apiKey: "AIzaSyCgT1jWF9JzLrfj15ed4_wZrJOKLmL3vJ8", // <--- Unificada con login.html
         authDomain: "empresa-ai.firebaseapp.com",
         projectId: "empresa-ai",
         storageBucket: "empresa-ai.appspot.com",
@@ -398,10 +410,15 @@
 
     // --- INICIALIZACIÓN DE FIREBASE ---
     console.log("Initializing Firebase...");
+    console.log("Firebase config:", firebaseConfig);
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     console.log("Firebase initialized successfully");
+    console.log("Auth object:", auth);
+    
+    // Verificar inmediatamente el estado de autenticación
+    console.log("Current user at startup:", auth.currentUser);
 
     // --- ELEMENTOS DEL DOM ---
     const sidebar = document.getElementById('sidebar');
@@ -419,9 +436,17 @@
     const chatInput = document.getElementById('chat-input');
     const messageArea = document.getElementById('message-area');
     
+    // Debug DOM elements
+    console.log('DOM Elements check:');
+    console.log('messageArea:', messageArea);
+    console.log('chatContainer:', chatContainer);
+    console.log('welcomeForm:', welcomeForm);
+    console.log('chatForm:', chatForm);
+    
     let userProfile = {
         photoURL: 'https://placehold.co/40x40/1f2937/ef4444?text=U',
-        initial: 'U'
+        initial: 'U',
+        name: 'Usuario'
     };
 
     // --- LÓGICA DEL SIDEBAR ---
@@ -432,6 +457,7 @@
     // --- LÓGICA DE AUTENTICACIÓN Y DATOS DE USUARIO ---
     onAuthStateChanged(auth, async (user) => {
         console.log("Auth state changed:", user ? "User logged in" : "No user");
+        console.log("User object:", user);
         
         if (user) {
             console.log("User UID:", user.uid);
@@ -453,6 +479,7 @@
                     userNameEl.textContent = userName;
                     companyNameEl.textContent = userData.company || 'Sin empresa';
                     userProfile.initial = initial;
+                    userProfile.name = userName; // Actualizar el nombre en el perfil
 
                     if (userData.photoURL) {
                         profilePicEl.src = userData.photoURL;
@@ -472,6 +499,7 @@
                     userNameEl.textContent = displayName;
                     companyNameEl.textContent = 'Completa tu perfil';
                     userProfile.initial = initial;
+                    userProfile.name = displayName; // Actualizar el nombre en el perfil
                     
                     const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
                     profilePicEl.src = placeholderUrl;
@@ -490,6 +518,7 @@
                 userNameEl.textContent = displayName;
                 companyNameEl.textContent = 'Error al cargar empresa';
                 userProfile.initial = initial;
+                userProfile.name = displayName; // Actualizar el nombre en el perfil
                 
                 const placeholderUrl = `https://placehold.co/48x48/1f2937/ef4444?text=${initial}`;
                 profilePicEl.src = placeholderUrl;
@@ -499,8 +528,13 @@
             console.log("User is not signed in");
             userNameEl.textContent = 'No autenticado';
             companyNameEl.textContent = 'Inicia sesión';
-            // Opcional: Redirigir al usuario si no está logueado
-            // window.location.href = '/login.html'; 
+            
+            // Mostrar mensaje y botón para ir al login
+            setTimeout(() => {
+                if (confirm('No tienes una sesión activa. ¿Quieres ir a la página de login?')) {
+                    window.location.href = 'login.html';
+                }
+            }, 2000);
         }
     });
 
@@ -509,10 +543,20 @@
         signOut(auth).catch((error) => console.error('Error signing out:', error));
     });
 
+    // --- BOTÓN PARA IR AL LOGIN ---
+    const goToLoginBtn = document.getElementById('go-to-login-btn');
+    if (goToLoginBtn) {
+        goToLoginBtn.addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
+    }
+
     // --- LÓGICA DEL CHAT ---
     const addMessage = (text, type, elementId = null) => {
         const messageId = elementId || `msg-${Date.now()}`;
         const isUser = type === 'sent';
+        
+        console.log(`Adding message: type="${type}", isUser=${isUser}, text="${text.substring(0, 50)}..."`);
 
         const messageHTML = `
             <div id="${messageId}" class="message ${isUser ? 'user' : ''}">
@@ -532,11 +576,23 @@
             </div>
         `;
         
+        if (!messageArea) {
+            console.error('messageArea not found!');
+            return messageId;
+        }
+        
+        console.log('Inserting message HTML into messageArea');
         messageArea.insertAdjacentHTML('beforeend', messageHTML);
+        
+        // Verificar que el mensaje se agregó
+        const addedElement = document.getElementById(messageId);
+        console.log('Message element added:', !!addedElement);
         
         // Scroll to bottom
         const container = document.getElementById('chat-container');
-        container.scrollTop = container.scrollHeight;
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
         
         return messageId;
     };
@@ -561,15 +617,24 @@
     };
 
     const getGeminiResponse = async (prompt) => {
+        console.log('Getting Gemini response for:', prompt);
+        
+        // Agregar mensaje "Pensando..."
         const thinkingMessageId = addMessage('Pensando...', 'received');
+        console.log('Thinking message added with ID:', thinkingMessageId);
 
         // Usar la configuración global de GEMINI_CONFIG
         const apiKey = window.GEMINI_CONFIG?.apiKey;
         const baseUrl = window.GEMINI_CONFIG?.baseUrl;
+        
         if (!apiKey || !baseUrl) {
-            updateMessage(thinkingMessageId, 'No se encontró la configuración de Gemini.');
+            console.error('Missing Gemini config');
+            // Eliminar "Pensando..." y mostrar error
+            document.getElementById(thinkingMessageId)?.remove();
+            addMessage('No se encontró la configuración de Gemini.', 'received');
             return;
         }
+        
         const apiUrl = `${baseUrl}?key=${apiKey}`;
         const payload = {
             contents: [{
@@ -578,6 +643,7 @@
         };
 
         try {
+            console.log('Calling Gemini API...');
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -592,11 +658,31 @@
 
             const result = await response.json();
             const botResponse = result.candidates?.[0]?.content.parts[0].text || 'Lo siento, no pude procesar tu solicitud.';
-            updateMessage(thinkingMessageId, botResponse);
+            console.log('Got response:', botResponse.substring(0, 100) + '...');
+            
+            // Eliminar el mensaje de "Pensando..."
+            const thinkingElement = document.getElementById(thinkingMessageId);
+            console.log('Thinking element found:', !!thinkingElement);
+            if (thinkingElement) {
+                thinkingElement.remove();
+                console.log('Thinking message removed');
+            }
+            
+            // Crear nuevo mensaje de respuesta de la IA
+            const responseMessageId = addMessage(botResponse, 'received');
+            console.log('Response message added with ID:', responseMessageId);
+            saveMessageAfterAdd(botResponse, 'received');
 
         } catch (error) {
             console.error("Error calling Gemini API:", error);
-            updateMessage(thinkingMessageId, 'Ocurrió un error al contactar a la IA. Por favor, inténtalo de nuevo.');
+            // En caso de error, eliminar mensaje de "Pensando..." y mostrar error
+            const thinkingElement = document.getElementById(thinkingMessageId);
+            if (thinkingElement) {
+                thinkingElement.remove();
+                console.log('Thinking message removed due to error');
+            }
+            addMessage('Ocurrió un error al contactar a la IA. Por favor, inténtalo de nuevo.', 'received');
+            saveMessageAfterAdd('Ocurrió un error al contactar a la IA. Por favor, inténtalo de nuevo.', 'received');
         }
     };
 
@@ -648,10 +734,22 @@
             document.getElementById('chat-input-container').classList.remove('hidden');
         }
 
-        addMessage(messageText, 'sent');
+        console.log('Sending message:', messageText);
+        
+        // Agregar mensaje del usuario
+        const userMessageId = addMessage(messageText, 'sent');
+        console.log('User message added with ID:', userMessageId);
+        
+        // Guardar mensaje
+        saveMessageAfterAdd(messageText, 'sent');
+        
+        // Limpiar input
         input.value = '';
 
-        getGeminiResponse(getPromptWithTone(messageText));
+        // Enviar a la IA
+        setTimeout(() => {
+            getGeminiResponse(getPromptWithTone(messageText));
+        }, 100);
     };
 
     // --- Lógica para habilitar/deshabilitar botones de envío ---
@@ -683,8 +781,40 @@
     updateSubmitButton(welcomeInput, welcomeSubmitBtn);
     updateSubmitButton(chatInput, chatSubmitBtn);
 
-    welcomeForm.addEventListener('submit', handleMessageSubmit);
-    chatForm.addEventListener('submit', handleMessageSubmit);
+    // --- ANIMACIÓN DEL TÍTULO POR LETRAS ---
+    function animateTitle() {
+        const title = "IMPULSO";
+        const titleElement = document.getElementById('animated-title');
+        
+        if (titleElement) {
+            titleElement.innerHTML = ''; // Limpiar contenido
+            
+            title.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.className = 'animate-letter-rise';
+                span.style.animationDelay = `${0.2 + index * 0.08}s`;
+                titleElement.appendChild(span);
+            });
+        }
+    }
+
+    // Ejecutar la animación del título al cargar la página
+    animateTitle();
+
+    if (welcomeForm) {
+        welcomeForm.addEventListener('submit', handleMessageSubmit);
+        console.log('Welcome form listener added');
+    } else {
+        console.error('Welcome form not found!');
+    }
+    
+    if (chatForm) {
+        chatForm.addEventListener('submit', handleMessageSubmit);
+        console.log('Chat form listener added');
+    } else {
+        console.error('Chat form not found!');
+    }
 
     // --- FUNCIONALIDAD DE ENTER EN INPUTS ---
     welcomeInput.addEventListener('keydown', function(e) {
@@ -852,7 +982,9 @@
       const snapshot = await getDocs(q);
       snapshot.forEach(docSnap => {
         const msg = docSnap.data();
-        addMessage(msg.text, msg.sender === 'user' ? 'sent' : 'received');
+        const messageType = msg.sender === 'user' ? 'sent' : 'received';
+        console.log(`Loading message: sender="${msg.sender}", type="${messageType}", text="${msg.text.substring(0, 50)}..."`);
+        addMessage(msg.text, messageType);
       });
     }
 
@@ -867,10 +999,8 @@
       });
     }
 
-    // --- Modifica addMessage para guardar mensajes ---
-    const originalAddMessage = window.addMessage;
-    window.addMessage = function(text, type, elementId = null) {
-      originalAddMessage(text, type, elementId);
+    // --- Función para guardar mensajes sin interferir con addMessage ---
+    const saveMessageAfterAdd = (text, type) => {
       if (type === 'sent') saveMessageToChat(text, 'user');
       if (type === 'received') saveMessageToChat(text, 'bot');
     };

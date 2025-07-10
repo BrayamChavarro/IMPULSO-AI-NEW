@@ -367,7 +367,7 @@
                         email: user.email,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    window.location.href = 'index.html'; // O la página de dashboard
+                    window.location.href = 'perfil.html'; // Redirigir al chat
                 } catch (err) {
                     if (err.code === 'auth/email-already-in-use') {
                         registerErrorDiv.textContent = 'Este correo ya está registrado.';
@@ -416,7 +416,7 @@
                         email: user.email,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }, { merge: true });
-                    window.location.href = 'index.html'; // O la página de dashboard
+                    window.location.href = 'perfil.html'; // Redirigir al chat
                 } catch (err) {
                     completeProfileErrorDiv.textContent = 'Error al guardar tu información.';
                 }
@@ -430,7 +430,7 @@
                     showCompleteProfileForm(user);
                 } else {
                     // Si todo está completo, redirigir
-                    window.location.href = 'index.html'; // O la página de dashboard
+                    window.location.href = 'perfil.html'; // Redirigir al chat
                 }
             }
 

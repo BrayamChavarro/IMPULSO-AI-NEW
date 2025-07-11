@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Impulso IA</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#FF8A00">
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -118,6 +125,31 @@
         a.volver-btn:hover svg {
             stroke: #FF8A00 !important;
         }
+        
+        /* Estilos para el logo SVG */
+        .logo-svg {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(255, 138, 0, 0.2));
+        }
+        
+        .logo-svg:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 4px 8px rgba(255, 138, 0, 0.4));
+        }
+        
+        /* Animación sutil para el gradiente del logo */
+        @keyframes logo-pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 2px 4px rgba(255, 138, 0, 0.2));
+            }
+            50% { 
+                filter: drop-shadow(0 2px 6px rgba(255, 138, 0, 0.4));
+            }
+        }
+        
+        .logo-svg {
+            animation: logo-pulse 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -134,7 +166,26 @@
                 <!-- Sección de Login -->
                 <div id="login-section" class="form-section">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <div class="flex items-center">
+                            <svg class="h-10 w-10 mr-2 logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="logo-gradient-login" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color: #FF8A00;"></stop>
+                                        <stop offset="100%" style="stop-color: #E52E71;"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient-login)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient-login)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient-login)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient-login)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                
+                                <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient-login)" stroke-width="1.5"></rect>
+                                <path d="M12 10V8" stroke="url(#logo-gradient-login)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M12 14V16" stroke="url(#logo-gradient-login)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M10 12H8" stroke="url(#logo-gradient-login)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M14 12H16" stroke="url(#logo-gradient-login)" stroke-width="1.5" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
                         <span class="text-xl font-semibold text-white">Impulso IA</span>
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-2">Bienvenido de nuevo</h2>
@@ -174,7 +225,26 @@
                 <!-- Sección de Registro -->
                 <div id="register-section" class="form-section">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <div class="flex items-center">
+                            <svg class="h-10 w-10 mr-2 logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="logo-gradient-register" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color: #FF8A00;"></stop>
+                                        <stop offset="100%" style="stop-color: #E52E71;"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient-register)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient-register)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient-register)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient-register)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                
+                                <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient-register)" stroke-width="1.5"></rect>
+                                <path d="M12 10V8" stroke="url(#logo-gradient-register)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M12 14V16" stroke="url(#logo-gradient-register)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M10 12H8" stroke="url(#logo-gradient-register)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M14 12H16" stroke="url(#logo-gradient-register)" stroke-width="1.5" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
                         <span class="text-xl font-semibold text-white">Impulso IA</span>
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-2">Crear cuenta</h2>
@@ -235,7 +305,26 @@
                 <!-- Sección para Completar Perfil (tras registro con Google) -->
                 <div id="complete-profile-section" class="form-section">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="bg-black rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold text-white">A</div>
+                        <div class="flex items-center">
+                            <svg class="h-10 w-10 mr-2 logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="logo-gradient-complete" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color: #FF8A00;"></stop>
+                                        <stop offset="100%" style="stop-color: #E52E71;"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient-complete)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient-complete)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient-complete)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient-complete)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                
+                                <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient-complete)" stroke-width="1.5"></rect>
+                                <path d="M12 10V8" stroke="url(#logo-gradient-complete)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M12 14V16" stroke="url(#logo-gradient-complete)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M10 12H8" stroke="url(#logo-gradient-complete)" stroke-width="1.5" stroke-linecap="round"></path>
+                                <path d="M14 12H16" stroke="url(#logo-gradient-complete)" stroke-width="1.5" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
                         <span class="text-xl font-semibold text-white">Impulso IA</span>
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-2">Un último paso...</h2>
@@ -258,7 +347,26 @@
 
         <!-- Panel Derecho: Branding -->
         <div id="branding-panel" class="w-1/2 p-10 md:flex flex-col items-center justify-center bg-black bg-opacity-90">
-            <div class="bg-[#18181b] rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold text-white mb-6">A</div>
+            <div class="flex items-center justify-center mb-6">
+                <svg class="h-16 w-16 logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient-branding" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #FF8A00;"></stop>
+                            <stop offset="100%" style="stop-color: #E52E71;"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path d="M14 20.5V16.5C14 15.3954 13.1046 14.5 12 14.5H10.5M3.5 10H7.5C8.60457 10 9.5 9.10457 9.5 8V3.5" stroke="url(#logo-gradient-branding)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M3.5 14H7.5C8.60457 14 9.5 14.8954 9.5 16V20.5" stroke="url(#logo-gradient-branding)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M14 3.5V7.5C14 8.60457 14.8954 9.5 16 9.5H20.5" stroke="url(#logo-gradient-branding)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M20.5 14H16.5C15.3954 14 14.5 14.8954 14.5 16V20.5" stroke="url(#logo-gradient-branding)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    
+                    <rect x="10" y="10" width="4" height="4" rx="0.5" stroke="url(#logo-gradient-branding)" stroke-width="1.5"></rect>
+                    <path d="M12 10V8" stroke="url(#logo-gradient-branding)" stroke-width="1.5" stroke-linecap="round"></path>
+                    <path d="M12 14V16" stroke="url(#logo-gradient-branding)" stroke-width="1.5" stroke-linecap="round"></path>
+                    <path d="M10 12H8" stroke="url(#logo-gradient-branding)" stroke-width="1.5" stroke-linecap="round"></path>
+                    <path d="M14 12H16" stroke="url(#logo-gradient-branding)" stroke-width="1.5" stroke-linecap="round"></path>
+                </svg>
+            </div>
             <h2 class="text-3xl font-extrabold text-white mb-2">Impulso IA</h2>
             <div class="text-gray-400 mb-4">Soluciones empresariales</div>
             <p class="text-gray-400 text-center">Diagnóstico y asesoría en inteligencia artificial para empresas colombianas.</p>

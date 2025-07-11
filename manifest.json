@@ -1,0 +1,17 @@
+{
+  "name": "Impulso IA",
+  "short_name": "Impulso IA",
+  "description": "Diagnóstico y asesoría en inteligencia artificial para empresas colombianas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#FF8A00",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+} 

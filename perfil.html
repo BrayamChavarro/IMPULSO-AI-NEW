@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IMPULSO Chat</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#FF8A00">
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -341,7 +348,7 @@
         }
         
         .message-content.user {
-            background-color: #dc2626;
+            background-color: #ac1e1e38;
             color: white;
             border-bottom-right-radius: 0.25rem;
         }
@@ -443,6 +450,284 @@
                  touch-action: manipulation;
              }
          }
+         
+         /* Enhanced AI response formatting */
+         .message-content.ai {
+             line-height: 1.6;
+         }
+         
+         .message-content.ai h1,
+         .message-content.ai h2,
+         .message-content.ai h3 {
+             line-height: 1.3;
+             font-weight: 700;
+         }
+         
+         .message-content.ai h1 {
+             color: #FED7AA;
+             border-bottom: 2px solid #FF8A00;
+             padding-bottom: 0.5rem;
+         }
+         
+         .message-content.ai h2 {
+             color: #FDBA74;
+             border-bottom: 1px solid rgba(255, 138, 0, 0.3);
+             padding-bottom: 0.5rem;
+         }
+         
+         .message-content.ai h3 {
+             color: #FB923C;
+         }
+         
+         .message-content.ai hr {
+             border-color: #4B5563;
+             margin: 1.5rem 0;
+         }
+         
+         .message-content.ai blockquote {
+             background: rgba(31, 41, 55, 0.5);
+             border-left: 4px solid #FF8A00;
+             padding: 0.75rem 1rem;
+             margin: 1rem 0;
+             border-radius: 0 0.5rem 0.5rem 0;
+             font-style: italic;
+         }
+         
+         .message-content.ai code {
+             background: #374151;
+             color: #FB923C;
+             padding: 0.25rem 0.5rem;
+             border-radius: 0.25rem;
+             font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+             font-size: 0.875em;
+         }
+         
+         .message-content.ai pre {
+             background: #1F2937;
+             border: 1px solid #374151;
+             border-radius: 0.5rem;
+             padding: 1rem;
+             margin: 1rem 0;
+             overflow-x: auto;
+         }
+         
+         .message-content.ai pre code {
+             background: none;
+             color: #E5E7EB;
+             padding: 0;
+         }
+         
+         /* List improvements */
+         .message-content.ai ul {
+             margin: 0.5rem 0;
+             padding-left: 1rem;
+         }
+         
+         .message-content.ai li {
+             margin: 0.25rem 0;
+             color: #D1D5DB;
+         }
+         
+         /* Emoji spacing */
+         .message-content.ai h1:first-child,
+         .message-content.ai h2:first-child,
+         .message-content.ai h3:first-child {
+             margin-top: 0;
+         }
+         
+         /* Progress indicators */
+         .message-content.ai strong {
+             color: #FFFFFF;
+             font-weight: 600;
+         }
+         
+                   .message-content.ai em {
+              color: #D1D5DB;
+              font-style: italic;
+          }
+          
+          /* Estilos del Modal de Eliminación */
+          .delete-modal-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: rgba(0, 0, 0, 0.75);
+              backdrop-filter: blur(4px);
+              z-index: 1000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 1rem;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+          }
+          
+          .delete-modal-overlay.show {
+              opacity: 1;
+          }
+          
+          .delete-modal-container {
+              width: 100%;
+              max-width: 400px;
+              transform: scale(0.9) translateY(20px);
+              transition: transform 0.3s ease-in-out;
+          }
+          
+          .delete-modal-overlay.show .delete-modal-container {
+              transform: scale(1) translateY(0);
+          }
+          
+          .delete-modal-content {
+              background: linear-gradient(145deg, #1f2937, #111827);
+              border: 1px solid #374151;
+              border-radius: 1rem;
+              padding: 2rem;
+              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                          0 0 0 1px rgba(255, 138, 0, 0.1);
+              text-align: center;
+          }
+          
+          .delete-modal-icon {
+              margin-bottom: 1.5rem;
+              animation: pulse-warning 2s infinite;
+          }
+          
+          @keyframes pulse-warning {
+              0%, 100% { 
+                  transform: scale(1);
+                  opacity: 1;
+              }
+              50% { 
+                  transform: scale(1.05);
+                  opacity: 0.8;
+              }
+          }
+          
+          .delete-modal-title {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: #FFFFFF;
+              margin-bottom: 1rem;
+          }
+          
+          .delete-modal-message {
+              color: #D1D5DB;
+              margin-bottom: 1.5rem;
+              line-height: 1.6;
+          }
+          
+          .delete-modal-details {
+              background: rgba(31, 41, 55, 0.5);
+              border: 1px solid #374151;
+              border-radius: 0.5rem;
+              padding: 1rem;
+              margin-bottom: 2rem;
+          }
+          
+          .chat-info {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              font-size: 0.875rem;
+          }
+          
+          .delete-modal-buttons {
+              display: flex;
+              gap: 1rem;
+              justify-content: center;
+          }
+          
+          .delete-btn-cancel,
+          .delete-btn-confirm {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 0.75rem 1.5rem;
+              border-radius: 0.5rem;
+              font-weight: 600;
+              font-size: 0.875rem;
+              transition: all 0.2s ease;
+              cursor: pointer;
+              border: none;
+              min-height: 44px;
+              min-width: 100px;
+          }
+          
+          .delete-btn-cancel {
+              background: #374151;
+              color: #E5E7EB;
+              border: 1px solid #4B5563;
+          }
+          
+          .delete-btn-cancel:hover {
+              background: #4B5563;
+              border-color: #6B7280;
+              transform: translateY(-1px);
+          }
+          
+          .delete-btn-confirm {
+              background: linear-gradient(135deg, #EF4444, #DC2626);
+              color: #FFFFFF;
+              border: 1px solid #DC2626;
+              box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
+          }
+          
+          .delete-btn-confirm:hover {
+              background: linear-gradient(135deg, #DC2626, #B91C1C);
+              transform: translateY(-1px);
+              box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.5);
+          }
+          
+          .delete-btn-confirm:active {
+              transform: translateY(0);
+          }
+          
+          /* Mobile responsive del modal */
+          @media (max-width: 768px) {
+              .delete-modal-overlay {
+                  padding: 1rem;
+              }
+              
+              .delete-modal-content {
+                  padding: 1.5rem;
+              }
+              
+              .delete-modal-buttons {
+                  flex-direction: column;
+                  gap: 0.75rem;
+              }
+              
+              .delete-btn-cancel,
+              .delete-btn-confirm {
+                  width: 100%;
+                  min-height: 48px;
+              }
+          }
+          
+          /* Animación de loading */
+          @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+          }
+          
+          .animate-spin {
+              animation: spin 1s linear infinite;
+          }
+          
+          /* Estado disabled de botones */
+          .delete-btn-confirm:disabled {
+              opacity: 0.7;
+              cursor: not-allowed;
+              transform: none !important;
+          }
+          
+          .delete-btn-confirm:disabled:hover {
+              transform: none !important;
+              box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39) !important;
+          }
 
 
 
@@ -692,7 +977,7 @@
             mobileOverlay.classList.toggle('active');
         } else {
             // Lógica para desktop
-            sidebar.classList.toggle('collapsed');
+        sidebar.classList.toggle('collapsed');
         }
     });
     
@@ -821,7 +1106,7 @@
                     }
                 </div>
                 <div class="message-content ${isUser ? 'user' : 'ai'}">
-                    <p class="message-text">${text}</p>
+                    <p class="message-text">${isUser ? text : ''}</p>
                 </div>
             </div>
         `;
@@ -838,6 +1123,35 @@
         const addedElement = document.getElementById(messageId);
         console.log('Message element added:', !!addedElement);
         
+        // Si es un mensaje de IA, aplicar formato mejorado inmediatamente
+        if (!isUser && addedElement) {
+            const textParagraph = addedElement.querySelector('.message-text');
+            if (textParagraph) {
+                const formattedText = formatAIResponse(text);
+                
+                // Enhanced markdown to HTML conversion (sin headers, solo negritas)
+                let html = formattedText
+                    // Separators
+                    .replace(/^---$/gm, '<hr class="my-4 border-gray-600">')
+                    // Bold and italic
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em class="text-gray-300 italic">$1</em>')
+                    // Inline code
+                    .replace(/`([^`]+)`/g, '<code class="bg-gray-700 text-orange-300 rounded px-2 py-1 text-sm font-mono">$1</code>')
+                    // Code blocks
+                    .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-800 text-gray-200 rounded-lg p-3 my-3 overflow-x-auto"><code>$1</code></pre>')
+                    // Lists
+                    .replace(/^\*   /gm, '&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                    .replace(/^\* /gm, '• ')
+                    // Quotes
+                    .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-orange-500 pl-4 py-2 bg-gray-800/50 italic text-gray-300 my-2">$1</blockquote>')
+                    // Newlines
+                    .replace(/\n/g, '<br>');
+                
+                textParagraph.innerHTML = html;
+            }
+        }
+        
         // Scroll to bottom
         const container = document.getElementById('chat-container');
         if (container) {
@@ -847,17 +1161,112 @@
         return messageId;
     };
     
+    // --- FUNCIÓN PARA MEJORAR EL FORMATO DE RESPUESTAS DE IA ---
+    const formatAIResponse = (text) => {
+        let formattedText = text;
+        
+        // PASO 1: Detectar tipo de contenido
+        const isLongResponse = text.length > 800;
+        const isTechnicalResponse = text.includes('**Marco General**') || 
+                                  text.includes('**I.') || 
+                                  text.includes('metodología') ||
+                                  text.includes('**Análisis') ||
+                                  text.includes('implementación') ||
+                                  text.includes('estrategia');
+        
+        // PASO 2: Mejorar títulos principales y secciones (sin emojis, solo negritas)
+        formattedText = formattedText
+            // Títulos principales con números romanos
+            .replace(/\*\*I\.\s*(.*?)\*\*/gi, '**PASO 1: $1**')
+            .replace(/\*\*II\.\s*(.*?)\*\*/gi, '**PASO 2: $1**')
+            .replace(/\*\*III\.\s*(.*?)\*\*/gi, '**PASO 3: $1**')
+            .replace(/\*\*IV\.\s*(.*?)\*\*/gi, '**PASO 4: $1**')
+            .replace(/\*\*V\.\s*(.*?)\*\*/gi, '**PASO 5: $1**')
+            
+            // Títulos con números
+            .replace(/\*\*(\d+)\.\s*(.*?)\*\*/gi, '**$1. $2**')
+            
+            // Títulos generales sin numeración (mantener como están, solo negritas)
+            .replace(/\*\*([A-ZÁÉÍÓÚÑ][^*\n]{3,})\*\*/gi, '**$1**');
+        
+        // PASO 3: Mejorar términos específicos de negocio (sin emojis)
+        formattedText = formattedText
+            .replace(/\*\*Marco General para (.*?)\*\*/gi, '**Marco General para $1**')
+            .replace(/\*\*Descomposición del Plan:\*\*/gi, '**Descomposición del Plan:**')
+            .replace(/\*\*Identificación de (.*?)\*\*/gi, '**Identificación de $1**')
+            .replace(/\*\*Análisis de (.*?)\*\*/gi, '**Análisis de $1**')
+            .replace(/\*\*Brainstorming de (.*?)\*\*/gi, '**Brainstorming de $1**')
+            .replace(/\*\*Evaluación (.*?)\*\*/gi, '**Evaluación $1**')
+            .replace(/\*\*Selección de (.*?)\*\*/gi, '**Selección de $1**')
+            .replace(/\*\*Definición (.*?)\*\*/gi, '**Definición $1**')
+            .replace(/\*\*Revisión (.*?)\*\*/gi, '**Revisión $1**')
+            .replace(/\*\*Implementación (.*?)\*\*/gi, '**Implementación $1**')
+            .replace(/\*\*Monitoreo (.*?)\*\*/gi, '**Monitoreo $1**')
+            .replace(/\*\*Gestión de (.*?)\*\*/gi, '**Gestión de $1**')
+            .replace(/\*\*KPIs:\*\*/gi, '**KPIs:**')
+            .replace(/\*\*ROI:\*\*/gi, '**ROI:**')
+            .replace(/\*\*Cronograma:\*\*/gi, '**Cronograma:**')
+            .replace(/\*\*Presupuesto:\*\*/gi, '**Presupuesto:**')
+            .replace(/\*\*Recursos:\*\*/gi, '**Recursos:**')
+            .replace(/\*\*Riesgos:\*\*/gi, '**Riesgos:**')
+            .replace(/\*\*Oportunidades:\*\*/gi, '**Oportunidades:**');
+        
+        // PASO 4: Mejorar listas y puntos (sin emojis)
+        formattedText = formattedText
+            .replace(/^(\d+)\.\s+(.+)$/gm, '**$1.** $2')
+            .replace(/^[-•]\s+(.+)$/gm, '• $1');
+        
+        // PASO 5: Mejorar palabras clave importantes (sin emojis)
+        formattedText = formattedText
+            .replace(/\b(importante|clave|fundamental|esencial|crítico|vital)\b/gi, '**$1**')
+            .replace(/\b(recuerda|nota|atención|consejo|tip)\b/gi, '**$1**');
+        
+        // PASO 6: Agregar separador y resumen para respuestas largas (sin emojis)
+        if (isLongResponse) {
+            // Agregar separador antes del final
+            if (!formattedText.includes('---')) {
+                formattedText += '\n\n---\n\n';
+            }
+            
+            // Agregar consejo final contextual (sin emojis)
+            if (isTechnicalResponse) {
+                formattedText += '**PUNTO CLAVE**\n\n**Recuerda:** La implementación exitosa requiere planificación detallada y ejecución paso a paso. Comienza con las tareas de mayor impacto.';
+            } else {
+                formattedText += '**RESUMEN**\n\n**Lo más importante:** Enfócate en la acción práctica y mantén la consistencia. Pequeños pasos llevan a grandes resultados.';
+            }
+        }
+        
+        return formattedText;
+    };
+    
     const updateMessage = (elementId, newText) => {
         const messageElement = document.getElementById(elementId);
         if (messageElement) {
             const textParagraph = messageElement.querySelector('.message-text');
             if(textParagraph) {
-                // Basic markdown to HTML conversion
-                let html = newText
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Italic
-                    .replace(/`([^`]+)`/g, '<code class="bg-gray-700 text-red-300 rounded px-1 py-0.5">$1</code>') // Inline code
-                    .replace(/\n/g, '<br>'); // Newlines
+                // Aplicar formato mejorado para respuestas de IA
+                const isAIMessage = messageElement.closest('.message').classList.contains('user') === false;
+                let processedText = isAIMessage ? formatAIResponse(newText) : newText;
+                
+                // Enhanced markdown to HTML conversion (sin headers, solo negritas)
+                let html = processedText
+                    // Separators
+                    .replace(/^---$/gm, '<hr class="my-4 border-gray-600">')
+                    // Bold and italic
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em class="text-gray-300 italic">$1</em>')
+                    // Inline code
+                    .replace(/`([^`]+)`/g, '<code class="bg-gray-700 text-orange-300 rounded px-2 py-1 text-sm font-mono">$1</code>')
+                    // Code blocks
+                    .replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-800 text-gray-200 rounded-lg p-3 my-3 overflow-x-auto"><code>$1</code></pre>')
+                    // Lists
+                    .replace(/^\*   /gm, '&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                    .replace(/^\* /gm, '• ')
+                    // Quotes
+                    .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-orange-500 pl-4 py-2 bg-gray-800/50 italic text-gray-300 my-2">$1</blockquote>')
+                    // Newlines
+                    .replace(/\n/g, '<br>');
+                
                 textParagraph.innerHTML = html;
             }
         }
@@ -963,9 +1372,9 @@
     // Modifica el prompt según el tono
     const getPromptWithTone = (prompt) => {
       if (currentTone === 'tech') {
-        return prompt + '\n\nResponde con lenguaje técnico y profesional.';
+        return prompt + '\n\nResponde con lenguaje técnico y profesional apropiado.';
       } else {
-        return prompt + '\n\nResponde de forma clara y sencilla, sin tecnicismos.';
+        return prompt + '\n\nResponde de forma clara, amigable y fácil de entender.';
       }
     };
 
@@ -1115,11 +1524,11 @@
       chatListDiv.innerHTML = '<li class="p-2 text-gray-400 text-sm">Cargando chats...</li>';
       
       try {
-        const chatsRef = collection(db, 'users', userId, 'chats');
+      const chatsRef = collection(db, 'users', userId, 'chats');
         const q = query(chatsRef, orderBy('lastMessageTime', 'desc'));
-        const snapshot = await getDocs(q);
+      const snapshot = await getDocs(q);
         
-        chats = [];
+      chats = [];
         chatListDiv.innerHTML = '';
         
         if (snapshot.empty) {
@@ -1127,51 +1536,51 @@
           return;
         }
         
-        snapshot.forEach(docSnap => {
-          const chat = { id: docSnap.id, ...docSnap.data() };
-          chats.push(chat);
-          
+      snapshot.forEach(docSnap => {
+        const chat = { id: docSnap.id, ...docSnap.data() };
+        chats.push(chat);
+        
           // Truncar último mensaje para preview
           const lastMessagePreview = chat.lastMessage 
             ? (chat.lastMessage.length > 40 ? chat.lastMessage.substring(0, 40) + '...' : chat.lastMessage)
             : 'Sin mensajes';
           
-          const listItem = document.createElement('li');
-          const item = document.createElement('a');
-          item.href = '#';
-          item.className = 'chat-list-item' + (currentChatId === chat.id ? ' selected' : '');
-          item.onclick = (e) => {
-            e.preventDefault();
-            selectChat(chat.id);
-          };
-          
-          item.innerHTML = `
-            <div class="chat-content">
-              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-              </svg>
+        const listItem = document.createElement('li');
+        const item = document.createElement('a');
+        item.href = '#';
+        item.className = 'chat-list-item' + (currentChatId === chat.id ? ' selected' : '');
+        item.onclick = (e) => {
+          e.preventDefault();
+          selectChat(chat.id);
+        };
+        
+        item.innerHTML = `
+          <div class="chat-content">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
               <div class="chat-title-container">
                 <div class="chat-title font-medium">${chat.title || 'Chat sin título'}</div>
                 <div class="chat-preview text-xs text-gray-500 truncate">${lastMessagePreview}</div>
               </div>
-            </div>
-            <div class="chat-actions">
+          </div>
+          <div class="chat-actions">
               <button class="edit-btn p-1 rounded hover:bg-gray-700" onclick="event.stopPropagation(); editChatTitle('${chat.id}')" title="Editar título">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-              </button>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </button>
               <button class="delete-btn p-1 rounded hover:bg-gray-700 text-red-400" onclick="event.stopPropagation(); deleteChat('${chat.id}')" title="Eliminar chat">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-              </button>
-            </div>
-          `;
-          
-          listItem.appendChild(item);
-          chatListDiv.appendChild(listItem);
-        });
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+        
+        listItem.appendChild(item);
+        chatListDiv.appendChild(listItem);
+      });
         
         console.log(`Chats cargados: ${chats.length}`);
       } catch (error) {
@@ -1415,12 +1824,12 @@
       
       try {
         // Guardar el mensaje
-        const messagesRef = collection(db, 'users', userId, 'chats', currentChatId, 'messages');
-        await addDoc(messagesRef, {
-          text,
-          sender,
-          timestamp: serverTimestamp()
-        });
+      const messagesRef = collection(db, 'users', userId, 'chats', currentChatId, 'messages');
+      await addDoc(messagesRef, {
+        text,
+        sender,
+        timestamp: serverTimestamp()
+      });
         
         // Actualizar último mensaje del chat
         const chatRef = doc(db, 'users', userId, 'chats', currentChatId);
@@ -1477,52 +1886,211 @@
       }
     };
 
-    window.deleteChat = async function(chatId) {
-      if (confirm('¿Estás seguro de que quieres eliminar este chat? Esta acción no se puede deshacer.')) {
-        try {
-          // Eliminar todos los mensajes del chat primero
-          const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
-          const messagesSnapshot = await getDocs(messagesRef);
-          
-          // Eliminar mensajes en lotes
-          const deletePromises = messagesSnapshot.docs.map(messageDoc => 
-            deleteDoc(messageDoc.ref)
-          );
-          await Promise.all(deletePromises);
-          
-          // Eliminar el chat
-          const chatRef = doc(db, 'users', userId, 'chats', chatId);
-          await deleteDoc(chatRef);
-          
-          console.log('Chat eliminado exitosamente');
-          
-          // Si era el chat actual, limpiar la vista
-          if (currentChatId === chatId) {
-            currentChatId = null;
-            const messageArea = document.getElementById('message-area');
-            messageArea.innerHTML = '';
-            
-            // Mostrar pantalla de bienvenida si no hay otros chats
-            if (chats.length <= 1) {
-              document.getElementById('welcome-screen').classList.remove('hidden');
-              document.getElementById('chat-container').classList.add('hidden');
-              document.getElementById('chat-input-container').classList.add('hidden');
-            }
-          }
-          
-          // Recargar lista de chats
-          await loadChats();
-          
-          // Si hay otros chats, seleccionar el primero
-          if (chats.length > 0 && currentChatId === null) {
-            selectChat(chats[0].id);
-          }
-          
-        } catch (error) {
-          console.error('Error al eliminar chat:', error);
-          alert('Error al eliminar el chat');
-        }
+    // Función para mostrar el modal de eliminación
+    window.deleteChat = function(chatId) {
+      console.log('deleteChat llamada con chatId:', chatId);
+      if (!chatId) {
+        console.error('deleteChat: chatId no válido');
+        return;
       }
+      
+      const chat = chats.find(c => c.id === chatId);
+      const chatTitle = chat ? chat.title : 'Chat sin título';
+      console.log('Mostrando modal para eliminar chat:', chatTitle, 'ID:', chatId);
+      showDeleteModal(chatId, chatTitle);
+    };
+    
+    // Función que realmente elimina el chat (llamada desde el modal)
+    const performDeleteChat = async function(chatId) {
+      try {
+        // Validar que tenemos un chatId válido
+        if (!chatId || !userId) {
+          console.error('Error: chatId o userId no válido', { chatId, userId });
+          throw new Error('ID de chat o usuario no válido');
+        }
+        
+        console.log('Eliminando chat:', chatId);
+        
+        // Agregar efecto de loading al botón
+        const confirmBtn = document.getElementById('delete-confirm-btn');
+        const originalHTML = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = `
+          <svg class="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Eliminando...
+        `;
+        confirmBtn.disabled = true;
+        
+        // Eliminar todos los mensajes del chat primero
+        const messagesRef = collection(db, 'users', userId, 'chats', chatId, 'messages');
+        const messagesSnapshot = await getDocs(messagesRef);
+        
+        // Eliminar mensajes en lotes
+        const deletePromises = messagesSnapshot.docs.map(messageDoc => 
+          deleteDoc(messageDoc.ref)
+        );
+        await Promise.all(deletePromises);
+        
+        // Eliminar el chat
+        const chatRef = doc(db, 'users', userId, 'chats', chatId);
+        await deleteDoc(chatRef);
+        
+        console.log('Chat eliminado exitosamente');
+        
+        // Si era el chat actual, limpiar la vista
+        if (currentChatId === chatId) {
+          currentChatId = null;
+          const messageArea = document.getElementById('message-area');
+          messageArea.innerHTML = '';
+          
+          // Mostrar pantalla de bienvenida si no hay otros chats
+          if (chats.length <= 1) {
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('chat-container').classList.add('hidden');
+            document.getElementById('chat-input-container').classList.add('hidden');
+          }
+        }
+        
+        // Recargar lista de chats
+        await loadChats();
+        
+        // Si hay otros chats, seleccionar el primero
+        if (chats.length > 0 && currentChatId === null) {
+          selectChat(chats[0].id);
+        }
+        
+        // Restaurar botón
+        confirmBtn.innerHTML = originalHTML;
+        confirmBtn.disabled = false;
+        
+      } catch (error) {
+        console.error('Error al eliminar chat:', error);
+        
+        // Mostrar error en el modal
+        const modal = document.getElementById('delete-modal');
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message text-red-400 text-sm mt-2';
+        errorDiv.textContent = 'Error al eliminar el chat. Inténtalo de nuevo.';
+        modal.querySelector('.delete-modal-details').appendChild(errorDiv);
+        
+        // Restaurar botón
+        const confirmBtn = document.getElementById('delete-confirm-btn');
+        confirmBtn.innerHTML = `
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+          Eliminar
+        `;
+        confirmBtn.disabled = false;
+        
+        // Remover mensaje de error después de 3 segundos
+        setTimeout(() => {
+          const errorMessage = modal.querySelector('.error-message');
+          if (errorMessage) {
+            errorMessage.remove();
+          }
+        }, 3000);
+      }
+    };
+
+    // --- FUNCIONES DEL MODAL DE ELIMINACIÓN ---
+    let pendingDeleteChatId = null;
+    let modalListenersConfigured = false;
+    
+    const showDeleteModal = (chatId, chatTitle) => {
+        console.log('showDeleteModal llamada con chatId:', chatId, 'chatTitle:', chatTitle);
+        
+        if (!chatId) {
+            console.error('showDeleteModal: chatId no válido');
+            return;
+        }
+        
+        pendingDeleteChatId = chatId;
+        console.log('pendingDeleteChatId asignado:', pendingDeleteChatId);
+        
+        const modal = document.getElementById('delete-modal');
+        const chatTitleElement = document.getElementById('delete-chat-title');
+        
+        // Configurar event listeners solo la primera vez
+        if (!modalListenersConfigured) {
+            setupModalEventListeners();
+            modalListenersConfigured = true;
+        }
+        
+        // Actualizar el título del chat en el modal
+        chatTitleElement.textContent = chatTitle || 'Chat sin título';
+        
+        // Mostrar modal
+        modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.add('show'), 10);
+        
+        // Prevenir scroll del body
+        document.body.style.overflow = 'hidden';
+    };
+    
+    const hideDeleteModal = () => {
+        console.log('Ocultando modal de eliminación');
+        const modal = document.getElementById('delete-modal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            // Limpiar cualquier mensaje de error
+            const errorMessage = modal.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+        }, 300);
+        
+        console.log('Limpiando pendingDeleteChatId:', pendingDeleteChatId);
+        pendingDeleteChatId = null;
+    };
+    
+    // Función para configurar los event listeners del modal (se ejecuta cuando el DOM esté listo)
+    const setupModalEventListeners = () => {
+        console.log('Configurando event listeners del modal...');
+        
+        const cancelBtn = document.getElementById('delete-cancel-btn');
+        const confirmBtn = document.getElementById('delete-confirm-btn');
+        const modal = document.getElementById('delete-modal');
+        
+        if (cancelBtn && confirmBtn && modal) {
+            // Event listeners para el modal
+            cancelBtn.addEventListener('click', hideDeleteModal);
+            
+            confirmBtn.addEventListener('click', async () => {
+                console.log('Botón confirmar clickeado, pendingDeleteChatId:', pendingDeleteChatId);
+                if (pendingDeleteChatId) {
+                    console.log('Procediendo a eliminar chat con ID:', pendingDeleteChatId);
+                    await performDeleteChat(pendingDeleteChatId);
+                    hideDeleteModal();
+                } else {
+                    console.error('No hay chatId pendiente para eliminar');
+                    hideDeleteModal();
+                }
+            });
+            
+            // Cerrar modal al hacer click en el overlay
+            modal.addEventListener('click', (e) => {
+                if (e.target.id === 'delete-modal') {
+                    hideDeleteModal();
+                }
+            });
+            
+            // Cerrar modal con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    hideDeleteModal();
+                }
+            });
+            
+            console.log('Event listeners del modal configurados correctamente');
+        } else {
+            console.error('No se encontraron los elementos del modal');
+        }
     };
 
     // --- Gestión mejorada del estado de autenticación para chats ---
@@ -1532,7 +2100,7 @@
         userId = user.uid;
         
         try {
-          await loadChats();
+        await loadChats();
           
           // Si hay chats, seleccionar el primero, si no, mostrar pantalla de bienvenida
           if (chats.length > 0) {
@@ -1561,6 +2129,56 @@
       }
     });
 </script>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div id="delete-modal" class="delete-modal-overlay hidden">
+    <div class="delete-modal-container">
+        <div class="delete-modal-content">
+            <!-- Icono de advertencia -->
+            <div class="delete-modal-icon">
+                <svg class="w-16 h-16 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            
+            <!-- Título -->
+            <h3 class="delete-modal-title">
+                ¿Eliminar este chat?
+            </h3>
+            
+            <!-- Mensaje -->
+            <p class="delete-modal-message">
+                Esta acción no se puede deshacer. Se eliminará permanentemente el chat y todos sus mensajes.
+            </p>
+            
+            <!-- Detalles del chat -->
+            <div class="delete-modal-details">
+                <div class="chat-info">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <span id="delete-chat-title" class="text-gray-300"></span>
+                </div>
+            </div>
+            
+            <!-- Botones -->
+            <div class="delete-modal-buttons">
+                <button id="delete-cancel-btn" class="delete-btn-cancel">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancelar
+                </button>
+                <button id="delete-confirm-btn" class="delete-btn-confirm">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
